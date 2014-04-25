@@ -1,0 +1,18 @@
+UniLib
+======
+
+UniLib is a simple C++11 Unicode library.
+
+If currently offers:
+- utf-8 and utf-16 encodings
+- Unicode General Category info
+- simple uppercasing and lowercasing
+- normalization forms
+
+The library consists of self contained source code in unilib directory.
+No build system is provided.
+
+Copyright 2014 by Institute of Formal and Applied Linguistics, Faculty of
+Mathematics and Physics, Charles University in Prague, Czech Republic.
+
+UniLib repository http://github.com/ufal/unilib is hosted on GitHub.
