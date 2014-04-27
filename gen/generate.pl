@@ -45,6 +45,22 @@ while (<$f>) {
 }
 close $f;
 
+# Method for splitting long lines
+sub split_long {
+  my ($line) = @_;
+  my @lines = split /\n/, $line;
+  foreach my $line (@lines) {
+    my $result = '';
+    while (length $line >= 2000) {
+      my $comma = rindex($line, ',', 1999) + 1;
+      $result .= substr($line, 0, $comma) . "\n    ";
+      $line = substr($line, $comma);
+    }
+    $line = $result . $line;
+  }
+  return join("\n", @lines);
+}
+
 # Generate blocks of length 256 for cat and othercase.
 foreach my $data_ref (@data) {
   my (@blocks, %blocks, @indices);
@@ -56,8 +72,8 @@ foreach my $data_ref (@data) {
     }
     push @indices, $blocks{$block};
   }
-  $data_ref->{indices} = "{\n  " . join(",", @indices) . "\n}";
-  $data_ref->{blocks} = "{\n  " . join(",\n  ", @blocks) . "\n}";
+  $data_ref->{indices} = split_long("{\n  " . join(",", @indices) . "\n}");
+  $data_ref->{blocks} = split_long("{\n  " . join(",\n  ", @blocks) . "\n}");
 }
 
 # Replace templates in given file.
