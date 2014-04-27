@@ -3,19 +3,21 @@ use warnings;
 use strict;
 use open qw{:std :utf8};
 
-@ARGV >= 3 or die "Usage: $0 UniLib_version Unicode_version UnicodeData.xz\n";
+@ARGV >= 4 or die "Usage: $0 UniLib_version Unicode_version UnicodeData.xz CompositionExclusions.xz\n";
 my $UniLibVersion = shift @ARGV;
 my $UnicodeVersion = shift @ARGV;
 my $UnicodeData = shift @ARGV;
+my $CompositionExclusion = shift @ARGV;
 
 my $N = 0x110000;
 
-# Load UnicodeData into cat and othercase.
+# Load UnicodeData
 my %cat = (name=>'CATEGORY', data=>[('_Cn') x $N]);
 my %othercase = (name=>'OTHERCASE', data=>[(0) x $N]);
 my %ccc = (name=>'CCC', data=>[(0) x $N]);
+my %composition = (name=>'COMPOSITION', data=>[(0) x $N], composition=>[], rawdata=>[0]);
 my %decomposition = (name=>'DECOMPOSITION', data=>[(0) x $N], decomposition=>[], rawdata=>[0]);
-my @data = (\%cat, \%othercase, \%ccc, \%decomposition);
+my @data = (\%cat, \%othercase, \%ccc, \%composition, \%decomposition);
 
 open (my $f, "-|", "xzcat $UnicodeData") or die "Cannot open 'xzcat $UnicodeData': $!";
 while (<$f>) {
@@ -49,6 +51,18 @@ while (<$f>) {
     $decomposition{decomposition}->[$code] = [$decomposition =~ s/^<[^>]*>\s*// ? 1 : 0] if length($decomposition);
     push @{$decomposition{decomposition}->[$code]}, map(hex, split /\s+/, $decomposition)  if length($decomposition);
   }
+}
+close $f;
+
+# Load CompositionExclusions and fill composition data
+my %excluded = ();
+open ($f, "-|", "xzcat $CompositionExclusion") or die "Cannot open 'xzcat $CompositionExclusion': $!";
+while (<$f>) {
+  chomp;
+  s/\s*(#.*)?$//;
+  next unless length;
+  /^([\da-fA-F]{4,5})$/ or die "Bad line $_ in CompositionExclusions";
+  $excluded{hex($1)} = 1;
 }
 close $f;
 
