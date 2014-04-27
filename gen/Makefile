@@ -1,4 +1,4 @@
-TARGETS=uchars.cpp uchars.h utf8.cpp utf8.h
+TARGETS=uchars.cpp uchars.h utf8.cpp utf8.h utf16.cpp utf16.h
 UNILIB=0.9.9
 UNICODE=6.3.0
 
