@@ -42,14 +42,14 @@ bool utf16::valid(const char16_t* str, size_t len) {
   return true;
 }
 
-void utf16::decode(const char16_t*& str, std::u32string& decoded) {
+void utf16::decode(const char16_t* str, std::u32string& decoded) {
   decoded.clear();
 
   for (char32_t chr; (chr = decode(str)); )
     decoded.push_back(chr);
 }
 
-void utf16::decode(const char16_t*& str, size_t& len, std::u32string& decoded) {
+void utf16::decode(const char16_t* str, size_t len, std::u32string& decoded) {
   decoded.clear();
 
   while (len)

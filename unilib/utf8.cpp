@@ -60,14 +60,14 @@ bool utf8::valid(const char* str, size_t len) {
   return true;
 }
 
-void utf8::decode(const char*& str, std::u32string& decoded) {
+void utf8::decode(const char* str, std::u32string& decoded) {
   decoded.clear();
 
   for (char32_t chr; (chr = decode(str)); )
     decoded.push_back(chr);
 }
 
-void utf8::decode(const char*& str, size_t& len, std::u32string& decoded) {
+void utf8::decode(const char* str, size_t len, std::u32string& decoded) {
   decoded.clear();
 
   while (len)

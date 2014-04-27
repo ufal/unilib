@@ -40,8 +40,8 @@ class utf16 {
   static inline char32_t first(const char16_t* str, size_t len);
   static inline char32_t first(const std::u16string& str);
 
-  static void decode(const char16_t*& str, std::u32string& decoded);
-  static void decode(const char16_t*& str, size_t& len, std::u32string& decoded);
+  static void decode(const char16_t* str, std::u32string& decoded);
+  static void decode(const char16_t* str, size_t len, std::u32string& decoded);
   static inline void decode(const std::u16string& str, std::u32string& decoded);
 
   class string_decoder_helper {
