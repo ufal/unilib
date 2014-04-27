@@ -156,7 +156,7 @@ class utf16::buffer_decoder_helper::iterator : public std::iterator<std::input_i
  public:
   iterator(const char16_t* str, size_t len) : codepoint(0), next(str), len(len) { operator++(); }
   iterator(const iterator& it) : codepoint(it.codepoint), next(it.next), len(it.len) {}
-  iterator& operator++() { if (next) { codepoint = decode(next, len); if (len <= 0) next = nullptr; } return *this; }
+  iterator& operator++() { if (!len) next = nullptr; if (next) codepoint = decode(next, len); return *this; }
   iterator operator++(int) { iterator tmp(*this); operator++(); return tmp; }
   bool operator==(const iterator& other) const { return next == other.next; }
   bool operator!=(const iterator& other) const { return next != other.next; }
