@@ -13,7 +13,9 @@ my $N = 0x110000;
 # Load UnicodeData into cat and othercase.
 my %cat = (name=>'CATEGORY', data=>[('_Cn') x $N]);
 my %othercase = (name=>'OTHERCASE', data=>[(0) x $N]);
-my @data = (\%cat, \%othercase);
+my %ccc = (name=>'CCC', data=>[(0) x $N]);
+my %decomposition = (name=>'DECOMPOSITION', data=>[(0) x $N], decomposition=>[], rawdata=>[0]);
+my @data = (\%cat, \%othercase, \%ccc, \%decomposition);
 
 open (my $f, "-|", "xzcat $UnicodeData") or die "Cannot open 'xzcat $UnicodeData': $!";
 while (<$f>) {
@@ -21,7 +23,7 @@ while (<$f>) {
   my @parts = split /;/, $_, -1;
   die "Bad line $_ in UnicodeData.txt" unless @parts == 15;
 
-  my ($code, $name, $cat, $upper, $lower, $title) = @parts[0, 1, 2, 12, 13, 14];
+  my ($code, $name, $cat, $ccc, $decomposition, $upper, $lower, $title) = @parts[0, 1, 2, 3, 5, 12, 13, 14];
   my $othercase = $cat =~ /L[ut]/ ? $lower : $cat =~ /Ll/ ? $upper : "";
 
   $code = hex($code);
@@ -35,12 +37,17 @@ while (<$f>) {
     my ($next_code, $next_name) = @next_parts[0, 1];
     $next_name =~ /^<$range_name, Last>$/ or die "Unrecognized end '$next_name' of range $range_name";
     $othercase == 0 or die "First element of range $range_name has othercase";
+    $ccc == 0 or die "First element of range $range_name has ccc";
+    length($decomposition) == 0 or die "First element of range $range_name has decomposition";
     $last_code = hex($next_code);
   }
 
   for (; $code <= $last_code; $code++) {
     $cat{data}->[$code] = "_$cat";
     $othercase{data}->[$code] = $othercase;
+    $ccc{data}->[$code] = $ccc;
+    $decomposition{decomposition}->[$code] = [$decomposition =~ s/^<[^>]*>\s*// ? 1 : 0] if length($decomposition);
+    push @{$decomposition{decomposition}->[$code]}, map(hex, split /\s+/, $decomposition)  if length($decomposition);
   }
 }
 close $f;
@@ -60,6 +67,31 @@ sub split_long {
   }
   return join("\n", @lines);
 }
+
+# Fill decomposition data
+sub skip_first {
+  shift @_;
+  return @_;
+}
+
+sub decompose {
+  my ($code) = @_;
+  return $code unless $decomposition{decomposition}->[$code];
+  return map {decompose($_)} skip_first(@{$decomposition{decomposition}->[$code]});
+}
+
+for (my $code = 0; $code < $N; $code++) {
+  next unless $decomposition{decomposition}->[$code];
+  my @decomposition = map {decompose($_)} skip_first(@{$decomposition{decomposition}->[$code]});
+  $decomposition{data}->[$code] = scalar(@{$decomposition{rawdata}});
+  push @{$decomposition{rawdata}}, scalar(@decomposition) * 2 + $decomposition{decomposition}->[$code]->[0];
+  foreach my $chr (@decomposition) {
+    push @{$decomposition{rawdata}}, $chr & 0xFF;
+    push @{$decomposition{rawdata}}, ($chr >> 8) & 0xFF;
+    push @{$decomposition{rawdata}}, ($chr >> 16) & 0xFF;
+  }
+}
+$decomposition{rawdata} = split_long("{\n  " . join(",", @{$decomposition{rawdata}}) . "\n}");
 
 # Generate blocks of length 256 for cat and othercase.
 foreach my $data_ref (@data) {
@@ -83,6 +115,9 @@ while (<>) {
   foreach my $data_ref (@data) {
     s/\$$data_ref->{name}_INDICES/$data_ref->{indices}/eg;
     s/\$$data_ref->{name}_BLOCKS/$data_ref->{blocks}/eg;
+  }
+  foreach my $data_ref (\%decomposition) {
+    s/\$$data_ref->{name}_DATA/$data_ref->{rawdata}/eg;
   }
   print;
 }
