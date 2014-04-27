@@ -27,7 +27,7 @@
 namespace ufal {
 namespace unilib {
 
-class uchars {
+class unicode {
   enum : uint8_t {
     _Lu = 1, _Ll = 2, _Lt = 3, _Lm = 4, _Lo = 5,
     _Mn = 6, _Mc = 7, _Me = 8,
@@ -67,15 +67,15 @@ class uchars {
   static const int32_t othercase_block[][256];
 };
 
-uint32_t uchars::category(char32_t chr) {
+uint32_t unicode::category(char32_t chr) {
   return chr < CHARS ? 1 << category_block[category_index[chr >> 8]][chr & 0xFF] : DEFAULT_CAT;
 }
 
-char32_t uchars::uppercase(char32_t chr) {
+char32_t unicode::uppercase(char32_t chr) {
   return chr < CHARS && category(chr) & Ll ? chr + othercase_block[othercase_index[chr >> 8]][chr & 0xFF] : chr;
 }
 
-char32_t uchars::lowercase(char32_t chr) {
+char32_t unicode::lowercase(char32_t chr) {
   return chr < CHARS && category(chr) & Lut ? chr + othercase_block[othercase_index[chr >> 8]][chr & 0xFF] : chr;
 }
 

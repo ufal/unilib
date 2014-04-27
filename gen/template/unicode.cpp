@@ -19,22 +19,22 @@
 // UniLib version: $UNILIB_VERSION
 // Unicode version: $UNICODE_VERSION
 
-#include "uchars.h"
+#include "unicode.h"
 
 namespace ufal {
 namespace unilib {
 
-const char32_t uchars::CHARS;
+const char32_t unicode::CHARS;
 
-const int32_t uchars::DEFAULT_CAT;
+const int32_t unicode::DEFAULT_CAT;
 
-const uint8_t uchars::category_index[uchars::CHARS >> 8] = $CATEGORY_INDICES;
+const uint8_t unicode::category_index[unicode::CHARS >> 8] = $CATEGORY_INDICES;
 
-const uint8_t uchars::category_block[][256] = $CATEGORY_BLOCKS;
+const uint8_t unicode::category_block[][256] = $CATEGORY_BLOCKS;
 
-const uint8_t uchars::othercase_index[uchars::CHARS >> 8] = $OTHERCASE_INDICES;
+const uint8_t unicode::othercase_index[unicode::CHARS >> 8] = $OTHERCASE_INDICES;
 
-const int32_t uchars::othercase_block[][256] = $OTHERCASE_BLOCKS;
+const int32_t unicode::othercase_block[][256] = $OTHERCASE_BLOCKS;
 
 } // namespace unilib
 } // namespace ufal
