@@ -56,9 +56,9 @@ const uint8_t uninorms::ccc_block[][256] = $CCC_BLOCKS;
 
 const uint8_t uninorms::decomposition_index[uninorms::CHARS >> 8] = $DECOMPOSITION_INDICES;
 
-const uint16_t uninorms::decomposition_block[][256] = $DECOMPOSITION_BLOCKS;
+const uint16_t uninorms::decomposition_block[][257] = $DECOMPOSITION_BLOCKS;
 
-const uint8_t uninorms::decomposition_data[] = $DECOMPOSITION_DATA;
+const char32_t uninorms::decomposition_data[] = $DECOMPOSITION_DATA;
 
 } // namespace unilib
 } // namespace ufal

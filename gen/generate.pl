@@ -79,24 +79,23 @@ sub decompose {
   return map {decompose($_)} skip_first(@{$decomposition{decomposition}->[$code]});
 }
 
-for (my $code = 0; $code < $N; $code++) {
-  next unless $decomposition{decomposition}->[$code];
-  my @decomposition = map {decompose($_)} skip_first(@{$decomposition{decomposition}->[$code]});
-  $decomposition{data}->[$code] = scalar(@{$decomposition{rawdata}});
-  push @{$decomposition{rawdata}}, scalar(@decomposition) * 2 + $decomposition{decomposition}->[$code]->[0];
-  foreach my $chr (@decomposition) {
-    push @{$decomposition{rawdata}}, $chr & 0xFF;
-    push @{$decomposition{rawdata}}, ($chr >> 8) & 0xFF;
-    push @{$decomposition{rawdata}}, ($chr >> 16) & 0xFF;
+for (my $code = 0; $code <= $N; $code++) {
+  my ($kanonical, @decomposition) = (0);
+  if ($decomposition{decomposition}->[$code]) {
+    $kanonical = $decomposition{decomposition}->[$code]->[0];
+    @decomposition = map {decompose($_)} skip_first(@{$decomposition{decomposition}->[$code]});
   }
+  $decomposition{data}->[$code] = 2 * scalar(@{$decomposition{rawdata}}) + $kanonical;
+  push @{$decomposition{rawdata}}, @decomposition;
 }
 $decomposition{rawdata} = "{\n  " . join(",", @{$decomposition{rawdata}}) . "\n}";
 
-# Generate blocks of length 256 for cat and othercase.
+# Generate blocks of length 256 (or 257 for composition and decomposition).
 foreach my $data_ref (@data) {
   my (@blocks, %blocks, @indices);
+  my $bsize = $data_ref->{name} =~ /(DE)?COMPOSITION/ ? 257 : 256;
   for (my $b = 0; $b < $N; $b += 256) {
-    my $block = "{" . join(",", @{$data_ref->{data}}[$b..$b+255]) . "}";
+    my $block = "{" . join(",", $bsize==257 && $data_ref->{data}->[$b]==$data_ref->{data}->[$b+$bsize-1] ? (0)x257 : @{$data_ref->{data}}[$b..$b+$bsize-1]) . "}";
     if (not exists $blocks{$block}) {
       $blocks{$block} = @blocks;
       push @blocks, $block;
