@@ -15,8 +15,8 @@ my $N = 0x110000;
 my %cat = (name=>'CATEGORY', data=>[('_Cn') x $N]);
 my %othercase = (name=>'OTHERCASE', data=>[(0) x $N]);
 my %ccc = (name=>'CCC', data=>[(0) x $N]);
-my %composition = (name=>'COMPOSITION', data=>[(0) x $N], composition=>[], rawdata=>[0]);
-my %decomposition = (name=>'DECOMPOSITION', data=>[(0) x $N], decomposition=>[], rawdata=>[0]);
+my %composition = (name=>'COMPOSITION', data=>[], composition=>[], rawdata=>[0]);
+my %decomposition = (name=>'DECOMPOSITION', data=>[], decomposition=>[], rawdata=>[0]);
 my @data = (\%cat, \%othercase, \%ccc, \%composition, \%decomposition);
 
 open (my $f, "-|", "xzcat $UnicodeData") or die "Cannot open 'xzcat $UnicodeData': $!";
@@ -66,6 +66,25 @@ while (<$f>) {
   $excluded{hex($1)} = 1;
 }
 close $f;
+
+for (my $code = 0; $code < $N; $code++) {
+  next unless $decomposition{decomposition}->[$code];     # skip no decomposition
+  next if $decomposition{decomposition}->[$code]->[0];    # skip kanonical decomposition
+  next if @{$decomposition{decomposition}->[$code]} == 2; # skip singleton decomposition
+  die "Unexpected non-kanonical decomposition for $code" if @{$decomposition{decomposition}->[$code]} != 3;
+  next if $ccc{data}->[$code] != 0;                       # skip non-starter characters
+  next if $ccc{data}->[$decomposition{decomposition}->[$code]->[1]] != 0; # skip non-starter decomposition
+  next if $excluded{$code};                               # skip composition exclusion
+  push @{$composition{composition}->[$decomposition{decomposition}->[$code]->[1]]}, [$decomposition{decomposition}->[$code]->[2], $code];
+}
+
+for (my $code = 0; $code <= $N; $code++) {
+  my @composition;
+  @composition = sort {$a->[0] <=> $b->[0]} @{$composition{composition}->[$code]} if $composition{composition}->[$code];
+  $composition{data}->[$code] = scalar(@{$composition{rawdata}});
+  push @{$composition{rawdata}}, map {@{$_}} @composition;
+}
+$composition{rawdata} = "{\n  " . join(",", @{$composition{rawdata}}) . "\n}";
 
 # Fill decomposition data
 sub skip_first {
@@ -126,6 +145,7 @@ foreach my $data_ref (@data) {
   $data_ref->{indices} = split_long($data_ref->{indices});
   $data_ref->{blocks} = split_long($data_ref->{blocks});
 }
+$composition{rawdata} = split_long($composition{rawdata});
 $decomposition{rawdata} = split_long($decomposition{rawdata});
 
 # Replace templates in given file.
@@ -136,7 +156,7 @@ while (<>) {
     s/\$$data_ref->{name}_INDICES/$data_ref->{indices}/eg;
     s/\$$data_ref->{name}_BLOCKS/$data_ref->{blocks}/eg;
   }
-  foreach my $data_ref (\%decomposition) {
+  foreach my $data_ref (\%composition, \%decomposition) {
     s/\$$data_ref->{name}_DATA/$data_ref->{rawdata}/eg;
   }
   print;

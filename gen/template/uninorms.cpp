@@ -54,6 +54,12 @@ const uint8_t uninorms::ccc_index[uninorms::CHARS >> 8] = $CCC_INDICES;
 
 const uint8_t uninorms::ccc_block[][256] = $CCC_BLOCKS;
 
+const uint8_t uninorms::composition_index[uninorms::CHARS >> 8] = $COMPOSITION_INDICES;
+
+const uint16_t uninorms::composition_block[][257] = $COMPOSITION_BLOCKS;
+
+const char32_t uninorms::composition_data[] = $COMPOSITION_DATA;
+
 const uint8_t uninorms::decomposition_index[uninorms::CHARS >> 8] = $DECOMPOSITION_INDICES;
 
 const uint16_t uninorms::decomposition_block[][257] = $DECOMPOSITION_BLOCKS;

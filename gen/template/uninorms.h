@@ -42,6 +42,10 @@ class uninorms {
   static const uint8_t ccc_index[CHARS >> 8];
   static const uint8_t ccc_block[][256];
 
+  static const uint8_t composition_index[CHARS >> 8];
+  static const uint16_t composition_block[][257];
+  static const char32_t composition_data[];
+
   static const uint8_t decomposition_index[CHARS >> 8];
   static const uint16_t decomposition_block[][257];
   static const char32_t decomposition_data[];
