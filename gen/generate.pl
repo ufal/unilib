@@ -48,8 +48,9 @@ while (<$f>) {
     $cat{data}->[$code] = "_$cat";
     $othercase{data}->[$code] = $othercase;
     $ccc{data}->[$code] = $ccc;
-    $decomposition{decomposition}->[$code] = [$decomposition =~ s/^<[^>]*>\s*// ? 1 : 0] if length($decomposition);
-    push @{$decomposition{decomposition}->[$code]}, map(hex, split /\s+/, $decomposition)  if length($decomposition);
+    next unless length($decomposition);
+    my $kanonical = $decomposition =~ s/^<[^>]*>\s*// ? 1 : 0;
+    $decomposition{decomposition}->[$code] = [$kanonical, map(hex, split /\s+/, $decomposition)];
   }
 }
 close $f;
@@ -65,22 +66,6 @@ while (<$f>) {
   $excluded{hex($1)} = 1;
 }
 close $f;
-
-# Method for splitting long lines
-sub split_long {
-  my ($line) = @_;
-  my @lines = split /\n/, $line;
-  foreach my $line (@lines) {
-    my $result = '';
-    while (length $line >= 2000) {
-      my $comma = rindex($line, ',', 1999) + 1;
-      $result .= substr($line, 0, $comma) . "\n    ";
-      $line = substr($line, $comma);
-    }
-    $line = $result . $line;
-  }
-  return join("\n", @lines);
-}
 
 # Fill decomposition data
 sub skip_first {
@@ -105,7 +90,7 @@ for (my $code = 0; $code < $N; $code++) {
     push @{$decomposition{rawdata}}, ($chr >> 16) & 0xFF;
   }
 }
-$decomposition{rawdata} = split_long("{\n  " . join(",", @{$decomposition{rawdata}}) . "\n}");
+$decomposition{rawdata} = "{\n  " . join(",", @{$decomposition{rawdata}}) . "\n}";
 
 # Generate blocks of length 256 for cat and othercase.
 foreach my $data_ref (@data) {
@@ -118,9 +103,31 @@ foreach my $data_ref (@data) {
     }
     push @indices, $blocks{$block};
   }
-  $data_ref->{indices} = split_long("{\n  " . join(",", @indices) . "\n}");
-  $data_ref->{blocks} = split_long("{\n  " . join(",\n  ", @blocks) . "\n}");
+  $data_ref->{indices} = "{\n  " . join(",", @indices) . "\n}";
+  $data_ref->{blocks} = "{\n  " . join(",\n  ", @blocks) . "\n}";
 }
+
+# Split long lines in generated tables.
+sub split_long {
+  my ($line) = @_;
+  my @lines = split /\n/, $line;
+  foreach my $line (@lines) {
+    my $result = '';
+    while (length $line >= 2000) {
+      my $comma = rindex($line, ',', 1999) + 1;
+      $result .= substr($line, 0, $comma) . "\n    ";
+      $line = substr($line, $comma);
+    }
+    $line = $result . $line;
+  }
+  return join("\n", @lines);
+}
+
+foreach my $data_ref (@data) {
+  $data_ref->{indices} = split_long($data_ref->{indices});
+  $data_ref->{blocks} = split_long($data_ref->{blocks});
+}
+$decomposition{rawdata} = split_long($decomposition{rawdata});
 
 # Replace templates in given file.
 while (<>) {
