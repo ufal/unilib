@@ -46,6 +46,13 @@ void uninorms::compose(std::u32string& str) {
 }
 
 void uninorms::decompose(std::u32string& str, bool kanonical) {
+  // Counting how much additional space do we need
+  int additional = 0;
+  for (auto&& chr : str) {
+    auto decomposition = &decomposition_block[decomposition_index[chr >> 8]][chr & 0xFF];
+    int decomposition_len = (decomposition[1] >> 1) - (decomposition[0] >> 1);
+    if (decomposition_len && (kanonical || !(decomposition[0] & 1))) additional += decomposition_len;
+  }
 }
 
 const char32_t uninorms::CHARS;
