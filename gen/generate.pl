@@ -93,18 +93,19 @@ sub skip_first {
 }
 
 sub decompose {
-  my ($code) = @_;
-  return $code unless $decomposition{decomposition}->[$code];
-  return map {decompose($_)} skip_first(@{$decomposition{decomposition}->[$code]});
+  my ($code, $kanonical) = @_;
+  return $code unless $decomposition{decomposition}->[$code] && ($kanonical || !$decomposition{decomposition}->[$code]->[0]);
+  return map {decompose($_, $kanonical)} skip_first(@{$decomposition{decomposition}->[$code]});
 }
 
 for (my $code = 0; $code <= $N; $code++) {
-  my ($kanonical, @decomposition) = (0);
+  my ($kanonical, $further_kanonical, @decomposition) = (0, 0);
   if ($decomposition{decomposition}->[$code]) {
     $kanonical = $decomposition{decomposition}->[$code]->[0];
-    @decomposition = map {decompose($_)} skip_first(@{$decomposition{decomposition}->[$code]});
+    @decomposition = map {decompose($_, $kanonical)} skip_first(@{$decomposition{decomposition}->[$code]});
+    $further_kanonical = !$kanonical && @decomposition != map {decompose($_, 1)} skip_first(@{$decomposition{decomposition}->[$code]});
   }
-  $decomposition{data}->[$code] = 2 * scalar(@{$decomposition{rawdata}}) + $kanonical;
+  $decomposition{data}->[$code] = 4 * scalar(@{$decomposition{rawdata}}) + 2 * $further_kanonical + $kanonical;
   push @{$decomposition{rawdata}}, @decomposition;
 }
 $decomposition{rawdata} = "{\n  " . join(",", @{$decomposition{rawdata}}) . "\n}";
