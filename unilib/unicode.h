@@ -39,7 +39,8 @@ class unicode {
   };
 
  public:
-  enum : uint32_t {
+  typedef uint32_t category_t;
+  enum : category_t {
     Lu = 1 << _Lu, Ll = 1 << _Ll, Lt = 1 << _Lt, Lut = Lu | Lt, LC = Lu | Ll | Lt,
       Lm = 1 << _Lm, Lo = 1 << _Lo, L = Lu | Ll | Lt | Lm | Lo,
     Mn = 1 << _Mn, Mc = 1 << _Mc, Me = 1 << _Me, M = Mn | Mc | Me,
