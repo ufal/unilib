@@ -104,6 +104,8 @@ for (my $code = 0; $code <= $N; $code++) {
     $kanonical = $decomposition{decomposition}->[$code]->[0];
     @decomposition = map {decompose($_, $kanonical)} skip_first(@{$decomposition{decomposition}->[$code]});
     $further_kanonical = !$kanonical && @decomposition != map {decompose($_, 1)} skip_first(@{$decomposition{decomposition}->[$code]});
+    die "No decomposition" if not @decomposition;
+    die "Identity decomposition" if @decomposition == 1 && $decomposition[0] eq $code;
   }
   $decomposition{data}->[$code] = 4 * scalar(@{$decomposition{rawdata}}) + 2 * $further_kanonical + $kanonical;
   push @{$decomposition{rawdata}}, @decomposition;
