@@ -46,6 +46,7 @@ int main(void) {
   vector<string> words;
   vector<string> characters;
   vector<u32string> forms(5);
+  vector<bool> tested_chars(0x110000);
   while (getline(cin, line)) {
     split(line, ';', words);
     if (words.size() != forms.size()) return cerr << "Cannot parse NormalizationTest line " << line << endl, 1;
@@ -79,7 +80,20 @@ int main(void) {
     test(nfkd, forms[2], forms[4]);
     test(nfkd, forms[3], forms[4]);
     test(nfkd, forms[4], forms[4]);
+
+    if (forms[0].size() == 1) tested_chars[forms[0][0]] = true;
   }
+
+  // One-letter strings not mentioned in NormalizationTest are fixed points.
+  u32string letter(U" ");
+  for (char32_t chr = 0; chr < tested_chars.size(); chr++)
+    if (!tested_chars[chr]) {
+      letter[0] = chr;
+      test(nfc, letter, letter);
+      test(nfd, letter, letter);
+      test(nfkc, letter, letter);
+      test(nfkd, letter, letter);
+    }
 
   test_summary();
 
