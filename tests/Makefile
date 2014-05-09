@@ -11,7 +11,7 @@ run_test_normalization: test_normalization
 
 test_simple: $(foreach src,unicode utf8 utf16,../unilib/$(src).cpp ../unilib/$(src).h)
 test_normalization: ../unilib/uninorms.cpp ../unilib/uninorms.h
-test_simple test_normalization:%:%.cpp
+test_simple test_normalization:%:%.cpp test.h
 	g++ $(filter %.cpp,$^) -std=c++11 -I ../unilib -W -Wall -O2 -g -o $@
 
 .PHONY: clean
