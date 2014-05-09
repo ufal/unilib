@@ -49,8 +49,8 @@ while (<$f>) {
     $othercase{data}->[$code] = $othercase;
     $ccc{data}->[$code] = $ccc;
     next unless length($decomposition);
-    my $kanonical = $decomposition =~ s/^<[^>]*>\s*// ? 1 : 0;
-    $decomposition{decomposition}->[$code] = [$kanonical, map(hex, split /\s+/, $decomposition)];
+    my $kompatibility = $decomposition =~ s/^<[^>]*>\s*// ? 1 : 0;
+    $decomposition{decomposition}->[$code] = [$kompatibility, map(hex, split /\s+/, $decomposition)];
   }
 }
 close $f;
@@ -69,9 +69,9 @@ close $f;
 
 for (my $code = 0; $code < $N; $code++) {
   next unless $decomposition{decomposition}->[$code];     # skip no decomposition
-  next if $decomposition{decomposition}->[$code]->[0];    # skip kanonical decomposition
+  next if $decomposition{decomposition}->[$code]->[0];    # skip kompatibility decomposition
   next if @{$decomposition{decomposition}->[$code]} == 2; # skip singleton decomposition
-  die "Unexpected non-kanonical decomposition for $code" if @{$decomposition{decomposition}->[$code]} != 3;
+  die "Unexpected non-kompatibility decomposition for $code" if @{$decomposition{decomposition}->[$code]} != 3;
   next if $ccc{data}->[$code] != 0;                       # skip non-starter characters
   next if $ccc{data}->[$decomposition{decomposition}->[$code]->[1]] != 0; # skip non-starter decomposition
   next if $excluded{$code};                               # skip composition exclusion
@@ -93,21 +93,21 @@ sub skip_first {
 }
 
 sub decompose {
-  my ($code, $kanonical) = @_;
-  return $code unless $decomposition{decomposition}->[$code] && ($kanonical || !$decomposition{decomposition}->[$code]->[0]);
-  return map {decompose($_, $kanonical)} skip_first(@{$decomposition{decomposition}->[$code]});
+  my ($code, $kompatibility) = @_;
+  return $code unless $decomposition{decomposition}->[$code] && ($kompatibility || !$decomposition{decomposition}->[$code]->[0]);
+  return map {decompose($_, $kompatibility)} skip_first(@{$decomposition{decomposition}->[$code]});
 }
 
 for (my $code = 0; $code <= $N; $code++) {
-  my ($kanonical, $further_kanonical, @decomposition) = (0, 0);
+  my ($kompatibility, $further_kompatibility, @decomposition) = (0, 0);
   if ($decomposition{decomposition}->[$code]) {
-    $kanonical = $decomposition{decomposition}->[$code]->[0];
-    @decomposition = map {decompose($_, $kanonical)} skip_first(@{$decomposition{decomposition}->[$code]});
-    $further_kanonical = join(" ",@decomposition) ne join(" ",map {decompose($_, 1)} skip_first(@{$decomposition{decomposition}->[$code]})) ? 1 : 0;
+    $kompatibility = $decomposition{decomposition}->[$code]->[0];
+    @decomposition = map {decompose($_, $kompatibility)} skip_first(@{$decomposition{decomposition}->[$code]});
+    $further_kompatibility = join(" ",@decomposition) ne join(" ",map {decompose($_, 1)} skip_first(@{$decomposition{decomposition}->[$code]})) ? 1 : 0;
     die "No decomposition" if not @decomposition;
     die "Identity decomposition" if @decomposition == 1 && $decomposition[0] eq $code;
   }
-  $decomposition{data}->[$code] = 4 * scalar(@{$decomposition{rawdata}}) + 2 * $further_kanonical + $kanonical;
+  $decomposition{data}->[$code] = 4 * scalar(@{$decomposition{rawdata}}) + 2 * $further_kompatibility + $kompatibility;
   push @{$decomposition{rawdata}}, @decomposition;
 }
 $decomposition{rawdata} = "{\n  " . join(",", @{$decomposition{rawdata}}) . "\n}";
