@@ -12,7 +12,11 @@ template<class Test, class I, class O>
 void test(Test test, I input, O output) {
   O result = test(input);
   if (result != output) {
-    cerr << "Failed, expected"; for (auto&& chr : output) cerr << ' ' << chr; cerr << ", but got"; for (auto&& chr : result) cerr << ' ' << chr; cerr << "." << endl;
+    cerr << "Failed, expected" << hex;
+    for (auto&& chr : output) cerr << ' ' << unsigned(chr);
+    cerr << ", but got";
+    for (auto&& chr : result) cerr << ' ' << unsigned(chr);
+    cerr << dec << "." << endl;
     failed++;
   } else
     passed++;
