@@ -8,15 +8,27 @@ using namespace std;
 // Simple testing framework
 int passed = 0, failed = 0;
 
+template <class T>
+void test_dump(T data) {
+  cerr << data;
+}
+
+template <class T>
+void test_dump(basic_string<T> data) {
+  cerr << hex;
+  for (auto&& chr : data) cerr << unsigned(chr) << ' ';
+  cerr << oct;
+}
+
 template<class Test, class I, class O>
 void test(Test test, I input, O output) {
   O result = test(input);
   if (result != output) {
-    cerr << "Failed, expected" << hex;
-    for (auto&& chr : output) cerr << ' ' << unsigned(chr);
-    cerr << ", but got";
-    for (auto&& chr : result) cerr << ' ' << unsigned(chr);
-    cerr << dec << "." << endl;
+    cerr << "Failed, expected ";
+    test_dump(output);
+    cerr << ", but got ";
+    test_dump(result);
+    cerr << "." << endl;
     failed++;
   } else
     passed++;
