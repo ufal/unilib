@@ -13,6 +13,11 @@ void test_dump(T data) {
   cerr << data;
 }
 
+template <>
+void test_dump(char32_t data) {
+  cerr << hex << data << oct;
+}
+
 template <class T>
 void test_dump(basic_string<T> data) {
   cerr << hex;
