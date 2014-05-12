@@ -16,7 +16,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with UniLib.  If not, see <http://www.gnu.org/licenses/>.
 
-// UniLib version: 1.0
+// UniLib version: 1.1
 // Unicode version: 6.3.0
 
 #include "unicode.h"
