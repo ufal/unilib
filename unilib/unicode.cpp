@@ -1,4 +1,4 @@
-// This file is part of UniLib.
+// This file is part of UniLib <http://github.com/ufal/unilib/>.
 //
 // Copyright 2014 by Institute of Formal and Applied Linguistics, Faculty of
 // Mathematics and Physics, Charles University in Prague, Czech Republic.
@@ -16,7 +16,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with UniLib.  If not, see <http://www.gnu.org/licenses/>.
 
-// UniLib version: 0.9.9
+// UniLib version: 1.0
 // Unicode version: 6.3.0
 
 #include "unicode.h"
