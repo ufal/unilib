@@ -36,11 +36,14 @@ int main(void) {
     char32_t code = stoi(parts[0], nullptr, 16);
     test(unicode::category, code, categories[parts[2]]);
 
+    char32_t lowercase = parts[13].empty() ? code : stoi(parts[13], nullptr, 16);
+    test(unicode::lowercase, code, lowercase);
+
     char32_t uppercase = parts[12].empty() ? code : stoi(parts[12], nullptr, 16);
     test(unicode::uppercase, code, uppercase);
 
-    char32_t lowercase = parts[13].empty() ? code : stoi(parts[13], nullptr, 16);
-    test(unicode::lowercase, code, lowercase);
+    char32_t titlecase = parts[14].empty() ? code : stoi(parts[14], nullptr, 16);
+    test(unicode::titlecase, code, titlecase);
   }
 
   test_summary();

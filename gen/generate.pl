@@ -26,10 +26,17 @@ while (<$f>) {
   die "Bad line $_ in UnicodeData.txt" unless @parts == 15;
 
   my ($code, $name, $cat, $ccc, $decomposition, $upper, $lower, $title) = @parts[0, 1, 2, 3, 5, 12, 13, 14];
-  my $othercase = $cat =~ /L[ut]/ ? $lower : $cat =~ /Ll/ ? $upper : "";
-
   $code = hex($code);
-  $othercase = length $othercase ? hex($othercase) - $code : 0;
+
+  my $othercase;
+  $title = "" if hex($title) == $code;
+  if (length($lower) && !length($upper) && !length($title)) { $othercase = hex($lower) * 256 + 1; }
+  elsif (!length($lower) && length($upper) && $upper eq $title) { $othercase = hex($upper) * 256 + 2; }
+  elsif (!length($lower) && !length($upper) && !length($title)) { $othercase = 0; }
+  elsif (length($lower) && length($upper) && !length($title)) { $othercase = hex($lower) * 256 + 3; }
+  elsif (!length($lower) && length($upper) && length($title)) { $othercase = hex($upper) * 256 + 4; }
+  elsif (length($lower) && !length($upper) && length($title)) { $othercase = hex($title) * 256 + 5; }
+  else { die "Cannot parse lower/upper/title in UCD line '$_'"; }
 
   my $last_code = $code;
   if ($name =~ /^<(.*), First>$/) {

@@ -34,7 +34,7 @@ const uint8_t unicode::category_block[][256] = $CATEGORY_BLOCKS;
 
 const uint8_t unicode::othercase_index[unicode::CHARS >> 8] = $OTHERCASE_INDICES;
 
-const int32_t unicode::othercase_block[][256] = $OTHERCASE_BLOCKS;
+const char32_t unicode::othercase_block[][256] = $OTHERCASE_BLOCKS;
 
 } // namespace unilib
 } // namespace ufal

@@ -54,9 +54,9 @@ class unicode {
 
   static inline uint32_t category(char32_t chr);
 
-  static inline char32_t uppercase(char32_t chr);
-
   static inline char32_t lowercase(char32_t chr);
+  static inline char32_t uppercase(char32_t chr);
+  static inline char32_t titlecase(char32_t chr);
 
  private:
   static const char32_t CHARS = 0x110000;
@@ -65,19 +65,43 @@ class unicode {
   static const uint8_t category_index[CHARS >> 8];
   static const uint8_t category_block[][256];
   static const uint8_t othercase_index[CHARS >> 8];
-  static const int32_t othercase_block[][256];
+  static const char32_t othercase_block[][256];
+
+  enum othercase_type { LOWER_ONLY = 1, UPPERTITLE_ONLY = 2, LOWER_THEN_UPPER = 3, UPPER_THEN_TITLE = 4, TITLE_THEN_LOWER = 5 };
 };
 
 uint32_t unicode::category(char32_t chr) {
   return chr < CHARS ? 1 << category_block[category_index[chr >> 8]][chr & 0xFF] : DEFAULT_CAT;
 }
 
-char32_t unicode::uppercase(char32_t chr) {
-  return chr < CHARS && category(chr) & Ll ? chr + othercase_block[othercase_index[chr >> 8]][chr & 0xFF] : chr;
+char32_t unicode::lowercase(char32_t chr) {
+  if (chr < CHARS) {
+    char32_t othercase = othercase_block[othercase_index[chr >> 8]][chr & 0xFF];
+    if ((othercase & 0xFF) == othercase_type::LOWER_ONLY) return othercase >> 8;
+    if ((othercase & 0xFF) == othercase_type::LOWER_THEN_UPPER) return othercase >> 8;
+    if ((othercase & 0xFF) == othercase_type::TITLE_THEN_LOWER) return othercase_block[othercase_index[(othercase >> 8) >> 8]][(othercase >> 8) & 0xFF] >> 8;
+  }
+  return chr;
 }
 
-char32_t unicode::lowercase(char32_t chr) {
-  return chr < CHARS && category(chr) & Lut ? chr + othercase_block[othercase_index[chr >> 8]][chr & 0xFF] : chr;
+char32_t unicode::uppercase(char32_t chr) {
+  if (chr < CHARS) {
+    char32_t othercase = othercase_block[othercase_index[chr >> 8]][chr & 0xFF];
+    if ((othercase & 0xFF) == othercase_type::UPPERTITLE_ONLY) return othercase >> 8;
+    if ((othercase & 0xFF) == othercase_type::UPPER_THEN_TITLE) return othercase >> 8;
+    if ((othercase & 0xFF) == othercase_type::LOWER_THEN_UPPER) return othercase_block[othercase_index[(othercase >> 8) >> 8]][(othercase >> 8) & 0xFF] >> 8;
+  }
+  return chr;
+}
+
+char32_t unicode::titlecase(char32_t chr) {
+  if (chr < CHARS) {
+    char32_t othercase = othercase_block[othercase_index[chr >> 8]][chr & 0xFF];
+    if ((othercase & 0xFF) == othercase_type::UPPERTITLE_ONLY) return othercase >> 8;
+    if ((othercase & 0xFF) == othercase_type::TITLE_THEN_LOWER) return othercase >> 8;
+    if ((othercase & 0xFF) == othercase_type::UPPER_THEN_TITLE) return othercase_block[othercase_index[(othercase >> 8) >> 8]][(othercase >> 8) & 0xFF] >> 8;
+  }
+  return chr;
 }
 
 } // namespace unilib
