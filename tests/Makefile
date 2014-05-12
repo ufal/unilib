@@ -1,17 +1,20 @@
-TESTS=simple normalization
+TESTS=simple normalization ucd
+UNICODE=6.3.0
 all: compile
 compile: $(foreach test,$(TESTS),test_$(test))
 test: $(foreach test,$(TESTS),run_test_$(test))
 
 run_test_simple: test_simple
 	./$<
-
 run_test_normalization: test_normalization
-	xzcat ../gen/data/NormalizationTest-6.3.0.txt.xz | sed 's/ *[#@].*$$//;s/;$$//;/^$$/d' | ./$<
+	xzcat ../gen/data/NormalizationTest-$(UNICODE).txt.xz | sed 's/ *[#@].*$$//;s/;$$//;/^$$/d' | ./$<
+run_test_ucd: test_ucd
+	xzcat ../gen/data/UnicodeData-$(UNICODE).txt.xz | ./$<
 
 test_simple: $(foreach src,unicode utf8 utf16,../unilib/$(src).cpp ../unilib/$(src).h)
 test_normalization: ../unilib/uninorms.cpp ../unilib/uninorms.h
-test_simple test_normalization:%:%.cpp test.h
+test_ucd: ../unilib/unicode.cpp ../unilib/unicode.h
+$(patsubst %,test_%,$(TESTS)):%:%.cpp test.h
 	g++ $(filter %.cpp,$^) -std=c++11 -I ../unilib -W -Wall -O2 -g -o $@
 
 .PHONY: clean
