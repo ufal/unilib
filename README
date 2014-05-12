@@ -6,7 +6,7 @@ UniLib is a simple C++11 Unicode library.
 If currently offers:
 - utf-8 and utf-16 encodings
 - Unicode General Category info
-- simple uppercasing and lowercasing
+- simple lowercasing, titlecasing and uppercasing
 - Unicode normalization forms
 
 The library consists of several self contained sources in unilib directory:
