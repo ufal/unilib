@@ -19,4 +19,4 @@ $(patsubst %,test_%,$(TESTS)):%:%.cpp test.h
 
 .PHONY: clean
 clean:
-	rm -f $(foreach test,$(TESTS),test_$(TEST))
+	rm -f $(foreach test,$(TESTS),test_$(test))
