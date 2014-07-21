@@ -10,7 +10,8 @@
 // UniLib version: 1.1
 // Unicode version: 7.0.0
 
-#pragma once
+#ifndef UFAL_UNILIB_UTF8_H
+#define UFAL_UNILIB_UTF8_H
 
 #include <cstddef>
 #include <iterator>
@@ -242,3 +243,5 @@ template<class F> void utf8::map(F f, const std::string& str, std::string& resul
 
 } // namespace unilib
 } // namespace ufal
+
+#endif // UFAL_UNILIB_UTF8_H

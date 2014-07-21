@@ -10,7 +10,8 @@
 // UniLib version: 1.1
 // Unicode version: 7.0.0
 
-#pragma once
+#ifndef UFAL_UNILIB_UNINORMS_H
+#define UFAL_UNILIB_UNINORMS_H
 
 #include <string>
 
@@ -50,3 +51,5 @@ class uninorms {
 
 } // namespace unilib
 } // namespace ufal
+
+#endif // UFAL_UNILIB_UNINORMS_H

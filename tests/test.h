@@ -1,4 +1,6 @@
-#pragma once
+#ifndef UFAL_UNILIB_TEST_H
+#define UFAL_UNILIB_TEST_H
+
 #include <iostream>
 #include <string>
 #include <tuple>
@@ -52,3 +54,5 @@ struct udata {
   udata(string u8, u16string u16, u32string u32) : u8(u8), u16(u16), u32(u32) {}
 };
 #define U(str) udata(u8"" str, u"" str, U"" str)
+
+#endif // UFAL_UNILIB_TEST_H
