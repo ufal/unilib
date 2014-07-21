@@ -1,7 +1,7 @@
 UniLib
 ======
 
-UniLib is an embeddable C++11 Unicode library.
+UniLib is an embeddable C++11 Unicode library under 3-clause BSD license.
 
 If currently offers:
 - utf-8 and utf-16 encodings
