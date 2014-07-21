@@ -1,5 +1,5 @@
 TESTS=simple normalization ucd
-UNICODE=6.3.0
+UNICODE=7.0.0
 all: compile
 compile: $(foreach test,$(TESTS),test_$(test))
 test: $(foreach test,$(TESTS),run_test_$(test))

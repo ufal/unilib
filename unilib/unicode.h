@@ -17,7 +17,7 @@
 // along with UniLib.  If not, see <http://www.gnu.org/licenses/>.
 
 // UniLib version: 1.1
-// Unicode version: 6.3.0
+// Unicode version: 7.0.0
 
 #pragma once
 
