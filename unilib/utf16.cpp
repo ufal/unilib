@@ -7,7 +7,7 @@
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under 3-clause BSD licence.
 //
-// UniLib version: 1.1
+// UniLib version: 2.0
 // Unicode version: 7.0.0
 
 #include "utf16.h"

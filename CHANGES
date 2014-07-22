@@ -1,5 +1,5 @@
-Version 1.1 [not yet released]
-------------------------------
+Version 2.0 [22 Jul 2014]
+-------------------------
 - Updated Unicode to 7.0.0.
 - Changed licence to 3-clause BSD.
 - Added ustrip with combining mark stripping.
