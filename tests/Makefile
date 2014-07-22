@@ -1,4 +1,4 @@
-TESTS=simple normalization ucd
+TESTS=simple ucd normalization strip
 UNICODE=7.0.0
 all: compile
 compile: $(foreach test,$(TESTS),test_$(test))
@@ -6,14 +6,17 @@ test: $(foreach test,$(TESTS),run_test_$(test))
 
 run_test_simple: test_simple
 	./$<
-run_test_normalization: test_normalization
-	xzcat ../gen/data/NormalizationTest-$(UNICODE).txt.xz | sed 's/ *[#@].*$$//;s/;$$//;/^$$/d' | ./$<
 run_test_ucd: test_ucd
 	xzcat ../gen/data/UnicodeData-$(UNICODE).txt.xz | ./$<
+run_test_normalization: test_normalization
+	xzcat ../gen/data/NormalizationTest-$(UNICODE).txt.xz | sed 's/ *[#@].*$$//;s/;$$//;/^$$/d' | ./$<
+run_test_strip: test_strip
+	./$<
 
 test_simple: $(foreach src,unicode utf8 utf16,../unilib/$(src).cpp ../unilib/$(src).h)
-test_normalization: ../unilib/uninorms.cpp ../unilib/uninorms.h
 test_ucd: ../unilib/unicode.cpp ../unilib/unicode.h
+test_normalization: ../unilib/uninorms.cpp ../unilib/uninorms.h
+test_strip: $(foreach src,unicode uninorms unistrip,../unilib/$(src).cpp ../unilib/$(src).h)
 $(patsubst %,test_%,$(TESTS)):%:%.cpp test.h
 	g++ $(filter %.cpp,$^) -std=c++11 -I ../unilib -W -Wall -O2 -g -o $@
 

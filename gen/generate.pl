@@ -17,7 +17,9 @@ my %othercase = (name=>'OTHERCASE', data=>[(0) x $N]);
 my %ccc = (name=>'CCC', data=>[(0) x $N]);
 my %composition = (name=>'COMPOSITION', data=>[], composition=>[], rawdata=>[0]);
 my %decomposition = (name=>'DECOMPOSITION', data=>[], decomposition=>[], rawdata=>[0]);
-my @data = (\%cat, \%othercase, \%ccc, \%composition, \%decomposition);
+my %combining_mark = (name=>'COMBINING_MARK', data=>[(0) x $N]);
+my %stripped = (name=>'STRIPPED', data=>[(0) x $N], rawdata=>[0], rawmap=>{});
+my @data = (\%cat, \%othercase, \%ccc, \%composition, \%decomposition, \%combining_mark, \%stripped);
 
 open (my $f, "-|", "xzcat $UnicodeData") or die "Cannot open 'xzcat $UnicodeData': $!";
 while (<$f>) {
@@ -119,12 +121,39 @@ for (my $code = 0; $code <= $N; $code++) {
 }
 $decomposition{rawdata} = "{\n  " . join(",", @{$decomposition{rawdata}}) . "\n}";
 
-# Generate blocks of length 256 (or 257 for composition and decomposition).
+# Fill combining mark data
+for (my $code = 0; $code < $N; $code++) {
+  $combining_mark{data}->[$code] = $cat{data}->[$code] =~ /^_M/ ? 1 : 0;
+}
+
+# Fill stripped combining marks data
+for (my $code = 0; $code < $N; $code++) {
+  # Is the character not a combining mark and has nonkompatibility decomposition?
+  if ($cat{data}->[$code] !~ /^_M/ && $decomposition{decomposition}->[$code] && !$decomposition{decomposition}->[$code]->[0]) {
+    my @decomposition = map {decompose($_, 0)} skip_first(@{$decomposition{decomposition}->[$code]});
+    my @stripped = grep {$cat{data}->[$_] !~ /^_M/} @decomposition;
+    if (scalar(@stripped) < scalar(@decomposition)) {
+      die "Bad stripped combining marks decomposition of $code: " . join(" ", @stripped) if @stripped != 1 || $stripped[0] == $code;
+      if (not exists $stripped{rawmap}->{$stripped[0]}) {
+        $stripped{rawmap}->{$stripped[0]} = @{$stripped{rawdata}};
+        push @{$stripped{rawdata}}, $stripped[0];
+      }
+      $stripped{data}->[$code] = $stripped{rawmap}->{$stripped[0]};
+    }
+  }
+}
+$stripped{rawdata} = "{\n  " . join(",", @{$stripped{rawdata}}) . "\n}";
+
+# Generate blocks of suitable length (32, 256 or 257).
 foreach my $data_ref (@data) {
   my (@blocks, %blocks, @indices);
   my $bsize = $data_ref->{name} =~ /(DE)?COMPOSITION/ ? 257 : 256;
   for (my $b = 0; $b < $N; $b += 256) {
-    my $block = "{" . join(",", $bsize==257 && $data_ref->{data}->[$b]==$data_ref->{data}->[$b+$bsize-1] ? (0)x257 : @{$data_ref->{data}}[$b..$b+$bsize-1]) . "}";
+    my $block = "{" . join(",",
+      $data_ref->{name} =~ /(DE)?COMPOSITION/ ? $data_ref->{data}->[$b]==$data_ref->{data}->[$b+256] ? (0)x257 : @{$data_ref->{data}}[$b..$b+256] :
+      $data_ref->{name} =~ /COMBINING_MARK/ ? map(ord, split(//, pack("b*", join("", @{$data_ref->{data}}[$b..$b+255])))) :
+      @{$data_ref->{data}}[$b..$b+255]
+    ) . "}";
     if (not exists $blocks{$block}) {
       $blocks{$block} = @blocks;
       push @blocks, $block;
@@ -155,8 +184,9 @@ foreach my $data_ref (@data) {
   $data_ref->{indices} = split_long($data_ref->{indices});
   $data_ref->{blocks} = split_long($data_ref->{blocks});
 }
-$composition{rawdata} = split_long($composition{rawdata});
-$decomposition{rawdata} = split_long($decomposition{rawdata});
+foreach my $data_ref (\%composition, \%decomposition, \%stripped) {
+  $data_ref->{rawdata} = split_long($data_ref->{rawdata});
+}
 
 # Replace templates in given file.
 while (<>) {
@@ -166,7 +196,7 @@ while (<>) {
     s/\$$data_ref->{name}_INDICES/$data_ref->{indices}/eg;
     s/\$$data_ref->{name}_BLOCKS/$data_ref->{blocks}/eg;
   }
-  foreach my $data_ref (\%composition, \%decomposition) {
+  foreach my $data_ref (\%composition, \%decomposition, \%stripped) {
     s/\$$data_ref->{name}_DATA/$data_ref->{rawdata}/eg;
   }
   print;
