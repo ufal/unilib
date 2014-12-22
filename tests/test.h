@@ -1,5 +1,13 @@
-#ifndef UFAL_UNILIB_TEST_H
-#define UFAL_UNILIB_TEST_H
+// This file is part of UniLib <http://github.com/ufal/unilib/>.
+//
+// Copyright 2014 Institute of Formal and Applied Linguistics, Faculty of
+// Mathematics and Physics, Charles University in Prague, Czech Republic.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -54,5 +62,3 @@ struct udata {
   udata(string u8, u16string u16, u32string u32) : u8(u8), u16(u16), u32(u32) {}
 };
 #define U(str) udata(u8"" str, u"" str, U"" str)
-
-#endif // UFAL_UNILIB_TEST_H

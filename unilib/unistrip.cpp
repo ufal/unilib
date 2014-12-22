@@ -1,13 +1,13 @@
 // This file is part of UniLib <http://github.com/ufal/unilib/>.
 //
-// Copyright 2014 by Institute of Formal and Applied Linguistics, Faculty
-// of Mathematics and Physics, Charles University in Prague, Czech Republic.
-// All rights reserved.
+// Copyright 2014 Institute of Formal and Applied Linguistics, Faculty of
+// Mathematics and Physics, Charles University in Prague, Czech Republic.
 //
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted under 3-clause BSD licence.
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
-// UniLib version: 2.0
+// UniLib version: 2.1
 // Unicode version: 7.0.0
 
 #include "unistrip.h"

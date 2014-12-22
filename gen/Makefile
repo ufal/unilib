@@ -1,5 +1,5 @@
 TARGETS=unicode.cpp unicode.h uninorms.cpp uninorms.h unistrip.cpp unistrip.h utf8.cpp utf8.h utf16.cpp utf16.h
-UNILIB=2.0
+UNILIB=2.1
 UNICODE=7.0.0
 
 all: $(foreach target,$(TARGETS),../unilib/$(target))
