@@ -20,7 +20,7 @@ test_ucd: ../unilib/unicode.cpp ../unilib/unicode.h
 test_normalization: ../unilib/uninorms.cpp ../unilib/uninorms.h
 test_strip: $(foreach src,unicode uninorms unistrip,../unilib/$(src).cpp ../unilib/$(src).h)
 $(patsubst %,test_%,$(TESTS)):%:%.cpp test.h
-	g++ $(filter %.cpp,$^) -std=c++11 -I ../unilib -W -Wall -O2 -g -o $@
+	$(CXX) $(filter %.cpp,$^) -std=c++11 -I ../unilib -W -Wall -O2 -g -o $@
 
 .PHONY: clean
 clean:
