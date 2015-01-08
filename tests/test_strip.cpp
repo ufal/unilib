@@ -39,7 +39,5 @@ int main(void) {
     }
   }
 
-  test_summary();
-
-  return 0;
+  return test_summary();
 }

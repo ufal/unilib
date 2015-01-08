@@ -49,8 +49,9 @@ void test(Test test, I input, O output) {
     passed++;
 }
 
-void test_summary() {
+int test_summary() {
   cerr << "Passed: " << passed << ", failed: " << failed << endl;
+  return failed != 0;
 }
 
 // Basic UTF data created during compilation

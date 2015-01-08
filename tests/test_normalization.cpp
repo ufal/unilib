@@ -104,7 +104,5 @@ int main(void) {
       test(nfkd, letter, letter);
     }
 
-  test_summary();
-
-  return 0;
+  return test_summary();
 }

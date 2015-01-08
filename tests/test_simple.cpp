@@ -70,7 +70,5 @@ int main(void) {
     test(u8_uc_buffer_iter, get<0>(data).u8, get<1>(data).u8);
   }
 
-  test_summary();
-
-  return 0;
+  return test_summary();
 }

@@ -55,7 +55,5 @@ int main(void) {
     test(unicode::titlecase, code, titlecase);
   }
 
-  test_summary();
-
-  return 0;
+  return test_summary();
 }
