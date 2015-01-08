@@ -2,6 +2,7 @@ UniLib
 ======
 
 UniLib is an embeddable C++11 Unicode library under MPL 2.0 license.
+It is versioned using Semantic Versioning http://semver.org/.
 
 If currently offers:
 - utf-8 and utf-16 encodings
