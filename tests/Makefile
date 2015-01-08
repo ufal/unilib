@@ -1,5 +1,7 @@
 TESTS=simple ucd normalization strip
 UNICODE=7.0.0
+
+.PHONY: all compile test
 all: compile
 compile: $(foreach test,$(TESTS),test_$(test))
 test: $(foreach test,$(TESTS),run_test_$(test))
