@@ -1,5 +1,16 @@
 language: cpp
-compiler:
-  - gcc
-  - clang
+matrix:
+  include:
+    - compiler: gcc
+      env: GCC=4.7
+    - compiler: gcc
+      env: GCC=4.8
+    - compiler: gcc
+      env: GCC=4.9
+    - compiler: clang
+before_install:
+  - if [ -n "$GCC" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y; fi
+  - if [ -n "$GCC" ]; then sudo apt-get update -qq; fi
+  - if [ -n "$GCC" ]; then sudo apt-get install -qq g++-$GCC;fi
+  - if [ -n "$GCC" ]; then export CXX=g++-$GCC; fi
 script: make -C tests test
