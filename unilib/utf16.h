@@ -10,8 +10,7 @@
 // UniLib version: 2.2.0-devel
 // Unicode version: 7.0.0
 
-#ifndef UFAL_UNILIB_UTF16_H
-#define UFAL_UNILIB_UTF16_H
+#pragma once
 
 #include <cstddef>
 #include <iterator>
@@ -205,5 +204,3 @@ template<class F> void utf16::map(F f, const std::u16string& str, std::u16string
 
 } // namespace unilib
 } // namespace ufal
-
-#endif // UFAL_UNILIB_UTF16_H

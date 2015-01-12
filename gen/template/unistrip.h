@@ -10,8 +10,7 @@
 // UniLib version: $UNILIB_VERSION
 // Unicode version: $UNICODE_VERSION
 
-#ifndef UFAL_UNILIB_UNISTRIP_H
-#define UFAL_UNILIB_UNISTRIP_H
+#pragma once
 
 #include <string>
 
@@ -46,5 +45,3 @@ char32_t unistrip::strip_combining_marks(char32_t chr) {
 
 } // namespace unilib
 } // namespace ufal
-
-#endif // UFAL_UNILIB_UNISTRIP_H

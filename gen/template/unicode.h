@@ -10,8 +10,7 @@
 // UniLib version: $UNILIB_VERSION
 // Unicode version: $UNICODE_VERSION
 
-#ifndef UFAL_UNILIB_UNICODE_H
-#define UFAL_UNILIB_UNICODE_H
+#pragma once
 
 #include <cstddef>
 #include <string>
@@ -98,5 +97,3 @@ char32_t unicode::titlecase(char32_t chr) {
 
 } // namespace unilib
 } // namespace ufal
-
-#endif // UFAL_UNILIB_UNICODE_H
