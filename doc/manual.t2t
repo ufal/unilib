@@ -7,3 +7,135 @@ Version 2.2.0-devel
 
 
 = API Reference =
+
+The UniLib library is contained in ``ufal::unilib`` namespace.
+It consists of several independent files, each containing a class with
+the same name.
+
+
+== Class unicode ==[unicode]
+
+```
+class ufal::unilib::unicode {
+ public:
+  typedef uint32_t category_t;
+
+  enum : category_t {
+    Lu = ... , Ll = ... , Lt = ... , Lut = Lu | Lt, LC = Lu | Ll | Lt,
+      Lm = ... , Lo = ... , L = Lu | Ll | Lt | Lm | Lo,
+    Mn = ... , Mc = ... , Me = ... , M = Mn | Mc | Me,
+    Nd = ... , Nl = ... , No = ... , N = Nd | Nl | No,
+    Pc = ... , Pd = ... , Ps = ... , Pe = ... , Pi = ... ,
+      Pf = ... , Po = ... , P = Pc | Pd | Ps | Pe | Pi | Pf | Po,
+    Sm = ... , Sc = ... , Sk = ... , So = ... , S = Sm | Sc | Sk | So,
+    Zs = ... , Zl = ... , Zp = ... , Z = Zs | Zl | Zp,
+    Cc = ... , Cf = ... , Cs = ... , Co = ... , Cn = ... , C = Cc | Cf | Cs | Co | Cn
+  };
+
+  static inline uint32_t category(char32_t chr);
+
+  static inline char32_t lowercase(char32_t chr);
+  static inline char32_t uppercase(char32_t chr);
+  static inline char32_t titlecase(char32_t chr);
+};
+```
+
+
+== Class uninorms ==[uninorms]
+
+```
+class ufal::unilib::uninorms {
+ public:
+  static void nfc(std::u32string& str);
+  static void nfd(std::u32string& str);
+  static void nfkc(std::u32string& str);
+  static void nfkd(std::u32string& str);
+};
+```
+
+
+== Class unistrip ==[unistrip]
+
+```
+class ufal::unilib::unistrip {
+ public:
+  static inline bool is_combining_mark(char32_t chr);
+  static inline char32_t strip_combining_marks(char32_t chr);
+};
+```
+
+
+== Class utf8 ==[utf8]
+
+```
+class utf8 {
+ public:
+  static bool valid(const char* str);
+  static bool valid(const char* str, size_t len);
+  static inline bool valid(const std::string& str);
+
+  static inline char32_t decode(const char*& str);
+  static inline char32_t decode(const char*& str, size_t& len);
+  static inline char32_t first(const char* str);
+  static inline char32_t first(const char* str, size_t len);
+  static inline char32_t first(const std::string& str);
+
+  static void decode(const char* str, std::u32string& decoded);
+  static void decode(const char* str, size_t len, std::u32string& decoded);
+  static inline void decode(const std::string& str, std::u32string& decoded);
+
+  class string_decoder_helper;
+  static inline string_decoder_helper decoder(const char* str);
+  static inline string_decoder_helper decoder(const std::string& str);
+
+  class buffer_decoder_helper;
+  static inline buffer_decoder_helper decoder(const char* str, size_t len);
+
+  static inline void append(char*& str, char32_t chr);
+  static inline void append(std::string& str, char32_t chr);
+
+  static void encode(const std::u32string& str, std::string& encoded);
+
+  template<class F> static void map(F f, const char* str, std::string& result);
+  template<class F> static void map(F f, const char* str, size_t len, std::string& result);
+  template<class F> static void map(F f, const std::string& str, std::string& result);
+};
+```
+
+
+== Class utf16 ==[utf16]
+
+```
+class ufal::unilib::utf16 {
+ public:
+  static bool valid(const char16_t* str);
+  static bool valid(const char16_t* str, size_t len);
+  static inline bool valid(const std::u16string& str);
+
+  static inline char32_t decode(const char16_t*& str);
+  static inline char32_t decode(const char16_t*& str, size_t& len);
+  static inline char32_t first(const char16_t* str);
+  static inline char32_t first(const char16_t* str, size_t len);
+  static inline char32_t first(const std::u16string& str);
+
+  static void decode(const char16_t* str, std::u32string& decoded);
+  static void decode(const char16_t* str, size_t len, std::u32string& decoded);
+  static inline void decode(const std::u16string& str, std::u32string& decoded);
+
+  class string_decoder_helper;
+  static inline string_decoder_helper decoder(const char16_t* str);
+  static inline string_decoder_helper decoder(const std::u16string& str);
+
+  class buffer_decoder_helper;
+  static inline buffer_decoder_helper decoder(const char16_t* str, size_t len);
+
+  static inline void append(char16_t*& str, char32_t chr);
+  static inline void append(std::u16string& str, char32_t chr);
+
+  static void encode(const std::u32string& str, std::u16string& encoded);
+
+  template<class F> static void map(F f, const char16_t* str, std::u16string& result);
+  template<class F> static void map(F f, const char16_t* str, size_t len, std::u16string& result);
+  template<class F> static void map(F f, const std::u16string& str, std::u16string& result);
+};
+```
