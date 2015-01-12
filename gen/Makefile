@@ -5,4 +5,4 @@ UNICODE=7.0.0
 all: $(foreach target,$(TARGETS),../unilib/$(target))
 
 ../unilib/%: template/% generate.pl Makefile data/UnicodeData-$(UNICODE).txt.xz data/CompositionExclusions-$(UNICODE).txt.xz
-	./generate.pl $(UNILIB) $(UNICODE) data/UnicodeData-$(UNICODE).txt.xz data/CompositionExclusions-$(UNICODE).txt.xz template/header.h $< >$@
+	./generate.pl $(UNILIB) $(UNICODE) data/UnicodeData-$(UNICODE).txt.xz data/CompositionExclusions-$(UNICODE).txt.xz $< >$@
