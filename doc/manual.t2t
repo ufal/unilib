@@ -1,8 +1,6 @@
 UniLib: embeddable Unicode Library
 Version 2.2.0-devel
 
-%!encoding: utf-8
-
 = Introduction =
 
 %!include: readme.t2t
