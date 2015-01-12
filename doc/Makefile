@@ -17,9 +17,12 @@ manual: manual.html manual.txt readme.txt
 %.txt: %.t2t $(wildcard *.t2t)
 	$(call t2t_docsys_txt,$@,$<,manual)
 
+%.md: %.t2t $(wildcard *.t2t)
+	$(call t2t_docsys_md,$@,$<,manual)
+
 %.pdf: %.t2t $(wildcard *.t2t)
 	$(call t2t_docsys_pdf,$@,$<,manual)
 
 .PHONY: clean
 clean:
-	@rm -f $(wildcard $(t2t_docsys_output_wildcards))
+	@rm -f $(wildcard $(T2T_DOCSYS_OUTPUT_WILDCARDS))
