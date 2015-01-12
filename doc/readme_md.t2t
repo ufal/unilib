@@ -1,0 +1,5 @@
+UniLib: C++11 Embeddable Unicode Library
+[![Build Status](https://travis-ci.org/ufal/unilib.svg?branch=master)](https://travis-ci.org/ufal/unilib)
+
+%!encoding: utf-8
+%!include: readme.t2t
