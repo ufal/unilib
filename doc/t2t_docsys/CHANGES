@@ -1,3 +1,8 @@
+Version 2.6.6 [12 Jan 2015]
+---------------------------
+- Use lowercase version of utf-8 encoding name.
+
+
 Version 2.6.5 [12 Jan 2015]
 ---------------------------
 - Fix bug introduced in 2.6.4 in HTML and TeX generation.

@@ -148,7 +148,7 @@ FLAGS	 = {'headers'	 :1 , 'enum-title' :0 , 'mask-email' :0 ,
 	    'css-sugar'  :0 , 'css-suggar' :0 , 'css-inside' :0 ,
 	    'quiet'	 :0 , 'slides'	   :0 }
 OPTIONS  = {'target'	 :'', 'toc-level'  :3 , 'style'      :'',
-	    'infile'	 :'', 'outfile'    :'', 'encoding'   :'UTF-8',
+	    'infile'	 :'', 'outfile'    :'', 'encoding'   :'utf-8',
 	    'config-file':'', 'split'	   :0 , 'lang'	     :'',
 	    'width'	 :0 , 'height'	   :0 , 'art-chars'  :'',
 	    'show-config-value':''}
