@@ -13,7 +13,7 @@ use warnings;
 use strict;
 use open qw{:std :utf8};
 
-@ARGV >= 4 or die "Usage: $0 UniLib_version Unicode_version UnicodeData.xz CompositionExclusions.xz\n";
+@ARGV >= 4 && !(@ARGV % 2) or die "Usage: $0 UniLib_version Unicode_version UnicodeData.xz CompositionExclusions.xz [input_file output_file]*\n";
 my $UniLibVersion = shift @ARGV;
 my $UnicodeVersion = shift @ARGV;
 my $UnicodeData = shift @ARGV;
@@ -198,16 +198,25 @@ foreach my $data_ref (\%composition, \%decomposition, \%stripped) {
   $data_ref->{rawdata} = split_long($data_ref->{rawdata});
 }
 
-# Replace templates in given file.
-while (<>) {
-  s/\$UNILIB_VERSION/$UniLibVersion/g;
-  s/\$UNICODE_VERSION/$UnicodeVersion/g;
-  foreach my $data_ref (@data) {
-    s/\$$data_ref->{name}_INDICES/$data_ref->{indices}/eg;
-    s/\$$data_ref->{name}_BLOCKS/$data_ref->{blocks}/eg;
+# Replace templates in given files.
+while (@ARGV) {
+  my $input_file = shift @ARGV;
+  my $output_file = shift @ARGV;
+
+  open (my $input, "<", $input_file) or die "Cannot open file $input_file: $!";
+  open (my $output, ">", $output_file) or die "Cannot open file $output_file: $!";
+  while (<$input>) {
+    s/\$UNILIB_VERSION/$UniLibVersion/g;
+    s/\$UNICODE_VERSION/$UnicodeVersion/g;
+    foreach my $data_ref (@data) {
+      s/\$$data_ref->{name}_INDICES/$data_ref->{indices}/eg;
+      s/\$$data_ref->{name}_BLOCKS/$data_ref->{blocks}/eg;
+    }
+    foreach my $data_ref (\%composition, \%decomposition, \%stripped) {
+      s/\$$data_ref->{name}_DATA/$data_ref->{rawdata}/eg;
+    }
+    print $output $_;
   }
-  foreach my $data_ref (\%composition, \%decomposition, \%stripped) {
-    s/\$$data_ref->{name}_DATA/$data_ref->{rawdata}/eg;
-  }
-  print;
+  close $input;
+  close $output;
 }

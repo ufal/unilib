@@ -2,7 +2,5 @@ TARGETS=Makefile.include unicode.cpp unicode.h uninorms.cpp uninorms.h unistrip.
 UNILIB=2.2.0-devel
 UNICODE=7.0.0
 
-all: $(foreach target,$(TARGETS),../unilib/$(target))
-
-../unilib/%: template/% generate.pl Makefile data/UnicodeData-$(UNICODE).txt.xz data/CompositionExclusions-$(UNICODE).txt.xz
-	./generate.pl $(UNILIB) $(UNICODE) data/UnicodeData-$(UNICODE).txt.xz data/CompositionExclusions-$(UNICODE).txt.xz $< >$@
+all: generate.pl Makefile data/UnicodeData-$(UNICODE).txt.xz data/CompositionExclusions-$(UNICODE).txt.xz $(TARGETS:%=template/%)
+	./generate.pl $(UNILIB) $(UNICODE) data/UnicodeData-$(UNICODE).txt.xz data/CompositionExclusions-$(UNICODE).txt.xz $(foreach t,$(TARGETS),template/$(t) ../unilib/$(t))
