@@ -43,7 +43,7 @@ class unicode {
     Cc = 1 << _Cc, Cf = 1 << _Cf, Cs = 1 << _Cs, Co = 1 << _Co, Cn = 1 << _Cn, C = Cc | Cf | Cs | Co | Cn
   };
 
-  static inline uint32_t category(char32_t chr);
+  static inline category_t category(char32_t chr);
 
   static inline char32_t lowercase(char32_t chr);
   static inline char32_t uppercase(char32_t chr);
@@ -61,7 +61,7 @@ class unicode {
   enum othercase_type { LOWER_ONLY = 1, UPPERTITLE_ONLY = 2, LOWER_THEN_UPPER = 3, UPPER_THEN_TITLE = 4, TITLE_THEN_LOWER = 5 };
 };
 
-uint32_t unicode::category(char32_t chr) {
+category_t unicode::category(char32_t chr) {
   return chr < CHARS ? 1 << category_block[category_index[chr >> 8]][chr & 0xFF] : DEFAULT_CAT;
 }
 
