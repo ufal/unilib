@@ -10,7 +10,13 @@ Version 2.2.0-devel
 
 The UniLib library is contained in ``ufal::unilib`` namespace.
 It consists of several independent files, each containing a class with
-the same name.
+the same name. All methods are thread-safe, unless stated otherwise.
+
+The ``char32_t`` type represents Unicode code points and ``u32string`` type
+represents sequences of Unicode code points. For UTF-8 the ``char`` and
+``string`` types represent code units and sequences of code units, for UTF-16
+the ``char16_t`` and ``u16string`` types are used to represent code units and
+sequence of code units.
 
 
 == Class unicode ==[unicode]
@@ -38,7 +44,13 @@ class ufal::unilib::unicode {
 };
 ```
 
-=== unicode::category_t type and enum ===[category_t]
+The [``unicode`` #unicode] class contains basic information from
+[Unicode Character Database http://www.unicode.org/reports/tr44/], notably:
+- general categories
+- simple uppercase/lowercase/titlecase mappings
+
+
+=== unicode::category_t ===[category_t]
 ```
 typedef uint32_t [category_t #category_t];
 
@@ -53,8 +65,25 @@ enum : [category_t #category_t] {
 };
 ```
 
+The [``category_t`` #category_t] type represents general category from
+[Unicode Character Database http://www.unicode.org/reports/tr44/].
+Its values are:
+- abbreviated property value aliases for general categories
+- abbreviated aliases for groupings of related general categories, as listed
+  in the [Unicode Character Database http://www.unicode.org/reports/tr44/].
+
+
+Note that the [``category_t`` #category_t] is a bitmask indicating general
+categories, which makes it easy to define arbitrary subsets of general categories
+similarly to how groupings of general categories are defined.
+
+
 === unicode::category ===[category]
 ``` static inline [category_t #category_t] category(char32_t chr);
+
+Returns general category of the given Unicode code point as a value of
+[``category_t`` #category_t] enumeration.
+
 
 === unicode::lowercase() ===[lowercase]
 ``` static inline char32_t lowercase(char32_t chr);
@@ -143,10 +172,9 @@ class ufal::unilib::utf8 {
 };
 ```
 
-The [utf8 #utf8] class deals with UTF-8 encoding. The ``char`` type
-is used to represent UTF-8 characters and ``string`` type is used to
-represented UTF-8 strings; the ``char32_t`` type represents Unicode code points
-and ``u32string`` type represents strings of Unicode code points.
+The [``utf8`` #utf8] class deals with UTF-8 encoding. The ``char`` type
+is used to represent UTF-8 code unit and ``string`` type is used to
+represented sequences of UTF-8 code units.
 
 === utf8::valid(const char* str) ===[valid_c]
 ``` static bool valid (const char* str);
@@ -250,9 +278,9 @@ class ufal::unilib::utf16 {
 };
 ```
 
-The [utf16 #utf16] class is a direct analogue of [utf8 #utf8] class, but
-instead of UTF-8 encoding it deals with UTF-16 encoding. The ``char16_t`` type
-is used to represent UTF-16 characters and ``u16string`` type is used to
-represented UTF-16 strings.
+The [``utf16`` #utf16] class is a direct analogue of [utf8 #utf8] class, but
+instead of UTF-8 encoding it deals with UTF-16 encoding.  The ``char16_t`` type
+is used to represent UTF-16 code unit and ``u16string`` type is used to
+represented sequences of UTF-16 code units.
 
-For method documentation, please see the [utf8 #utf8] class.
+For method documentation, please see the [``utf8`` #utf8] class.
