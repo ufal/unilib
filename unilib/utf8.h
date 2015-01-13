@@ -63,7 +63,6 @@ class utf8 {
 
   static inline void append(char*& str, char32_t chr);
   static inline void append(std::string& str, char32_t chr);
-
   static void encode(const std::u32string& str, std::string& encoded);
 
   template<class F> static void map(F f, const char* str, std::string& result);

@@ -63,7 +63,6 @@ class utf16 {
 
   static inline void append(char16_t*& str, char32_t chr);
   static inline void append(std::u16string& str, char32_t chr);
-
   static void encode(const std::u32string& str, std::u16string& encoded);
 
   template<class F> static void map(F f, const char16_t* str, std::u16string& result);
