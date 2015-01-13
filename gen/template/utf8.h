@@ -35,31 +35,31 @@ class utf8 {
   static void decode(const char* str, size_t len, std::u32string& decoded);
   static inline void decode(const std::string& str, std::u32string& decoded);
 
-  class string_decoder_helper {
+  class string_decoder {
    public:
     class iterator;
     inline iterator begin();
     inline iterator end();
    private:
-    inline string_decoder_helper(const char* str);
+    inline string_decoder(const char* str);
     const char* str;
     friend class utf8;
   };
-  static inline string_decoder_helper decoder(const char* str);
-  static inline string_decoder_helper decoder(const std::string& str);
+  static inline string_decoder decoder(const char* str);
+  static inline string_decoder decoder(const std::string& str);
 
-  class buffer_decoder_helper {
+  class buffer_decoder {
    public:
     class iterator;
     inline iterator begin();
     inline iterator end();
    private:
-    inline buffer_decoder_helper(const char* str, size_t len);
+    inline buffer_decoder(const char* str, size_t len);
     const char* str;
     size_t len;
     friend class utf8;
   };
-  static inline buffer_decoder_helper decoder(const char* str, size_t len);
+  static inline buffer_decoder decoder(const char* str, size_t len);
 
   static inline void append(char*& str, char32_t chr);
   static inline void append(std::string& str, char32_t chr);
@@ -144,7 +144,7 @@ void utf8::decode(const std::string& str, std::u32string& decoded) {
   decode(str.c_str(), decoded);
 }
 
-class utf8::string_decoder_helper::iterator : public std::iterator<std::input_iterator_tag, char32_t> {
+class utf8::string_decoder::iterator : public std::iterator<std::input_iterator_tag, char32_t> {
  public:
   iterator(const char* str) : codepoint(0), next(str) { operator++(); }
   iterator(const iterator& it) : codepoint(it.codepoint), next(it.next) {}
@@ -158,25 +158,25 @@ class utf8::string_decoder_helper::iterator : public std::iterator<std::input_it
   const char* next;
 };
 
-utf8::string_decoder_helper::string_decoder_helper(const char* str) : str(str) {}
+utf8::string_decoder::string_decoder(const char* str) : str(str) {}
 
-utf8::string_decoder_helper::iterator utf8::string_decoder_helper::begin() {
+utf8::string_decoder::iterator utf8::string_decoder::begin() {
   return iterator(str);
 }
 
-utf8::string_decoder_helper::iterator utf8::string_decoder_helper::end() {
+utf8::string_decoder::iterator utf8::string_decoder::end() {
   return iterator(nullptr);
 }
 
-utf8::string_decoder_helper utf8::decoder(const char* str) {
-  return string_decoder_helper(str);
+utf8::string_decoder utf8::decoder(const char* str) {
+  return string_decoder(str);
 }
 
-utf8::string_decoder_helper utf8::decoder(const std::string& str) {
-  return string_decoder_helper(str.c_str());
+utf8::string_decoder utf8::decoder(const std::string& str) {
+  return string_decoder(str.c_str());
 }
 
-class utf8::buffer_decoder_helper::iterator : public std::iterator<std::input_iterator_tag, char32_t> {
+class utf8::buffer_decoder::iterator : public std::iterator<std::input_iterator_tag, char32_t> {
  public:
   iterator(const char* str, size_t len) : codepoint(0), next(str), len(len) { operator++(); }
   iterator(const iterator& it) : codepoint(it.codepoint), next(it.next), len(it.len) {}
@@ -191,18 +191,18 @@ class utf8::buffer_decoder_helper::iterator : public std::iterator<std::input_it
   size_t len;
 };
 
-utf8::buffer_decoder_helper::buffer_decoder_helper(const char* str, size_t len) : str(str), len(len) {}
+utf8::buffer_decoder::buffer_decoder(const char* str, size_t len) : str(str), len(len) {}
 
-utf8::buffer_decoder_helper::iterator utf8::buffer_decoder_helper::begin() {
+utf8::buffer_decoder::iterator utf8::buffer_decoder::begin() {
   return iterator(str, len);
 }
 
-utf8::buffer_decoder_helper::iterator utf8::buffer_decoder_helper::end() {
+utf8::buffer_decoder::iterator utf8::buffer_decoder::end() {
   return iterator(nullptr, 0);
 }
 
-utf8::buffer_decoder_helper utf8::decoder(const char* str, size_t len) {
-  return buffer_decoder_helper(str, len);
+utf8::buffer_decoder utf8::decoder(const char* str, size_t len) {
+  return buffer_decoder(str, len);
 }
 
 void utf8::append(char*& str, char32_t chr) {

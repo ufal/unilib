@@ -35,31 +35,31 @@ class utf16 {
   static void decode(const char16_t* str, size_t len, std::u32string& decoded);
   static inline void decode(const std::u16string& str, std::u32string& decoded);
 
-  class string_decoder_helper {
+  class string_decoder {
    public:
     class iterator;
     inline iterator begin();
     inline iterator end();
    private:
-    inline string_decoder_helper(const char16_t* str);
+    inline string_decoder(const char16_t* str);
     const char16_t* str;
     friend class utf16;
   };
-  static inline string_decoder_helper decoder(const char16_t* str);
-  static inline string_decoder_helper decoder(const std::u16string& str);
+  static inline string_decoder decoder(const char16_t* str);
+  static inline string_decoder decoder(const std::u16string& str);
 
-  class buffer_decoder_helper {
+  class buffer_decoder {
    public:
     class iterator;
     inline iterator begin();
     inline iterator end();
    private:
-    inline buffer_decoder_helper(const char16_t* str, size_t len);
+    inline buffer_decoder(const char16_t* str, size_t len);
     const char16_t* str;
     size_t len;
     friend class utf16;
   };
-  static inline buffer_decoder_helper decoder(const char16_t* str, size_t len);
+  static inline buffer_decoder decoder(const char16_t* str, size_t len);
 
   static inline void append(char16_t*& str, char32_t chr);
   static inline void append(std::u16string& str, char32_t chr);
@@ -110,7 +110,7 @@ void utf16::decode(const std::u16string& str, std::u32string& decoded) {
   decode(str.c_str(), decoded);
 }
 
-class utf16::string_decoder_helper::iterator : public std::iterator<std::input_iterator_tag, char32_t> {
+class utf16::string_decoder::iterator : public std::iterator<std::input_iterator_tag, char32_t> {
  public:
   iterator(const char16_t* str) : codepoint(0), next(str) { operator++(); }
   iterator(const iterator& it) : codepoint(it.codepoint), next(it.next) {}
@@ -124,25 +124,25 @@ class utf16::string_decoder_helper::iterator : public std::iterator<std::input_i
   const char16_t* next;
 };
 
-utf16::string_decoder_helper::string_decoder_helper(const char16_t* str) : str(str) {}
+utf16::string_decoder::string_decoder(const char16_t* str) : str(str) {}
 
-utf16::string_decoder_helper::iterator utf16::string_decoder_helper::begin() {
+utf16::string_decoder::iterator utf16::string_decoder::begin() {
   return iterator(str);
 }
 
-utf16::string_decoder_helper::iterator utf16::string_decoder_helper::end() {
+utf16::string_decoder::iterator utf16::string_decoder::end() {
   return iterator(nullptr);
 }
 
-utf16::string_decoder_helper utf16::decoder(const char16_t* str) {
-  return string_decoder_helper(str);
+utf16::string_decoder utf16::decoder(const char16_t* str) {
+  return string_decoder(str);
 }
 
-utf16::string_decoder_helper utf16::decoder(const std::u16string& str) {
-  return string_decoder_helper(str.c_str());
+utf16::string_decoder utf16::decoder(const std::u16string& str) {
+  return string_decoder(str.c_str());
 }
 
-class utf16::buffer_decoder_helper::iterator : public std::iterator<std::input_iterator_tag, char32_t> {
+class utf16::buffer_decoder::iterator : public std::iterator<std::input_iterator_tag, char32_t> {
  public:
   iterator(const char16_t* str, size_t len) : codepoint(0), next(str), len(len) { operator++(); }
   iterator(const iterator& it) : codepoint(it.codepoint), next(it.next), len(it.len) {}
@@ -157,18 +157,18 @@ class utf16::buffer_decoder_helper::iterator : public std::iterator<std::input_i
   size_t len;
 };
 
-utf16::buffer_decoder_helper::buffer_decoder_helper(const char16_t* str, size_t len) : str(str), len(len) {}
+utf16::buffer_decoder::buffer_decoder(const char16_t* str, size_t len) : str(str), len(len) {}
 
-utf16::buffer_decoder_helper::iterator utf16::buffer_decoder_helper::begin() {
+utf16::buffer_decoder::iterator utf16::buffer_decoder::begin() {
   return iterator(str, len);
 }
 
-utf16::buffer_decoder_helper::iterator utf16::buffer_decoder_helper::end() {
+utf16::buffer_decoder::iterator utf16::buffer_decoder::end() {
   return iterator(nullptr, 0);
 }
 
-utf16::buffer_decoder_helper utf16::decoder(const char16_t* str, size_t len) {
-  return buffer_decoder_helper(str, len);
+utf16::buffer_decoder utf16::decoder(const char16_t* str, size_t len) {
+  return buffer_decoder(str, len);
 }
 
 void utf16::append(char16_t*& str, char32_t chr) {
