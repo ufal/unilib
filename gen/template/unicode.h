@@ -61,7 +61,7 @@ class unicode {
   enum othercase_type { LOWER_ONLY = 1, UPPERTITLE_ONLY = 2, LOWER_THEN_UPPER = 3, UPPER_THEN_TITLE = 4, TITLE_THEN_LOWER = 5 };
 };
 
-category_t unicode::category(char32_t chr) {
+unicode::category_t unicode::category(char32_t chr) {
   return chr < CHARS ? 1 << category_block[category_index[chr >> 8]][chr & 0xFF] : DEFAULT_CAT;
 }
 
