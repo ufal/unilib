@@ -18,27 +18,52 @@ the same name.
 ```
 class ufal::unilib::unicode {
  public:
-  typedef uint32_t category_t;
+  typedef uint32_t [category_t #category_t];
 
-  enum : category_t {
-    Lu = ... , Ll = ... , Lt = ... , Lut = Lu | Lt, LC = Lu | Ll | Lt,
-      Lm = ... , Lo = ... , L = Lu | Ll | Lt | Lm | Lo,
-    Mn = ... , Mc = ... , Me = ... , M = Mn | Mc | Me,
-    Nd = ... , Nl = ... , No = ... , N = Nd | Nl | No,
-    Pc = ... , Pd = ... , Ps = ... , Pe = ... , Pi = ... ,
-      Pf = ... , Po = ... , P = Pc | Pd | Ps | Pe | Pi | Pf | Po,
-    Sm = ... , Sc = ... , Sk = ... , So = ... , S = Sm | Sc | Sk | So,
-    Zs = ... , Zl = ... , Zp = ... , Z = Zs | Zl | Zp,
-    Cc = ... , Cf = ... , Cs = ... , Co = ... , Cn = ... , C = Cc | Cf | Cs | Co | Cn
+  enum : [category_t #category_t] {
+    Lu, Ll, Lt, Lut = Lu | Lt, LC = Lu | Ll | Lt, Lm, Lo, L = Lu | Ll | Lt | Lm | Lo,
+    Mn, Mc, Me, M = Mn | Mc | Me,
+    Nd, Nl, No, N = Nd | Nl | No,
+    Pc, Pd, Ps, Pe, Pi, Pf, Po, P = Pc | Pd | Ps | Pe | Pi | Pf | Po,
+    Sm, Sc, Sk, So, S = Sm | Sc | Sk | So,
+    Zs, Zl, Zp, Z = Zs | Zl | Zp,
+    Cc, Cf, Cs, Co, Cn, C = Cc | Cf | Cs | Co | Cn
   };
 
-  static inline uint32_t category(char32_t chr);
+  static inline [category_t #category_t] [category #category](char32_t chr);
 
-  static inline char32_t lowercase(char32_t chr);
-  static inline char32_t uppercase(char32_t chr);
-  static inline char32_t titlecase(char32_t chr);
+  static inline char32_t [lowercase #lowercase](char32_t chr);
+  static inline char32_t [uppercase #uppercase](char32_t chr);
+  static inline char32_t [titlecase #titlecase](char32_t chr);
 };
 ```
+
+=== unicode::category_t type and enum ===[category_t]
+```
+typedef uint32_t [category_t #category_t];
+
+enum : [category_t #category_t] {
+  Lu, Ll, Lt, Lut = Lu | Lt, LC = Lu | Ll | Lt, Lm, Lo, L = Lu | Ll | Lt | Lm | Lo,
+  Mn, Mc, Me, M = Mn | Mc | Me,
+  Nd, Nl, No, N = Nd | Nl | No,
+  Pc, Pd, Ps, Pe, Pi, Pf, Po, P = Pc | Pd | Ps | Pe | Pi | Pf | Po,
+  Sm, Sc, Sk, So, S = Sm | Sc | Sk | So,
+  Zs, Zl, Zp, Z = Zs | Zl | Zp,
+  Cc, Cf, Cs, Co, Cn, C = Cc | Cf | Cs | Co | Cn
+};
+```
+
+=== unicode::category ===[category]
+``` static inline [category_t #category_t] category(char32_t chr);
+
+=== unicode::lowercase() ===[lowercase]
+``` static inline char32_t lowercase(char32_t chr);
+
+=== unicode::uppercase() ===[uppercase]
+``` static inline char32_t uppercase(char32_t chr);
+
+=== unicode::titlecase() ===[titlecase]
+``` static inline char32_t titlecase(char32_t chr);
 
 
 == Class uninorms ==[uninorms]
@@ -46,12 +71,24 @@ class ufal::unilib::unicode {
 ```
 class ufal::unilib::uninorms {
  public:
-  static void nfc(std::u32string& str);
-  static void nfd(std::u32string& str);
-  static void nfkc(std::u32string& str);
-  static void nfkd(std::u32string& str);
+  static void [nfc #nfc](std::u32string& str);
+  static void [nfd #nfd](std::u32string& str);
+  static void [nfkc #nfkc](std::u32string& str);
+  static void [nfkd #nfkd](std::u32string& str);
 };
 ```
+
+=== uninorms::nfc() ===[nfc]
+``` static void nfc(std::u32string& str);
+
+=== uninorms::nfd() ===[nfd]
+``` static void nfd(std::u32string& str);
+
+=== uninorms::nfkc() ===[nfkc]
+``` static void nfkc(std::u32string& str);
+
+=== uninorms::nfkd() ===[nfkd]
+``` static void nfkd(std::u32string& str);
 
 
 == Class unistrip ==[unistrip]
@@ -59,48 +96,123 @@ class ufal::unilib::uninorms {
 ```
 class ufal::unilib::unistrip {
  public:
-  static inline bool is_combining_mark(char32_t chr);
-  static inline char32_t strip_combining_marks(char32_t chr);
+  static inline bool [is_combining_mark #is_combining_mark](char32_t chr);
+  static inline char32_t [strip_combining_marks #strip_combining_marks](char32_t chr);
 };
 ```
+
+=== unistrip::is_combining_mark() ===[is_combining_mark]
+``` static inline bool is_combining_mark(char32_t chr);
+
+=== unistrip::strip_combining_marks() ===[strip_combining_marks]
+``` static inline char32_t strip_combining_marks(char32_t chr);
 
 
 == Class utf8 ==[utf8]
 
 ```
-class utf8 {
+class ufal::unilib::utf8 {
  public:
-  static bool valid(const char* str);
-  static bool valid(const char* str, size_t len);
-  static inline bool valid(const std::string& str);
+  static bool [valid #valid_c](const char* str);
+  static bool [valid #valid_cl](const char* str, size_t len);
+  static inline bool [valid #valid_s](const std::string& str);
 
-  static inline char32_t decode(const char*& str);
-  static inline char32_t decode(const char*& str, size_t& len);
-  static inline char32_t first(const char* str);
-  static inline char32_t first(const char* str, size_t len);
-  static inline char32_t first(const std::string& str);
+  static inline char32_t [decode #decode_c](const char*& str);
+  static inline char32_t [decode #decode_cl](const char*& str, size_t& len);
+  static inline char32_t [first #first_c](const char* str);
+  static inline char32_t [first #first_cl](const char* str, size_t len);
+  static inline char32_t [first #first_s](const std::string& str);
 
-  static void decode(const char* str, std::u32string& decoded);
-  static void decode(const char* str, size_t len, std::u32string& decoded);
-  static inline void decode(const std::string& str, std::u32string& decoded);
+  static void [decode #decode_c](const char* str, std::u32string& decoded);
+  static void [decode #decode_cl](const char* str, size_t len, std::u32string& decoded);
+  static inline void [decode #decode_s](const std::string& str, std::u32string& decoded);
 
-  class string_decoder_helper;
-  static inline string_decoder_helper decoder(const char* str);
-  static inline string_decoder_helper decoder(const std::string& str);
+  class [string_decoder #string_decoder] { public: class iterator; inline iterator begin(); inline iterator end(); };
+  class [buffer_decoder #buffer_decoder] { public: class iterator; inline iterator begin(); inline iterator end(); };
+  static inline [string_decoder #string_decoder] [decoder #decoder_c](const char* str);
+  static inline [buffer_decoder #buffer_decoder] [decoder #decoder_cl](const char* str, size_t len);
+  static inline [string_decoder #string_decoder] [decoder #decoder_s](const std::string& str);
 
-  class buffer_decoder_helper;
-  static inline buffer_decoder_helper decoder(const char* str, size_t len);
+  static inline void [append #append_c](char*& str, char32_t chr);
+  static inline void [append #append_s](std::string& str, char32_t chr);
+  static void [encode #encode](const std::u32string& str, std::string& encoded);
 
-  static inline void append(char*& str, char32_t chr);
-  static inline void append(std::string& str, char32_t chr);
-
-  static void encode(const std::u32string& str, std::string& encoded);
-
-  template<class F> static void map(F f, const char* str, std::string& result);
-  template<class F> static void map(F f, const char* str, size_t len, std::string& result);
-  template<class F> static void map(F f, const std::string& str, std::string& result);
+  template<class F> static void [map #map_c](F f, const char* str, std::string& result);
+  template<class F> static void [map #map_cl](F f, const char* str, size_t len, std::string& result);
+  template<class F> static void [map #map_s](F f, const std::string& str, std::string& result);
 };
 ```
+
+The [utf8 #utf8] class deals with UTF-8 encoding. The ``char`` type
+is used to represent UTF-8 characters and ``string`` type is used to
+represented UTF-8 strings; the ``char32_t`` type represents Unicode code points
+and ``u32string`` type represents strings of Unicode code points.
+
+=== utf8::valid(const char* str) ===[valid_c]
+``` static bool valid (const char* str);
+
+=== utf8::valid(const char* str, size_t len) ===[valid_cl]
+``` static bool valid (const char* str, size_t len);
+
+=== utf8::valid(const std::string& str) ===[valid_s]
+``` static inline bool valid (const std::string& str);
+
+=== utf8::decode(const char*& str) ===[decode_c]
+``` static inline char32_t decode (const char*& str);
+
+=== utf8::decode(const char*& str, size_t& len) ===[decode_cl]
+``` static inline char32_t decode (const char*& str, size_t& len);
+
+=== utf8::first(const char* str) ===[first_c]
+``` static inline char32_t first (const char* str);
+
+=== utf8::first(const char* str, size_t len) ===[first_cl]
+``` static inline char32_t first (const char* str, size_t len);
+
+=== utf8::first(const std::string& str) ===[first_s]
+``` static inline char32_t first (const std::string& str);
+
+=== utf8::decode(const char* str, std::u32string& decoded) ===[decode_c]
+``` static void decode (const char* str, std::u32string& decoded);
+
+=== utf8::decode(const char* str, size_t len, std::u32string& decoded) ===[decode_cl]
+``` static void decode (const char* str, size_t len, std::u32string& decoded);
+
+=== utf8::decode(const std::string& str, std::u32string& decoded) ===[decode_s]
+``` static inline void decode (const std::string& str, std::u32string& decoded);
+
+=== utf8::string_decoder ===[string_decoder]
+``` class string_decoder { public: class iterator; inline iterator begin(); inline iterator end(); };
+
+=== utf8::buffer_decoder ===[buffer_decoder]
+``` class buffer_decoder { public: class iterator; inline iterator begin(); inline iterator end(); };
+
+=== utf8::decoder(const char* str) ===[decoder_c]
+``` static inline [string_decoder #string_decoder] decoder (const char* str);
+
+=== utf8::decoder(const char* str, size_t len) ===[decoder_cl]
+``` static inline [buffer_decoder #buffer_decoder] decoder (const char* str, size_t len);
+
+=== utf8::decoder(const std::string& str) ===[decoder_s]
+``` static inline [string_decoder #string_decoder] decoder (const std::string& str);
+
+=== utf8::append(char*& str, char32_t chr) ===[append_c]
+``` static inline void append (char*& str, char32_t chr);
+
+=== utf8::append(std::string& str, char32_t chr) ===[append_s]
+``` static inline void append (std::string& str, char32_t chr);
+
+=== utf8::encode(const std::u32string& str, std::string& encoded) ===[encode]
+``` static void encode (const std::u32string& str, std::string& encoded);
+
+=== utf8::map(F f, const char* str, std::string& result) ===[map_c]
+``` template<class F> static void map (F f, const char* str, std::string& result);
+
+=== utf8::map(F f, const char* str, size_t len, std::string& result) ===[map_cl]
+``` template<class F> static void map (F f, const char* str, size_t len, std::string& result);
+
+=== utf8::map(F f, const std::string& str, std::string& result) ===[map_s]
+``` template<class F> static void map (F f, const std::string& str, std::string& result);
 
 
 == Class utf16 ==[utf16]
@@ -122,12 +234,11 @@ class ufal::unilib::utf16 {
   static void decode(const char16_t* str, size_t len, std::u32string& decoded);
   static inline void decode(const std::u16string& str, std::u32string& decoded);
 
-  class string_decoder_helper;
-  static inline string_decoder_helper decoder(const char16_t* str);
-  static inline string_decoder_helper decoder(const std::u16string& str);
-
-  class buffer_decoder_helper;
-  static inline buffer_decoder_helper decoder(const char16_t* str, size_t len);
+  class string_decoder { public: class iterator; inline iterator begin(); inline iterator end(); };
+  class buffer_decoder { public: class iterator; inline iterator begin(); inline iterator end(); };
+  static inline string_decoder decoder(const char16_t* str);
+  static inline buffer_decoder decoder(const char16_t* str, size_t len);
+  static inline string_decoder decoder(const std::u16string& str);
 
   static inline void append(char16_t*& str, char32_t chr);
   static inline void append(std::u16string& str, char32_t chr);
@@ -138,3 +249,10 @@ class ufal::unilib::utf16 {
   template<class F> static void map(F f, const std::u16string& str, std::u16string& result);
 };
 ```
+
+The [utf16 #utf16] class is a direct analogue of [utf8 #utf8] class, but
+instead of UTF-8 encoding it deals with UTF-16 encoding. The ``char16_t`` type
+is used to represent UTF-16 characters and ``u16string`` type is used to
+represented UTF-16 strings.
+
+For method documentation, please see the [utf8 #utf8] class.
