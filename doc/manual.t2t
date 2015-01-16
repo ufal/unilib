@@ -193,7 +193,7 @@ This method is equivalent to the following process:
 - If the given code points has general category ``M``, return it.
 - Othervise, convert it to NFD.
 - If there are no code points with general category ``M``, return
-  the original character.
+  the original code points.
 - Otherwise, remove all code points with general cagetory ``M``.
 - Convert the result to NFC.
 - Return the resulting code point.
@@ -204,33 +204,33 @@ This method is equivalent to the following process:
 ```
 class ufal::unilib::utf8 {
  public:
-  static bool [valid #valid_c](const char* str);
-  static bool [valid #valid_cl](const char* str, size_t len);
-  static inline bool [valid #valid_s](const std::string& str);
+  static bool [valid #valid](const char* str);
+  static bool [valid #valid](const char* str, size_t len);
+  static inline bool [valid #valid](const std::string& str);
 
-  static inline char32_t [decode #decode_c](const char*& str);
-  static inline char32_t [decode #decode_cl](const char*& str, size_t& len);
-  static inline char32_t [first #first_c](const char* str);
-  static inline char32_t [first #first_cl](const char* str, size_t len);
-  static inline char32_t [first #first_s](const std::string& str);
+  static inline char32_t [decode #decode_char](const char*& str);
+  static inline char32_t [decode #decode_char](const char*& str, size_t& len);
+  static inline char32_t [first #first](const char* str);
+  static inline char32_t [first #first](const char* str, size_t len);
+  static inline char32_t [first #first](const std::string& str);
 
-  static void [decode #decode_c](const char* str, std::u32string& decoded);
-  static void [decode #decode_cl](const char* str, size_t len, std::u32string& decoded);
-  static inline void [decode #decode_s](const std::string& str, std::u32string& decoded);
+  static void [decode #decode_str](const char* str, std::u32string& decoded);
+  static void [decode #decode_str](const char* str, size_t len, std::u32string& decoded);
+  static inline void [decode #decode_str](const std::string& str, std::u32string& decoded);
 
   class [string_decoder #string_decoder] { public: class iterator; inline iterator begin(); inline iterator end(); };
   class [buffer_decoder #buffer_decoder] { public: class iterator; inline iterator begin(); inline iterator end(); };
-  static inline [string_decoder #string_decoder] [decoder #decoder_c](const char* str);
-  static inline [buffer_decoder #buffer_decoder] [decoder #decoder_cl](const char* str, size_t len);
-  static inline [string_decoder #string_decoder] [decoder #decoder_s](const std::string& str);
+  static inline [string_decoder #string_decoder] [decoder #decoder](const char* str);
+  static inline [buffer_decoder #buffer_decoder] [decoder #decoder](const char* str, size_t len);
+  static inline [string_decoder #string_decoder] [decoder #decoder](const std::string& str);
 
-  static inline void [append #append_c](char*& str, char32_t chr);
-  static inline void [append #append_s](std::string& str, char32_t chr);
+  static inline void [append #append](char*& str, char32_t chr);
+  static inline void [append #append](std::string& str, char32_t chr);
   static void [encode #encode](const std::u32string& str, std::string& encoded);
 
-  template<class F> static void [map #map_c](F f, const char* str, std::string& result);
-  template<class F> static void [map #map_cl](F f, const char* str, size_t len, std::string& result);
-  template<class F> static void [map #map_s](F f, const std::string& str, std::string& result);
+  template<class F> static void [map #map](F f, const char* str, std::string& result);
+  template<class F> static void [map #map](F f, const char* str, size_t len, std::string& result);
+  template<class F> static void [map #map](F f, const std::string& str, std::string& result);
 };
 ```
 
@@ -238,71 +238,122 @@ The [``utf8`` #utf8] class deals with UTF-8 encoding. The ``char`` type
 is used to represent UTF-8 code unit and ``string`` type is used to
 represented sequences of UTF-8 code units.
 
-=== utf8::valid(const char* str) ===[valid_c]
-``` static bool valid (const char* str);
+The input UTF-8 strings can be either:
+- ``const char*``: C-style strings ended by ``'\0'`` code point.
+- ``const char*, size_t``: Buffers of given length which can contain ``'\0'`` code points.
+- ``const string&``: STL strings ended by ``'\0'`` code point.
 
-=== utf8::valid(const char* str, size_t len) ===[valid_cl]
-``` static bool valid (const char* str, size_t len);
 
-=== utf8::valid(const std::string& str) ===[valid_s]
-``` static inline bool valid (const std::string& str);
 
-=== utf8::decode(const char*& str) ===[decode_c]
-``` static inline char32_t decode (const char*& str);
+=== utf8::valid() ===[valid]
+```
+static bool valid (const char* str);
+static bool valid (const char* str, size_t len);
+static inline bool valid (const std::string& str);
+```
 
-=== utf8::decode(const char*& str, size_t& len) ===[decode_cl]
-``` static inline char32_t decode (const char*& str, size_t& len);
+Returns ``true`` if the given string is in valid UTF-8 encoding.
 
-=== utf8::first(const char* str) ===[first_c]
-``` static inline char32_t first (const char* str);
 
-=== utf8::first(const char* str, size_t len) ===[first_cl]
-``` static inline char32_t first (const char* str, size_t len);
+=== utf8::decode() character ===[decode_char]
+```
+static inline char32_t decode (const char*& str);
+static inline char32_t decode (const char*& str, size_t& len);
+```
 
-=== utf8::first(const std::string& str) ===[first_s]
-``` static inline char32_t first (const std::string& str);
+Decode one code point of given UTF-8 string and advance it.  If invalid UTF-8
+encoding is found, ``?`` is returned and the input string advances as little as
+possible, so that no valid UTF-8 encoded code points are skipped.
 
-=== utf8::decode(const char* str, std::u32string& decoded) ===[decode_c]
-``` static void decode (const char* str, std::u32string& decoded);
+If end of string is detected (``len`` is zero in the buffer version,
+of ``*str`` is ``'\0'`` in the c-style string version), ``'\0'`` is returned
+and the string is not advanced.
 
-=== utf8::decode(const char* str, size_t len, std::u32string& decoded) ===[decode_cl]
-``` static void decode (const char* str, size_t len, std::u32string& decoded);
 
-=== utf8::decode(const std::string& str, std::u32string& decoded) ===[decode_s]
-``` static inline void decode (const std::string& str, std::u32string& decoded);
+=== utf8::first() ===[first]
+```
+static inline char32_t first (const char* str);
+static inline char32_t first (const char* str, size_t len);
+static inline char32_t first (const std::string& str);
+```
+
+Returns the first Unicode code point in the input string. If ``len`` is zero
+in the buffer version, ``'\0'`` is returned.
+
+
+=== utf8::decode() string ===[decode_str]
+```
+static void decode (const char* str, std::u32string& decoded);
+static void decode (const char* str, size_t len, std::u32string& decoded);
+static inline void decode (const std::string& str, std::u32string& decoded);
+```
+
+Decode the whole given UTF-8 string to the resulting ``u32string``.
+
+The invalid UTF-8 encoding is handled as in the [character version of ``decode()`` #decode_char],
+i.e. no valid UTF-8 code points are skipped and the invalid ones are replaced by ``?``.
+
 
 === utf8::string_decoder ===[string_decoder]
 ``` class string_decoder { public: class iterator; inline iterator begin(); inline iterator end(); };
 
+Helper class representing iterable view on UTF-8 encoded string.
+
+
 === utf8::buffer_decoder ===[buffer_decoder]
 ``` class buffer_decoder { public: class iterator; inline iterator begin(); inline iterator end(); };
 
-=== utf8::decoder(const char* str) ===[decoder_c]
-``` static inline [string_decoder #string_decoder] decoder (const char* str);
+Helper class representing iterable view on UTF-8 encoded string.
 
-=== utf8::decoder(const char* str, size_t len) ===[decoder_cl]
-``` static inline [buffer_decoder #buffer_decoder] decoder (const char* str, size_t len);
 
-=== utf8::decoder(const std::string& str) ===[decoder_s]
-``` static inline [string_decoder #string_decoder] decoder (const std::string& str);
+=== utf8::decoder() ===[decoder]
+```
+static inline [string_decoder #string_decoder] decoder(const char* str);
+static inline [buffer_decoder #buffer_decoder] decoder(const char* str, size_t len);
+static inline [string_decoder #string_decoder] decoder(const std::string& str);
+```
 
-=== utf8::append(char*& str, char32_t chr) ===[append_c]
-``` static inline void append (char*& str, char32_t chr);
+Returns an iterable object which iterates over Unicode code points
+of the input UTF-8 encoded string.
 
-=== utf8::append(std::string& str, char32_t chr) ===[append_s]
-``` static inline void append (std::string& str, char32_t chr);
+It is supposed to be used like
+``` for (auto chr : [utf8 #utf8]::[decoder #decoder](str)) ...
 
-=== utf8::encode(const std::u32string& str, std::string& encoded) ===[encode]
+Note that the iterable object is read-only, so although code points
+can be assigned to the iterator, the assignment does not change
+the original string.
+
+
+=== utf8::append() ===[append]
+```
+static inline void append (char*& str, char32_t chr);
+static inline void append (std::string& str, char32_t chr);
+```
+
+Encode given Unicode code point in UTF-8 encoding and append it to
+given string.
+
+
+=== utf8::encode() ===[encode]
 ``` static void encode (const std::u32string& str, std::string& encoded);
 
-=== utf8::map(F f, const char* str, std::string& result) ===[map_c]
-``` template<class F> static void map (F f, const char* str, std::string& result);
+Encode given Unicode string in UTF-8 encoding.
 
-=== utf8::map(F f, const char* str, size_t len, std::string& result) ===[map_cl]
-``` template<class F> static void map (F f, const char* str, size_t len, std::string& result);
 
-=== utf8::map(F f, const std::string& str, std::string& result) ===[map_s]
-``` template<class F> static void map (F f, const std::string& str, std::string& result);
+=== utf8::map() ===[map]
+```
+template<class F> static void map (F f, const char* str, std::string& result);
+template<class F> static void map (F f, const char* str, size_t len, std::string& result);
+template<class F> static void map (F f, const std::string& str, std::string& result);
+```
+
+Given input UTF-8 encoded string, decode the Unicode code points
+(using [``decode`` #decode_char]), apply the function ``f`` to
+every one of them, encode the resulting string back to UTF-8 and
+store it to ``result``.
+
+These functions can be used for example to change case of Unicode code points:
+``` [utf8 #utf8]::[map #map]([unicode #unicode]::[lowercase #lowercase], input, output)
 
 
 == Class utf16 ==[utf16]
