@@ -18,6 +18,68 @@
   <li><a href="#toc1">Introduction</a>
   </li>
   <li><a href="#toc2">API Reference</a>
+    <ul>
+    <li><a href="#unicode">2.1. Class unicode</a>
+      <ul>
+      <li><a href="#category_t">2.1.1. unicode::category_t</a>
+      </li>
+      <li><a href="#category">2.1.2. unicode::category</a>
+      </li>
+      <li><a href="#lowercase">2.1.3. unicode::lowercase()</a>
+      </li>
+      <li><a href="#uppercase">2.1.4. unicode::uppercase()</a>
+      </li>
+      <li><a href="#titlecase">2.1.5. unicode::titlecase()</a>
+      </li>
+      </ul>
+    </li>
+    <li><a href="#uninorms">2.2. Class uninorms</a>
+      <ul>
+      <li><a href="#nfc">2.2.1. uninorms::nfc()</a>
+      </li>
+      <li><a href="#nfd">2.2.2. uninorms::nfd()</a>
+      </li>
+      <li><a href="#nfkc">2.2.3. uninorms::nfkc()</a>
+      </li>
+      <li><a href="#nfkd">2.2.4. uninorms::nfkd()</a>
+      </li>
+      </ul>
+    </li>
+    <li><a href="#unistrip">2.3. Class unistrip</a>
+      <ul>
+      <li><a href="#is_combining_mark">2.3.1. unistrip::is_combining_mark()</a>
+      </li>
+      <li><a href="#strip_combining_marks">2.3.2. unistrip::strip_combining_marks()</a>
+      </li>
+      </ul>
+    </li>
+    <li><a href="#utf8">2.4. Class utf8</a>
+      <ul>
+      <li><a href="#valid">2.4.1. utf8::valid()</a>
+      </li>
+      <li><a href="#decode_char">2.4.2. utf8::decode() character</a>
+      </li>
+      <li><a href="#first">2.4.3. utf8::first()</a>
+      </li>
+      <li><a href="#decode_str">2.4.4. utf8::decode() string</a>
+      </li>
+      <li><a href="#string_decoder">2.4.5. utf8::string_decoder</a>
+      </li>
+      <li><a href="#buffer_decoder">2.4.6. utf8::buffer_decoder</a>
+      </li>
+      <li><a href="#decoder">2.4.7. utf8::decoder()</a>
+      </li>
+      <li><a href="#append">2.4.8. utf8::append()</a>
+      </li>
+      <li><a href="#encode">2.4.9. utf8::encode()</a>
+      </li>
+      <li><a href="#map">2.4.10. utf8::map()</a>
+      </li>
+      </ul>
+    </li>
+    <li><a href="#utf16">2.5. Class utf16</a>
+    </li>
+    </ul>
   </li>
   </ol>
 
@@ -75,7 +137,535 @@ UniLib repository <a href="http://github.com/ufal/unilib">http://github.com/ufal
 <a id="toc2" name="toc2"></a>
 <h1>2. API Reference</h1>
 
+<p>
+The UniLib library is contained in <code>ufal::unilib</code> namespace.
+It consists of several independent files, each containing a class with
+the same name. All methods are thread-safe, unless stated otherwise.
+</p>
+<p>
+The <code>char32_t</code> type represents Unicode code points and <code>u32string</code> type
+represents sequences of Unicode code points. For UTF-8 the <code>char</code> and
+<code>string</code> types represent code units and sequences of code units, for UTF-16
+the <code>char16_t</code> and <code>u16string</code> types are used to represent code units and
+sequence of code units.
+</p>
+
+<a id="unicode" name="unicode"></a>
+<h2>2.1. Class unicode</h2>
+
+<pre>
+class ufal::unilib::unicode {
+ public:
+  typedef uint32_t <A HREF="#category_t">category_t</A>;
+
+  enum : <A HREF="#category_t">category_t</A> {
+    Lu, Ll, Lt, Lut = Lu | Lt, LC = Lu | Ll | Lt, Lm, Lo, L = Lu | Ll | Lt | Lm | Lo,
+    Mn, Mc, Me, M = Mn | Mc | Me,
+    Nd, Nl, No, N = Nd | Nl | No,
+    Pc, Pd, Ps, Pe, Pi, Pf, Po, P = Pc | Pd | Ps | Pe | Pi | Pf | Po,
+    Sm, Sc, Sk, So, S = Sm | Sc | Sk | So,
+    Zs, Zl, Zp, Z = Zs | Zl | Zp,
+    Cc, Cf, Cs, Co, Cn, C = Cc | Cf | Cs | Co | Cn
+  };
+
+  static inline <A HREF="#category_t">category_t</A> <A HREF="#category">category</A>(char32_t chr);
+
+  static inline char32_t <A HREF="#lowercase">lowercase</A>(char32_t chr);
+  static inline char32_t <A HREF="#uppercase">uppercase</A>(char32_t chr);
+  static inline char32_t <A HREF="#titlecase">titlecase</A>(char32_t chr);
+};
+</pre>
+
+<p style="margin-bottom:0">
+The <a href="#unicode"><code>unicode</code></a> class contains basic information from
+<a href="http://www.unicode.org/reports/tr44/">Unicode Character Database</a>, notably:
+</p>
+<ul style="margin-top:0">
+<li>general categories
+</li>
+<li>simple uppercase/lowercase/titlecase mappings
+</li>
+</ul>
+
+<a id="category_t" name="category_t"></a>
+<h3>2.1.1. unicode::category_t</h3>
+
+<pre>
+typedef uint32_t <A HREF="#category_t">category_t</A>;
+
+enum : <A HREF="#category_t">category_t</A> {
+  Lu, Ll, Lt, Lut = Lu | Lt, LC = Lu | Ll | Lt, Lm, Lo, L = Lu | Ll | Lt | Lm | Lo,
+  Mn, Mc, Me, M = Mn | Mc | Me,
+  Nd, Nl, No, N = Nd | Nl | No,
+  Pc, Pd, Ps, Pe, Pi, Pf, Po, P = Pc | Pd | Ps | Pe | Pi | Pf | Po,
+  Sm, Sc, Sk, So, S = Sm | Sc | Sk | So,
+  Zs, Zl, Zp, Z = Zs | Zl | Zp,
+  Cc, Cf, Cs, Co, Cn, C = Cc | Cf | Cs | Co | Cn
+};
+</pre>
+
+<p style="margin-bottom:0">
+The <a href="#category_t"><code>category_t</code></a> type represents general category from
+<a href="http://www.unicode.org/reports/tr44/">Unicode Character Database</a>.
+Its values are:
+</p>
+<ul style="margin-top:0">
+<li>abbreviated property value aliases for general categories
+</li>
+<li>abbreviated aliases for groupings of related general categories, as listed
+  in the <a href="http://www.unicode.org/reports/tr44/">Unicode Character Database</a>.
+</li>
+</ul>
+
+<p>
+Note that the <a href="#category_t"><code>category_t</code></a> is a bitmask indicating general
+categories, which makes it easy to define arbitrary subsets of general categories
+similarly to how groupings of general categories are defined.
+</p>
+
+<a id="category" name="category"></a>
+<h3>2.1.2. unicode::category</h3>
+
+<pre>
+static inline <A HREF="#category_t">category_t</A> category(char32_t chr);
+</pre>
+
+<p>
+Returns general category of the given Unicode code point as a value of
+<a href="#category_t"><code>category_t</code></a> enumeration. The <code>Cn</code> category is
+returned for code points outside of valid range.
+</p>
+
+<a id="lowercase" name="lowercase"></a>
+<h3>2.1.3. unicode::lowercase()</h3>
+
+<pre>
+static inline char32_t lowercase(char32_t chr);
+</pre>
+
+<p>
+Returns the simple lowercase mapping of the given code point from
+<a href="http://www.unicode.org/reports/tr44/">Unicode Character Database</a>.
+If no such mapping is defined or the given code point is outside
+of valid range, the original code point is returned.
+</p>
+
+<a id="uppercase" name="uppercase"></a>
+<h3>2.1.4. unicode::uppercase()</h3>
+
+<pre>
+static inline char32_t uppercase(char32_t chr);
+</pre>
+
+<p>
+Returns the simple uppercase mapping of the given code point from
+<a href="http://www.unicode.org/reports/tr44/">Unicode Character Database</a>.
+If no such mapping is defined or the given code point is outside
+of valid range, the original code point is returned.
+</p>
+
+<a id="titlecase" name="titlecase"></a>
+<h3>2.1.5. unicode::titlecase()</h3>
+
+<pre>
+static inline char32_t titlecase(char32_t chr);
+</pre>
+
+<p>
+Returns the simple titlecase mapping of the given code point from
+<a href="http://www.unicode.org/reports/tr44/">Unicode Character Database</a>.
+If no such mapping is defined or the given code point is outside
+of valid range, the original code point is returned.
+</p>
+
+<a id="uninorms" name="uninorms"></a>
+<h2>2.2. Class uninorms</h2>
+
+<pre>
+class ufal::unilib::uninorms {
+ public:
+  static void <A HREF="#nfc">nfc</A>(std::u32string&amp; str);
+  static void <A HREF="#nfd">nfd</A>(std::u32string&amp; str);
+  static void <A HREF="#nfkc">nfkc</A>(std::u32string&amp; str);
+  static void <A HREF="#nfkd">nfkd</A>(std::u32string&amp; str);
+};
+</pre>
+
+<p>
+The <a href="#uninorms"><code>uninorms</code></a>] class performs normalization to
+<a href="http://unicode.org/reports/tr15/">Unicode Normalization Forms</a>.
+All normalization forms are supported and the normalization
+is performed inplace on <code>u32string</code> representing a string
+of Unicode code points.
+</p>
+
+<a id="nfc" name="nfc"></a>
+<h3>2.2.1. uninorms::nfc()</h3>
+
+<pre>
+static void nfc(std::u32string&amp; str);
+</pre>
+
+<p>
+Convert given string to <a href="http://unicode.org/reports/tr15/#Norm_Forms">Normalization Form C</a>.
+</p>
+
+<a id="nfd" name="nfd"></a>
+<h3>2.2.2. uninorms::nfd()</h3>
+
+<pre>
+static void nfd(std::u32string&amp; str);
+</pre>
+
+<p>
+Convert given string to <a href="http://unicode.org/reports/tr15/#Norm_Forms">Normalization Form D</a>.
+</p>
+
+<a id="nfkc" name="nfkc"></a>
+<h3>2.2.3. uninorms::nfkc()</h3>
+
+<pre>
+static void nfkc(std::u32string&amp; str);
+</pre>
+
+<p>
+Convert given string to <a href="http://unicode.org/reports/tr15/#Norm_Forms">Normalization Form KC</a>.
+</p>
+
+<a id="nfkd" name="nfkd"></a>
+<h3>2.2.4. uninorms::nfkd()</h3>
+
+<pre>
+static void nfkd(std::u32string&amp; str);
+</pre>
+
+<p>
+Convert given string to <a href="http://unicode.org/reports/tr15/#Norm_Forms">Normalization Form KD</a>.
+</p>
+
+<a id="unistrip" name="unistrip"></a>
+<h2>2.3. Class unistrip</h2>
+
+<pre>
+class ufal::unilib::unistrip {
+ public:
+  static inline bool <A HREF="#is_combining_mark">is_combining_mark</A>(char32_t chr);
+  static inline char32_t <A HREF="#strip_combining_marks">strip_combining_marks</A>(char32_t chr);
+};
+</pre>
+
+<p>
+The <a href="#unistrip"><code>unistrip</code></a> class performs combining marks stripping.
+The same functionality can be achieved by combining <a href="#unicode"><code>unicode</code></a>
+and <a href="#uninorms"><code>uninorms</code></a> class, but <a href="#unistrip"><code>unistrip</code></a> class
+performs the task much faster and needs less embedded data.
+</p>
+
+<a id="is_combining_mark" name="is_combining_mark"></a>
+<h3>2.3.1. unistrip::is_combining_mark()</h3>
+
+<pre>
+static inline bool is_combining_mark(char32_t chr);
+</pre>
+
+<p>
+Returns true if the general category of given Unicode code point is
+<code>M</code> (i.e., nonspacing mark <code>Mn</code> or spacing mark <code>Mc</code> or enclosing mark
+<code>Me</code>).
+</p>
+
+<a id="strip_combining_marks" name="strip_combining_marks"></a>
+<h3>2.3.2. unistrip::strip_combining_marks()</h3>
+
+<pre>
+static inline char32_t strip_combining_marks(char32_t chr);
+</pre>
+
+<p>
+Returns Unicode code point which has all combining marks present
+in the given code point removed. If the given code point is a combining
+mark itself, or there are no combining marks present,
+<a href="#strip_combining_marks"><code>strip_combining_marks</code></a> returns the original code
+point.
+</p>
+<p style="margin-bottom:0">
+This method is equivalent to the following process:
+</p>
+<ul style="margin-top:0">
+<li>If the given code point is outside the valid Unicode range, return it.
+</li>
+<li>If the given code points has general category <code>M</code>, return it.
+</li>
+<li>Othervise, convert it to NFD.
+</li>
+<li>If there are no code points with general category <code>M</code>, return
+  the original code points.
+</li>
+<li>Otherwise, remove all code points with general cagetory <code>M</code>.
+</li>
+<li>Convert the result to NFC.
+</li>
+<li>Return the resulting code point.
+</li>
+</ul>
+
+<a id="utf8" name="utf8"></a>
+<h2>2.4. Class utf8</h2>
+
+<pre>
+class ufal::unilib::utf8 {
+ public:
+  static bool <A HREF="#valid">valid</A>(const char* str);
+  static bool <A HREF="#valid">valid</A>(const char* str, size_t len);
+  static inline bool <A HREF="#valid">valid</A>(const std::string&amp; str);
+
+  static inline char32_t <A HREF="#decode_char">decode</A>(const char*&amp; str);
+  static inline char32_t <A HREF="#decode_char">decode</A>(const char*&amp; str, size_t&amp; len);
+  static inline char32_t <A HREF="#first">first</A>(const char* str);
+  static inline char32_t <A HREF="#first">first</A>(const char* str, size_t len);
+  static inline char32_t <A HREF="#first">first</A>(const std::string&amp; str);
+
+  static void <A HREF="#decode_str">decode</A>(const char* str, std::u32string&amp; decoded);
+  static void <A HREF="#decode_str">decode</A>(const char* str, size_t len, std::u32string&amp; decoded);
+  static inline void <A HREF="#decode_str">decode</A>(const std::string&amp; str, std::u32string&amp; decoded);
+
+  class <A HREF="#string_decoder">string_decoder</A> { public: class iterator; inline iterator begin(); inline iterator end(); };
+  class <A HREF="#buffer_decoder">buffer_decoder</A> { public: class iterator; inline iterator begin(); inline iterator end(); };
+  static inline <A HREF="#string_decoder">string_decoder</A> <A HREF="#decoder">decoder</A>(const char* str);
+  static inline <A HREF="#buffer_decoder">buffer_decoder</A> <A HREF="#decoder">decoder</A>(const char* str, size_t len);
+  static inline <A HREF="#string_decoder">string_decoder</A> <A HREF="#decoder">decoder</A>(const std::string&amp; str);
+
+  static inline void <A HREF="#append">append</A>(char*&amp; str, char32_t chr);
+  static inline void <A HREF="#append">append</A>(std::string&amp; str, char32_t chr);
+  static void <A HREF="#encode">encode</A>(const std::u32string&amp; str, std::string&amp; encoded);
+
+  template&lt;class F&gt; static void <A HREF="#map">map</A>(F f, const char* str, std::string&amp; result);
+  template&lt;class F&gt; static void <A HREF="#map">map</A>(F f, const char* str, size_t len, std::string&amp; result);
+  template&lt;class F&gt; static void <A HREF="#map">map</A>(F f, const std::string&amp; str, std::string&amp; result);
+};
+</pre>
+
+<p>
+The <a href="#utf8"><code>utf8</code></a> class deals with UTF-8 encoding. The <code>char</code> type
+is used to represent UTF-8 code unit and <code>string</code> type is used to
+represented sequences of UTF-8 code units.
+</p>
+<p style="margin-bottom:0">
+The input UTF-8 strings can be either:
+</p>
+<ul style="margin-top:0">
+<li><code>const char*</code>: C-style strings ended by <code>'\0'</code> code point.
+</li>
+<li><code>const char*, size_t</code>: Buffers of given length which can contain <code>'\0'</code> code points.
+</li>
+<li><code>const string&amp;</code>: STL strings ended by <code>'\0'</code> code point.
+</li>
+</ul>
+
+<a id="valid" name="valid"></a>
+<h3>2.4.1. utf8::valid()</h3>
+
+<pre>
+static bool valid (const char* str);
+static bool valid (const char* str, size_t len);
+static inline bool valid (const std::string&amp; str);
+</pre>
+
+<p>
+Returns <code>true</code> if the given string is in valid UTF-8 encoding.
+</p>
+
+<a id="decode_char" name="decode_char"></a>
+<h3>2.4.2. utf8::decode() character</h3>
+
+<pre>
+static inline char32_t decode (const char*&amp; str);
+static inline char32_t decode (const char*&amp; str, size_t&amp; len);
+</pre>
+
+<p>
+Decode one code point of given UTF-8 string and advance it.  If invalid UTF-8
+encoding is found, <code>?</code> is returned and the input string advances as little as
+possible, so that no valid UTF-8 encoded code points are skipped.
+</p>
+<p>
+If end of string is detected (<code>len</code> is zero in the buffer version,
+of <code>*str</code> is <code>'\0'</code> in the c-style string version), <code>'\0'</code> is returned
+and the string is not advanced.
+</p>
+
+<a id="first" name="first"></a>
+<h3>2.4.3. utf8::first()</h3>
+
+<pre>
+static inline char32_t first (const char* str);
+static inline char32_t first (const char* str, size_t len);
+static inline char32_t first (const std::string&amp; str);
+</pre>
+
+<p>
+Returns the first Unicode code point in the input string. If <code>len</code> is zero
+in the buffer version, <code>'\0'</code> is returned.
+</p>
+
+<a id="decode_str" name="decode_str"></a>
+<h3>2.4.4. utf8::decode() string</h3>
+
+<pre>
+static void decode (const char* str, std::u32string&amp; decoded);
+static void decode (const char* str, size_t len, std::u32string&amp; decoded);
+static inline void decode (const std::string&amp; str, std::u32string&amp; decoded);
+</pre>
+
+<p>
+Decode the whole given UTF-8 string to the resulting <code>u32string</code>.
+</p>
+<p>
+The invalid UTF-8 encoding is handled as in the <a href="#decode_char">character version of <code>decode()</code></a>,
+i.e. no valid UTF-8 code points are skipped and the invalid ones are replaced by <code>?</code>.
+</p>
+
+<a id="string_decoder" name="string_decoder"></a>
+<h3>2.4.5. utf8::string_decoder</h3>
+
+<pre>
+class string_decoder { public: class iterator; inline iterator begin(); inline iterator end(); };
+</pre>
+
+<p>
+Helper class representing iterable view on UTF-8 encoded string.
+</p>
+
+<a id="buffer_decoder" name="buffer_decoder"></a>
+<h3>2.4.6. utf8::buffer_decoder</h3>
+
+<pre>
+class buffer_decoder { public: class iterator; inline iterator begin(); inline iterator end(); };
+</pre>
+
+<p>
+Helper class representing iterable view on UTF-8 encoded string.
+</p>
+
+<a id="decoder" name="decoder"></a>
+<h3>2.4.7. utf8::decoder()</h3>
+
+<pre>
+static inline <A HREF="#string_decoder">string_decoder</A> decoder(const char* str);
+static inline <A HREF="#buffer_decoder">buffer_decoder</A> decoder(const char* str, size_t len);
+static inline <A HREF="#string_decoder">string_decoder</A> decoder(const std::string&amp; str);
+</pre>
+
+<p>
+Returns an iterable object which iterates over Unicode code points
+of the input UTF-8 encoded string.
+</p>
+<p style="margin-bottom:0">
+It is supposed to be used like
+</p>
+<pre style="margin-top:0">
+for (auto chr : <A HREF="#utf8">utf8</A>::<A HREF="#decoder">decoder</A>(str)) ...
+</pre>
+
+<p>
+Note that the iterable object is read-only, so although code points
+can be assigned to the iterator, the assignment does not change
+the original string.
+</p>
+
+<a id="append" name="append"></a>
+<h3>2.4.8. utf8::append()</h3>
+
+<pre>
+static inline void append (char*&amp; str, char32_t chr);
+static inline void append (std::string&amp; str, char32_t chr);
+</pre>
+
+<p>
+Encode given Unicode code point in UTF-8 encoding and append it to
+given string.
+</p>
+
+<a id="encode" name="encode"></a>
+<h3>2.4.9. utf8::encode()</h3>
+
+<pre>
+static void encode (const std::u32string&amp; str, std::string&amp; encoded);
+</pre>
+
+<p>
+Encode given Unicode string in UTF-8 encoding.
+</p>
+
+<a id="map" name="map"></a>
+<h3>2.4.10. utf8::map()</h3>
+
+<pre>
+template&lt;class F&gt; static void map (F f, const char* str, std::string&amp; result);
+template&lt;class F&gt; static void map (F f, const char* str, size_t len, std::string&amp; result);
+template&lt;class F&gt; static void map (F f, const std::string&amp; str, std::string&amp; result);
+</pre>
+
+<p>
+Given input UTF-8 encoded string, decode the Unicode code points
+(using <a href="#decode_char"><code>decode</code></a>), apply the function <code>f</code> to
+every one of them, encode the resulting string back to UTF-8 and
+store it to <code>result</code>.
+</p>
+<p style="margin-bottom:0">
+These functions can be used for example to change case of Unicode code points:
+</p>
+<pre style="margin-top:0">
+<A HREF="#utf8">utf8</A>::<A HREF="#map">map</A>(<A HREF="#unicode">unicode</A>::<A HREF="#lowercase">lowercase</A>, input, output)
+</pre>
+
+<a id="utf16" name="utf16"></a>
+<h2>2.5. Class utf16</h2>
+
+<pre>
+class ufal::unilib::utf16 {
+ public:
+  static bool valid(const char16_t* str);
+  static bool valid(const char16_t* str, size_t len);
+  static inline bool valid(const std::u16string&amp; str);
+
+  static inline char32_t decode(const char16_t*&amp; str);
+  static inline char32_t decode(const char16_t*&amp; str, size_t&amp; len);
+  static inline char32_t first(const char16_t* str);
+  static inline char32_t first(const char16_t* str, size_t len);
+  static inline char32_t first(const std::u16string&amp; str);
+
+  static void decode(const char16_t* str, std::u32string&amp; decoded);
+  static void decode(const char16_t* str, size_t len, std::u32string&amp; decoded);
+  static inline void decode(const std::u16string&amp; str, std::u32string&amp; decoded);
+
+  class string_decoder { public: class iterator; inline iterator begin(); inline iterator end(); };
+  class buffer_decoder { public: class iterator; inline iterator begin(); inline iterator end(); };
+  static inline string_decoder decoder(const char16_t* str);
+  static inline buffer_decoder decoder(const char16_t* str, size_t len);
+  static inline string_decoder decoder(const std::u16string&amp; str);
+
+  static inline void append(char16_t*&amp; str, char32_t chr);
+  static inline void append(std::u16string&amp; str, char32_t chr);
+  static void encode(const std::u32string&amp; str, std::u16string&amp; encoded);
+
+  template&lt;class F&gt; static void map(F f, const char16_t* str, std::u16string&amp; result);
+  template&lt;class F&gt; static void map(F f, const char16_t* str, size_t len, std::u16string&amp; result);
+  template&lt;class F&gt; static void map(F f, const std::u16string&amp; str, std::u16string&amp; result);
+};
+</pre>
+
+<p>
+The <a href="#utf16"><code>utf16</code></a> class is a direct analogue of <a href="#utf8">utf8</a> class, but
+instead of UTF-8 encoding it deals with UTF-16 encoding.  The <code>char16_t</code> type
+is used to represent UTF-16 code unit and <code>u16string</code> type is used to
+represented sequences of UTF-16 code units.
+</p>
+<p>
+For method documentation, please see the <a href="#utf8"><code>utf8</code></a> class.
+</p>
 </div>
+
 <!-- html code generated by txt2tags 2.6 (http://txt2tags.org) -->
 <!-- cmdline: txt2tags -t html -\-toc -\-enum-title -o manual.html -C t2t_docsys/t2t_docsys_manual.conf manual.t2t -->
 </body></html>
