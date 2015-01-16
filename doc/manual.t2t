@@ -126,17 +126,34 @@ class ufal::unilib::uninorms {
 };
 ```
 
+The [``uninorms`` #uninorms]] class performs normalization to
+[Unicode Normalization Forms http://unicode.org/reports/tr15/].
+All normalization forms are supported and the normalization
+is performed inplace on ``u32string`` representing a string
+of Unicode code points.
+
+
 === uninorms::nfc() ===[nfc]
 ``` static void nfc(std::u32string& str);
+
+Convert given string to [Normalization Form C http://unicode.org/reports/tr15/#Norm_Forms].
+
 
 === uninorms::nfd() ===[nfd]
 ``` static void nfd(std::u32string& str);
 
+Convert given string to [Normalization Form D http://unicode.org/reports/tr15/#Norm_Forms].
+
+
 === uninorms::nfkc() ===[nfkc]
 ``` static void nfkc(std::u32string& str);
 
+Convert given string to [Normalization Form KC http://unicode.org/reports/tr15/#Norm_Forms].
+
 === uninorms::nfkd() ===[nfkd]
 ``` static void nfkd(std::u32string& str);
+
+Convert given string to [Normalization Form KD http://unicode.org/reports/tr15/#Norm_Forms].
 
 
 == Class unistrip ==[unistrip]
@@ -149,11 +166,37 @@ class ufal::unilib::unistrip {
 };
 ```
 
+The [``unistrip`` #unistrip] class performs combining marks stripping.
+The same functionality can be achieved by combining [``unicode`` #unicode]
+and [``uninorms`` #uninorms] class, but [``unistrip`` #unistrip] class
+performs the task much faster and needs less embedded data.
+
+
 === unistrip::is_combining_mark() ===[is_combining_mark]
 ``` static inline bool is_combining_mark(char32_t chr);
 
+Returns true if the general category of given Unicode code point is
+``M`` (i.e., nonspacing mark ``Mn`` or spacing mark ``Mc`` or enclosing mark
+``Me``).
+
 === unistrip::strip_combining_marks() ===[strip_combining_marks]
 ``` static inline char32_t strip_combining_marks(char32_t chr);
+
+Returns Unicode code point which has all combining marks present
+in the given code point removed. If the given code point is a combining
+mark itself, or there are no combining marks present,
+[``strip_combining_marks`` #strip_combining_marks] returns the original code
+point.
+
+This method is equivalent to the following process:
+- If the given code point is outside the valid Unicode range, return it.
+- If the given code points has general category ``M``, return it.
+- Othervise, convert it to NFD.
+- If there are no code points with general category ``M``, return
+  the original character.
+- Otherwise, remove all code points with general cagetory ``M``.
+- Convert the result to NFC.
+- Return the resulting code point.
 
 
 == Class utf8 ==[utf8]
