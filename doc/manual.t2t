@@ -82,17 +82,36 @@ similarly to how groupings of general categories are defined.
 ``` static inline [category_t #category_t] category(char32_t chr);
 
 Returns general category of the given Unicode code point as a value of
-[``category_t`` #category_t] enumeration.
+[``category_t`` #category_t] enumeration. The ``Cn`` category is
+returned for code points outside of valid range.
 
 
 === unicode::lowercase() ===[lowercase]
 ``` static inline char32_t lowercase(char32_t chr);
 
+Returns the simple lowercase mapping of the given code point from
+[Unicode Character Database http://www.unicode.org/reports/tr44/].
+If no such mapping is defined or the given code point is outside
+of valid range, the original code point is returned.
+
+
 === unicode::uppercase() ===[uppercase]
 ``` static inline char32_t uppercase(char32_t chr);
 
+
+Returns the simple uppercase mapping of the given code point from
+[Unicode Character Database http://www.unicode.org/reports/tr44/].
+If no such mapping is defined or the given code point is outside
+of valid range, the original code point is returned.
+
 === unicode::titlecase() ===[titlecase]
 ``` static inline char32_t titlecase(char32_t chr);
+
+
+Returns the simple titlecase mapping of the given code point from
+[Unicode Character Database http://www.unicode.org/reports/tr44/].
+If no such mapping is defined or the given code point is outside
+of valid range, the original code point is returned.
 
 
 == Class uninorms ==[uninorms]
