@@ -23,4 +23,4 @@ install: doc
 
 .PHONY: clean
 clean:
-	@rm -f $(wildcard $(T2T_DOCSYS_OUTPUT_WILDCARDS))
+	@rm -f $(T2T_DOCSYS_OUTPUT_WILDCARDS)
