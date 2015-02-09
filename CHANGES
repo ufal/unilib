@@ -2,6 +2,8 @@ Version 2.2.0-devel
 -------------------
 - Start using Semantic Versioning http://semver.org/.
 - Use t2t_docsys http://github.com/ufal/t2t_docsys as documentation system.
+- Renamed the utf{8,16}::{string,buffer}_decoder_helper helper classes to
+  utf{8,16}::{string,buffer}_decoder.
 
 
 Version 2.1 [22 Dec 2014]

@@ -22,7 +22,15 @@ int main(void) {
   auto u32_to_u16 = [](u32string str){ u16string res; utf16::encode(str, res); return res; };
   auto u32_to_u8 = [](u32string str){ string res; utf8::encode(str, res); return res; };
 
-  // UTF conversions tests
+  // Iterators
+  auto u8_str_iter = [](string str) { decltype(str) res; for (auto&& chr : utf8::decoder(str)) utf8::append(res, chr); return res; };
+  auto u8_cstr_iter = [](string str) { decltype(str) res; for (auto&& chr : utf8::decoder(str.c_str())) utf8::append(res, chr); return res; };
+  auto u8_buffer_iter = [](string str) { decltype(str) res; for (auto&& chr : utf8::decoder(str.c_str(), str.size())) utf8::append(res, chr); return res; };
+  auto u16_str_iter = [](u16string str) { decltype(str) res; for (auto&& chr : utf16::decoder(str)) utf16::append(res, chr); return res; };
+  auto u16_cstr_iter = [](u16string str) { decltype(str) res; for (auto&& chr : utf16::decoder(str.c_str())) utf16::append(res, chr); return res; };
+  auto u16_buffer_iter = [](u16string str) { decltype(str) res; for (auto&& chr : utf16::decoder(str.c_str(), str.size())) utf16::append(res, chr); return res; };
+
+  // UTF trivial conversions tests
   for (auto&& data : {
     U("Příliš žluťoučký kůň úpěl ďábelské ódy"),
     U("あめ つち ほし そら / やま かは みね たに / くも きり むろ こけ / ひと いぬ うへ すゑ / ゆわ さる おふ せよ / えのえを なれ ゐて"),
@@ -37,6 +45,20 @@ int main(void) {
     test(u32_to_u8, data.u32, data.u8);
   }
 
+  // Conversion tests for all non-Cn and non-Cs code points
+  u32string nonCnCs_codepoints;
+  for (char32_t chr = 1; chr < 0x110000; chr++)
+    if (unicode::category(chr) & ~(unicode::Cn | unicode::Cs))
+      nonCnCs_codepoints.push_back(chr);
+  test([=](u32string str) { return u8_to_u32(u32_to_u8(str)); }, nonCnCs_codepoints, nonCnCs_codepoints);
+  test([=](u32string str) { return u8_to_u32(u8_str_iter(u32_to_u8(str))); }, nonCnCs_codepoints, nonCnCs_codepoints);
+  test([=](u32string str) { return u8_to_u32(u8_cstr_iter(u32_to_u8(str))); }, nonCnCs_codepoints, nonCnCs_codepoints);
+  test([=](u32string str) { return u8_to_u32(u8_buffer_iter(u32_to_u8(str))); }, nonCnCs_codepoints, nonCnCs_codepoints);
+  test([=](u32string str) { return u16_to_u32(u32_to_u16(str)); }, nonCnCs_codepoints, nonCnCs_codepoints);
+  test([=](u32string str) { return u16_to_u32(u16_str_iter(u32_to_u16(str))); }, nonCnCs_codepoints, nonCnCs_codepoints);
+  test([=](u32string str) { return u16_to_u32(u16_cstr_iter(u32_to_u16(str))); }, nonCnCs_codepoints, nonCnCs_codepoints);
+  test([=](u32string str) { return u16_to_u32(u16_buffer_iter(u32_to_u16(str))); }, nonCnCs_codepoints, nonCnCs_codepoints);
+
   // Case modifying
   auto u32_uc = [](u32string str) { for (auto&& chr : str) chr = unicode::uppercase(chr); return str; };
   auto u32_lc = [](u32string str) { for (auto&& chr : str) chr = unicode::lowercase(chr); return str; };
@@ -47,8 +69,10 @@ int main(void) {
 
   // Case modifying + iterators
   auto u16_uc_str_iter = [](u16string str) { decltype(str) res; for (auto&& chr : utf16::decoder(str)) utf16::append(res, unicode::uppercase(chr)); return res; };
+  auto u16_uc_cstr_iter = [](u16string str) { decltype(str) res; for (auto&& chr : utf16::decoder(str.c_str())) utf16::append(res, unicode::uppercase(chr)); return res; };
   auto u16_uc_buffer_iter = [](u16string str) { decltype(str) res; for (auto&& chr : utf16::decoder(str.c_str(), str.size())) utf16::append(res, unicode::uppercase(chr)); return res; };
   auto u8_uc_str_iter = [](string str) { decltype(str) res; for (auto&& chr : utf8::decoder(str)) utf8::append(res, unicode::uppercase(chr)); return res; };
+  auto u8_uc_cstr_iter = [](string str) { decltype(str) res; for (auto&& chr : utf8::decoder(str.c_str())) utf8::append(res, unicode::uppercase(chr)); return res; };
   auto u8_uc_buffer_iter = [](string str) { decltype(str) res; for (auto&& chr : utf8::decoder(str.c_str(), str.size())) utf8::append(res, unicode::uppercase(chr)); return res; };
 
   // Case modifying tests, iterators tests
@@ -65,8 +89,10 @@ int main(void) {
     test(u8_lc, get<0>(data).u8, get<2>(data).u8);
 
     test(u16_uc_str_iter, get<0>(data).u16, get<1>(data).u16);
+    test(u16_uc_cstr_iter, get<0>(data).u16, get<1>(data).u16);
     test(u16_uc_buffer_iter, get<0>(data).u16, get<1>(data).u16);
     test(u8_uc_str_iter, get<0>(data).u8, get<1>(data).u8);
+    test(u8_uc_cstr_iter, get<0>(data).u8, get<1>(data).u8);
     test(u8_uc_buffer_iter, get<0>(data).u8, get<1>(data).u8);
   }
 
