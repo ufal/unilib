@@ -436,3 +436,28 @@ UTF-16 code unit and u16string type is used to represented sequences of UTF-16
 code units.
 
 For method documentation, please see the utf8 class.
+
+
+Structure version
+-----------------
+
+  struct version {
+    unsigned major;
+    unsigned minor;
+    unsigned patch;
+    std::string prerelease;
+
+    // Returns current version.
+    static version current();
+  };
+
+The version class represents UniLib version according to Semantic Versioning
+(http://semver.org/).
+
+
+version::current
+----------------
+
+  static version current();
+
+Returns current Unilib version.

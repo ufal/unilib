@@ -397,3 +397,25 @@ is used to represent UTF-16 code unit and ``u16string`` type is used to
 represented sequences of UTF-16 code units.
 
 For method documentation, please see the [``utf8`` #utf8] class.
+
+
+== Structure version ==[version]
+```
+struct version {
+  unsigned major;
+  unsigned minor;
+  unsigned patch;
+  std::string prerelease;
+
+  // Returns current version.
+  static [version #version] [current #version_current]();
+};
+```
+
+The [``version`` #version] class represents UniLib version
+according to [Semantic Versioning http://semver.org/].
+
+=== version::current ===[version_current]
+``` static [version #version] current();
+
+Returns current Unilib version.

@@ -19,6 +19,16 @@ my $UnicodeVersion = shift @ARGV;
 my $UnicodeData = shift @ARGV;
 my $CompositionExclusion = shift @ARGV;
 
+$UniLibVersion =~ /^(\d+)\.(\d+)\.(\d+)(?:-(.+))?$/ or die "Cannot parse UNILIB version $UniLibVersion";
+my %versions = (
+  UNILIB_VERSION => $UniLibVersion,
+  UNILIB_MAJOR_VERSION => $1,
+  UNILIB_MINOR_VERSION => $2,
+  UNILIB_PATCH_VERSION => $3,
+  UNILIB_PRERELEASE_VERSION => '"'.($4 // "").'"',
+  UNICODE_VERSION => $UnicodeVersion
+);
+
 my $N = 0x110000;
 
 # Load UnicodeData
@@ -206,8 +216,9 @@ while (@ARGV) {
   open (my $input, "<", $input_file) or die "Cannot open file $input_file: $!";
   open (my $output, ">", $output_file) or die "Cannot open file $output_file: $!";
   while (<$input>) {
-    s/\$UNILIB_VERSION/$UniLibVersion/g;
-    s/\$UNICODE_VERSION/$UnicodeVersion/g;
+    foreach my $v (keys %versions) {
+      s/\$$v/$versions{$v}/g;
+    }
     foreach my $data_ref (@data) {
       s/\$$data_ref->{name}_INDICES/$data_ref->{indices}/eg;
       s/\$$data_ref->{name}_BLOCKS/$data_ref->{blocks}/eg;

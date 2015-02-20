@@ -79,6 +79,12 @@
     </li>
     <li><a href="#utf16">2.5. Class utf16</a>
     </li>
+    <li><a href="#version">2.6. Structure version</a>
+      <ul>
+      <li><a href="#version_current">2.6.1. version::current</a>
+      </li>
+      </ul>
+    </li>
     </ul>
   </li>
   </ol>
@@ -663,6 +669,37 @@ represented sequences of UTF-16 code units.
 </p>
 <p>
 For method documentation, please see the <a href="#utf8"><code>utf8</code></a> class.
+</p>
+
+<a id="version" name="version"></a>
+<h2>2.6. Structure version</h2>
+
+<pre>
+struct version {
+  unsigned major;
+  unsigned minor;
+  unsigned patch;
+  std::string prerelease;
+
+  // Returns current version.
+  static <A HREF="#version">version</A> <A HREF="#version_current">current</A>();
+};
+</pre>
+
+<p>
+The <a href="#version"><code>version</code></a> class represents UniLib version
+according to <a href="http://semver.org/">Semantic Versioning</a>.
+</p>
+
+<a id="version_current" name="version_current"></a>
+<h3>2.6.1. version::current</h3>
+
+<pre>
+static <A HREF="#version">version</A> current();
+</pre>
+
+<p>
+Returns current Unilib version.
 </p>
 </div>
 
