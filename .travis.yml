@@ -8,9 +8,10 @@ matrix:
     - compiler: gcc
       env: GCC=4.9
     - compiler: clang
+      env: DEPGCC=4.7
 before_install:
-  - if [ -n "$GCC" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y; fi
-  - if [ -n "$GCC" ]; then sudo apt-get update -qq; fi
-  - if [ -n "$GCC" ]; then sudo apt-get install -qq g++-$GCC;fi
+  - if [ -n "$GCC$DEPGCC" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y; fi
+  - if [ -n "$GCC$DEPGCC" ]; then sudo apt-get update -qq; fi
+  - if [ -n "$GCC$DEPGCC" ]; then sudo apt-get install -qq g++-$GCC$DEPGCC; fi
   - if [ -n "$GCC" ]; then export CXX=g++-$GCC; fi
-script: make -C tests test
+script: make -C tests compile
