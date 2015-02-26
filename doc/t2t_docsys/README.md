@@ -29,7 +29,7 @@ T2T DocSys repository http://github.com/ufal/t2t_docsys is hosted on GitHub.
 - Following variables are defined:
   - `T2T_DOCSYS_OUTPUT_WILDCARDS`  
     Wildcards of files produced by t2t_docsys. There are quite a few because
-    of calling pdflatex. Should be used as an argument of `$(wildcard)`.
+    of calling pdflatex.
 
   - `T2T_DOCSYS_VERSION`  
     Current T2T DocSys version.

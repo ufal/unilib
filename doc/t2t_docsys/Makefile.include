@@ -1,4 +1,4 @@
-T2T_DOCSYS_VERSION := 2.6.6
+T2T_DOCSYS_VERSION := 2.6.7
 
 T2T_DOCSYS_ROOT := $(dir $(lastword $(MAKEFILE_LIST)))
 

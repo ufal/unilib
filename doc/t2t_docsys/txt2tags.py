@@ -3217,6 +3217,7 @@ class TitleMaster:
 		self.user_labels = {}
 		self.anchor_count = 0
 		self.anchor_prefix = 'toc'
+		self.anchor_used = set()
 
 	def _open_close_blocks(self):
 		"Open new title blocks, closing the previous (if any)"
@@ -3353,6 +3354,8 @@ class TitleMaster:
 			label = label or '%s%s' % (self.anchor_prefix, self.anchor_count)
 		if label and TAGS['anchor']:
 			ret = regex['x'].sub(label,TAGS['anchor'])
+			if label in self.anchor_used: Error(_("Anchor '%s' used multiple times!") % label)
+			self.anchor_used.add(label)
 		return ret
 
 	def _get_full_title_text(self):
