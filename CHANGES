@@ -5,6 +5,7 @@ Version 2.2.0-devel
 - Renamed the utf{8,16}::{string,buffer}_decoder_helper helper classes to
   utf{8,16}::{string,buffer}_decoder.
 - Add version structure.
+- Fix compilation on Visual C++ 2013.
 
 
 Version 2.1 [22 Dec 2014]
