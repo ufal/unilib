@@ -7,7 +7,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
-// UniLib version: 3.0.0
+// UniLib version: 3.0.1-devel
 // Unicode version: 7.0.0
 
 #pragma once
@@ -25,7 +25,7 @@ struct version {
 
   // Returns current version.
   static version current() {
-    return {3, 0, 0, ""};
+    return {3, 0, 1, "devel"};
   }
 };
 
