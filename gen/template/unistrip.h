@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include <string>
+#include <cstdint>
 
 namespace ufal {
 namespace unilib {
