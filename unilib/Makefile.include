@@ -10,4 +10,4 @@
 UNILIB_VERSION := 3.0.1-devel
 UNILIB_UNICODE_VERSION := 7.0.0
 
-UNILIB_OBJECTS := unicode uninorms unistrip utf8 utf16
+UNILIB_OBJECTS := unicode uninorms unistrip utf8 utf16 version

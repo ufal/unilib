@@ -24,9 +24,7 @@ struct version {
   std::string prerelease;
 
   // Returns current version.
-  static version current() {
-    return {$UNILIB_MAJOR_VERSION, $UNILIB_MINOR_VERSION, $UNILIB_PATCH_VERSION, $UNILIB_PRERELEASE_VERSION};
-  }
+  static version current();
 };
 
 } // namespace unilib

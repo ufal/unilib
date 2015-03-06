@@ -7,25 +7,18 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
-// UniLib version: 3.0.1-devel
-// Unicode version: 7.0.0
+// UniLib version: $UNILIB_VERSION
+// Unicode version: $UNICODE_VERSION
 
-#pragma once
-
-#include <string>
+#include "version.h"
 
 namespace ufal {
 namespace unilib {
 
-struct version {
-  unsigned major;
-  unsigned minor;
-  unsigned patch;
-  std::string prerelease;
-
-  // Returns current version.
-  static version current();
-};
+// Returns current version.
+version version::current() {
+  return {$UNILIB_MAJOR_VERSION, $UNILIB_MINOR_VERSION, $UNILIB_PATCH_VERSION, $UNILIB_PRERELEASE_VERSION};
+}
 
 } // namespace unilib
 } // namespace ufal

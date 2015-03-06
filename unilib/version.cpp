@@ -10,22 +10,15 @@
 // UniLib version: 3.0.1-devel
 // Unicode version: 7.0.0
 
-#pragma once
-
-#include <string>
+#include "version.h"
 
 namespace ufal {
 namespace unilib {
 
-struct version {
-  unsigned major;
-  unsigned minor;
-  unsigned patch;
-  std::string prerelease;
-
-  // Returns current version.
-  static version current();
-};
+// Returns current version.
+version version::current() {
+  return {3, 0, 1, "devel"};
+}
 
 } // namespace unilib
 } // namespace ufal

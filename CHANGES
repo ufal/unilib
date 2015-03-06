@@ -1,5 +1,6 @@
 Version 3.0.1-devel
 -------------------
+- Move version::current from header to object file.
 
 
 Version 3.0.0 [26 Feb 2015]
