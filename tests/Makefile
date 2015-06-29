@@ -1,7 +1,7 @@
 include ../unilib/Makefile.include
 
 TESTS = compile normalization simple strip ucd
-UNICODE = 7.0.0
+UNICODE = 8.0.0
 
 .PHONY: all compile test
 all: compile

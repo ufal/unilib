@@ -8,6 +8,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 UNILIB_VERSION := 3.0.2-devel
-UNILIB_UNICODE_VERSION := 7.0.0
+UNILIB_UNICODE_VERSION := 8.0.0
 
 UNILIB_OBJECTS := unicode uninorms unistrip utf8 utf16 version
