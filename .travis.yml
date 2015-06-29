@@ -16,4 +16,4 @@ before_install:
   - if [ -n "$GCC$DEPGCC" ]; then travis_retry sudo apt-get update -qq; fi
   - if [ -n "$GCC$DEPGCC" ]; then travis_retry sudo apt-get install -qq g++-$GCC$DEPGCC; fi
   - if [ -n "$GCC" ]; then export CXX=g++-$GCC; fi
-script: make -C tests compile
+script: make -C tests test
