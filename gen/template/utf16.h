@@ -87,7 +87,8 @@ char32_t utf16::decode(const char16_t*& str) {
 }
 
 char32_t utf16::decode(const char16_t*& str, size_t& len) {
-  if (!len) return 0; --len;
+  if (!len) return 0;
+  --len;
   if (*str < 0xD800 || *str >= 0xE000) return *str++;
   if (!len || *str >= 0xDC00) return ++str, REPLACEMENT_CHAR;
   char32_t res = 0x10000 + ((*str++ - 0xD800) << 10);

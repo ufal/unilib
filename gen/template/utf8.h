@@ -105,7 +105,8 @@ char32_t utf8::decode(const char*& str) {
 
 char32_t utf8::decode(const char*& str, size_t& len) {
   const unsigned char*& ptr = (const unsigned char*&) str;
-  if (!len) return 0; len--;
+  if (!len) return 0;
+  --len;
   if (*ptr < 0x80) return *ptr++;
   else if (*ptr < 0xC0) return ++ptr, REPLACEMENT_CHAR;
   else if (*ptr < 0xE0) {
