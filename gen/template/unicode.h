@@ -59,7 +59,7 @@ class unicode {
   static const uint8_t othercase_index[CHARS >> 8];
   static const char32_t othercase_block[][256];
 
-  enum othercase_type { LOWER_ONLY = 1, UPPERTITLE_ONLY = 2, LOWER_THEN_UPPER = 3, UPPER_THEN_TITLE = 4, TITLE_THEN_LOWER = 5 };
+  enum othercase_type { LOWER_ONLY = 1, UPPERTITLE_ONLY = 2, UPPER_ONLY = 3, LOWER_THEN_UPPER = 4, UPPER_THEN_TITLE = 5, TITLE_THEN_LOWER = 6 };
 };
 
 unicode::category_t unicode::category(char32_t chr) {
@@ -80,6 +80,7 @@ char32_t unicode::uppercase(char32_t chr) {
   if (chr < CHARS) {
     char32_t othercase = othercase_block[othercase_index[chr >> 8]][chr & 0xFF];
     if ((othercase & 0xFF) == othercase_type::UPPERTITLE_ONLY) return othercase >> 8;
+    if ((othercase & 0xFF) == othercase_type::UPPER_ONLY) return othercase >> 8;
     if ((othercase & 0xFF) == othercase_type::UPPER_THEN_TITLE) return othercase >> 8;
     if ((othercase & 0xFF) == othercase_type::LOWER_THEN_UPPER) return othercase_block[othercase_index[(othercase >> 8) >> 8]][(othercase >> 8) & 0xFF] >> 8;
   }

@@ -54,10 +54,11 @@ while (<$f>) {
   $title = "" if hex($title) == $code;
   if (length($lower) && !length($upper) && !length($title)) { $othercase = hex($lower) * 256 + 1; }
   elsif (!length($lower) && length($upper) && $upper eq $title) { $othercase = hex($upper) * 256 + 2; }
+  elsif (!length($lower) && length($upper) && !length($title)) { $othercase = hex($upper) * 256 + 3; }
   elsif (!length($lower) && !length($upper) && !length($title)) { $othercase = 0; }
-  elsif (length($lower) && length($upper) && !length($title)) { $othercase = hex($lower) * 256 + 3; }
-  elsif (!length($lower) && length($upper) && length($title)) { $othercase = hex($upper) * 256 + 4; }
-  elsif (length($lower) && !length($upper) && length($title)) { $othercase = hex($title) * 256 + 5; }
+  elsif (length($lower) && length($upper) && !length($title)) { $othercase = hex($lower) * 256 + 4; }
+  elsif (!length($lower) && length($upper) && length($title)) { $othercase = hex($upper) * 256 + 5; }
+  elsif (length($lower) && !length($upper) && length($title)) { $othercase = hex($title) * 256 + 6; }
   else { die "Cannot parse lower/upper/title in UCD line '$_'"; }
 
   my $last_code = $code;
