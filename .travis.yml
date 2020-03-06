@@ -27,7 +27,7 @@ jobs:
       env: PLATFORM=win-vs CXX=cl BITS=64
       install:
         - choco install make --no-progress -y
-        - choco install python3 --no-progress -y
+        - choco install python3 --no-progress -y --params "PrependPath=1"
         - export PATH
 
 before_script:
