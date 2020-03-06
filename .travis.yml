@@ -25,7 +25,10 @@ jobs:
       env: PLATFORM=osx-clang CXX=clang++
     - os: windows
       env: PLATFORM=win-vs CXX=cl BITS=64
-      before_install: choco install make --no-progress -y
+      before_install:
+        - choco install make --no-progress -y
+        - choco install python --version 3.7.6 --no-progress -y
+        - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
 
 before_script:
   - export C_FLAGS='$(treat_warnings_as_errors)'

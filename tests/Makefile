@@ -14,11 +14,11 @@ run_test_compile: $(call exe,test_compile)
 run_test_conversions: $(call exe,test_conversions)
 	./$<
 run_test_normalization: $(call exe,test_normalization)
-	xzcat ../gen/data/NormalizationTest-$(UNICODE).txt.xz | sed 's/ *[#@].*$$//;s/;$$//;/^$$/d' | ./$<
+	python3 test_normalization_input.py ../gen/data/NormalizationTest-$(UNICODE).txt.xz | ./$<
 run_test_strip: $(call exe,test_strip)
 	./$<
 run_test_ucd: $(call exe,test_ucd)
-	xzcat ../gen/data/UnicodeData-$(UNICODE).txt.xz | ./$<
+	python3 test_ucd_input.py ../gen/data/UnicodeData-$(UNICODE).txt.xz | ./$<
 
 C_FLAGS += $(call include_dir,../unilib)
 $(call exe,test_compile): $(call obj,$(addprefix ../unilib/,$(UNILIB_OBJECTS)))
