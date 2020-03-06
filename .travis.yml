@@ -29,8 +29,7 @@ jobs:
         - choco install make --no-progress -y
         - choco install python3 --version 3.8.2 --no-progress -y
         - export PATH=/c/Python38:/c/Python38/Scripts:$PATH
-        - python3 || ln -s /c/Python38/python.exe /c/Python38/python3
-        - python3 --version
+        - if [ ! -f /c/Python38/python3 ]; then ln -s /c/Python38/python.exe /c/Python38/python3; fi
 
 before_script:
   - export C_FLAGS='$(treat_warnings_as_errors)'
