@@ -7,22 +7,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <vector>
-
 #include "test.h"
 
 #include "uninorms.h"
 using namespace ufal::unilib;
-
-void split(const string& text, char sep, vector<string>& tokens) {
-  tokens.clear();
-  if (text.empty()) return;
-
-  string::size_type index = 0;
-  for (string::size_type next; (next = text.find(sep, index)) != string::npos; index = next + 1)
-    tokens.emplace_back(text, index, next - index);
-  tokens.emplace_back(text, index);
-}
 
 int main(void) {
   // Unicode normalization

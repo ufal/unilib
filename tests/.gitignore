@@ -1,5 +1,6 @@
+.build/
 test_compile
+test_conversion
 test_normalization
-test_simple
 test_strip
 test_ucd

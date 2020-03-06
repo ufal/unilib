@@ -8,22 +8,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <unordered_map>
-#include <vector>
 
 #include "test.h"
 
 #include "unicode.h"
 using namespace ufal::unilib;
-
-void split(const string& text, char sep, vector<string>& tokens) {
-  tokens.clear();
-  if (text.empty()) return;
-
-  string::size_type index = 0;
-  for (string::size_type next; (next = text.find(sep, index)) != string::npos; index = next + 1)
-    tokens.emplace_back(text, index, next - index);
-  tokens.emplace_back(text, index);
-}
 
 unordered_map<string, unicode::category_t> categories = {
   {"Lu", unicode::Lu}, {"Ll", unicode::Ll}, {"Lt", unicode::Lt}, {"Lm", unicode::Lm}, {"Lo", unicode::Lo},
