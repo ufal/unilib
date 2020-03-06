@@ -53,13 +53,3 @@ int test_summary() {
   cerr << "Passed: " << passed << ", failed: " << failed << endl;
   return failed != 0;
 }
-
-// Basic UTF data created during compilation
-struct udata {
-  string u8;
-  u16string u16;
-  u32string u32;
-
-  udata(string u8, u16string u16, u32string u32) : u8(u8), u16(u16), u32(u32) {}
-};
-#define U(str) udata(u8"" str, u"" str, U"" str)

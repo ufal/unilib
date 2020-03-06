@@ -1,31 +1,34 @@
+include Makefile.builtem
+
 include ../unilib/Makefile.include
 
-TESTS = compile normalization simple strip ucd
+TESTS = $(foreach test,compile conversions normalization strip ucd,test_$(test))
 UNICODE = 13.0.0
 
 .PHONY: all compile test
 all: compile
-compile: $(foreach test,$(TESTS),test_$(test))
-test: $(foreach test,$(TESTS),run_test_$(test))
+compile: $(call exe,$(TESTS))
+test: $(addprefix run_,$(TESTS))
 
-run_test_compile: test_compile
-run_test_normalization: test_normalization
+run_test_compile: $(call exe,test_compile)
+run_test_conversions: $(call exe,test_conversions)
+	./$<
+run_test_normalization: $(call exe,test_normalization)
 	xzcat ../gen/data/NormalizationTest-$(UNICODE).txt.xz | sed 's/ *[#@].*$$//;s/;$$//;/^$$/d' | ./$<
-run_test_simple: test_simple
+run_test_strip: $(call exe,test_strip)
 	./$<
-run_test_strip: test_strip
-	./$<
-run_test_ucd: test_ucd
+run_test_ucd: $(call exe,test_ucd)
 	xzcat ../gen/data/UnicodeData-$(UNICODE).txt.xz | ./$<
 
-test_compile: $(foreach src,$(UNILIB_OBJECTS),../unilib/$(src).cpp ../unilib/$(src).h)
-test_normalization: ../unilib/uninorms.cpp ../unilib/uninorms.h
-test_simple: $(foreach src,unicode utf8 utf16,../unilib/$(src).cpp ../unilib/$(src).h)
-test_strip: $(foreach src,unicode uninorms unistrip,../unilib/$(src).cpp ../unilib/$(src).h)
-test_ucd: ../unilib/unicode.cpp ../unilib/unicode.h
-$(patsubst %,test_%,$(TESTS)):%:%.cpp test.h
-	$(CXX) $(filter %.cpp,$^) -std=c++11 -I ../unilib -W -Wall -Werror -O2 -o $@
+C_FLAGS += $(call include_dir,../unilib)
+$(call exe,test_compile): $(call obj,$(addprefix ../unilib/,$(UNILIB_OBJECTS)))
+$(call exe,test_conversions): $(call obj,$(addprefix ../unilib/,unicode utf8 utf16))
+$(call exe,test_normalization): $(call obj,$(addprefix ../unilib/,uninorms))
+$(call exe,test_strip): $(call obj,$(addprefix ../unilib/,unicode uninorms unistrip))
+$(call exe,test_ucd): $(call obj,$(addprefix ../unilib/,unicode))
+$(call exe,$(TESTS)):$(call exe,%): $$(call obj,%)
+	$(call link_exe,$@,$^,$(call win_subsystem,console))
 
 .PHONY: clean
 clean:
-	rm -f $(foreach test,$(TESTS),test_$(test))
+	$(call rm,.build $(call all_exe,$(TESTS)))

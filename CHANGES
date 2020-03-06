@@ -1,6 +1,9 @@
 Version 3.1.2-devel
 -------------------
 - Update Unicode to 13.0.0.
+- Update tests to work also under Windows.
+  We now use C++ Builtem http://github.com/ufal/cpp_builtem
+  as build system and rewrote tests to only contain ASCII.
 
 
 Version 3.1.1 [15 Jun 2016]
