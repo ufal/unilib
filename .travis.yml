@@ -21,6 +21,7 @@ jobs:
       addons: {apt: {packages: [g++-9], sources: [ubuntu-toolchain-r-test]}}
     - compiler: gcc
       env: PLATFORM=linux-gcc CXX=g++-10
+      dist: bionic
       addons: {apt: {packages: [g++-10], sources: [ubuntu-toolchain-r-test]}}
     - compiler: clang
       env: PLATFORM=linux-clang CXX=clang++
