@@ -52,6 +52,10 @@ jobs:
         name: Windows - Install make
         run: choco install --no-progress -y make
 
+      - if: matrix.container == 'quay.io/pypa/manylinux2014_x86_64'
+        name: Manylinux2014 container - Set default python3
+        run: ln -s $(which python3.10) /usr/bin/python3
+
       - name: Compile tests
         run: make PLATFORM=${{ matrix.platform }} -k -C tests compile
         env:
