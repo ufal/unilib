@@ -1,5 +1,5 @@
 # UniLib: C++11 Embeddable Unicode Library
-[![Build Status](https://travis-ci.org/ufal/unilib.svg?branch=master)](https://travis-ci.org/ufal/unilib)
+[![Tests](https://github.com/ufal/unilib/actions/workflows/tests.yml/badge.svg)](https://github.com/ufal/unilib/actions/workflows/tests.yml)
 
 UniLib is an embeddable C++11 Unicode library under
 [MPL 2.0 license](http://www.mozilla.org/MPL/2.0/).
