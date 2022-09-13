@@ -1,4 +1,4 @@
-all: $(foreach data,UnicodeData CompositionExclusions NormalizationTest,$(data)-13.0.0.txt.xz)
+all: $(foreach data,UnicodeData CompositionExclusions NormalizationTest,$(data)-15.0.0.txt.xz)
 
 UnicodeData-%.txt.xz:
 	curl http://www.unicode.org/Public/$*/ucd/UnicodeData.txt | xz -c9v >$@
