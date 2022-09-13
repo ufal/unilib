@@ -42,10 +42,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v4
-        with:
-          python-version: 3.x
-
       - if: startsWith(matrix.os, 'windows')
         name: Windows - Set up MSVC
         uses: ilammy/msvc-dev-cmd@v1
