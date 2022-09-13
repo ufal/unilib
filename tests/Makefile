@@ -3,7 +3,7 @@ include Makefile.builtem
 include ../unilib/Makefile.include
 
 TESTS = $(foreach test,compile conversion normalization strip ucd,test_$(test))
-UNICODE = 13.0.0
+UNICODE = 15.0.0
 
 .PHONY: all compile test
 all: compile
