@@ -12,13 +12,13 @@ test: $(addprefix run_,$(TESTS))
 
 run_test_compile: $(call exe,test_compile)
 run_test_conversion: $(call exe,test_conversion)
-	python3 test_conversion_input.py | ./$<
+	python3 test_conversion_input.py | $(call platform_name,./$<)
 run_test_normalization: $(call exe,test_normalization)
-	python3 test_normalization_input.py ../gen/data/NormalizationTest-$(UNICODE).txt.xz | ./$<
+	python3 test_normalization_input.py ../gen/data/NormalizationTest-$(UNICODE).txt.xz | $(call platform_name,./$<)
 run_test_strip: $(call exe,test_strip)
-	./$<
+	$(call platform_name,./$<)
 run_test_ucd: $(call exe,test_ucd)
-	python3 test_ucd_input.py ../gen/data/UnicodeData-$(UNICODE).txt.xz | ./$<
+	python3 test_ucd_input.py ../gen/data/UnicodeData-$(UNICODE).txt.xz | $(call platform_name,./$<)
 
 C_FLAGS += $(call include_dir,../unilib)
 $(call exe,test_compile): $(call obj,$(addprefix ../unilib/,$(UNILIB_OBJECTS)))
