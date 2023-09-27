@@ -1,6 +1,7 @@
 Version 4.0.0-dev
 -----------------
-- Increase the minimum requirements to C++ 17, bump major version to 4.
+- Increase the minimum requirements to C++ 17 [incompatible change].
+- Start using `std::string_view` in the API [incompatible change].
 - Replace the system generating the API documentation.
 - Update Unicode data to 15.1.0.
 
