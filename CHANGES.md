@@ -4,7 +4,7 @@ Version 3.3.2-dev
 
 Version 3.3.1 [12 Sep 2023]
 ---------------------------
-- Stop using the std::iterator deprecated in C++17.
+- Stop using the `std::iterator` deprecated in C++17.
 
 
 Version 3.3.0 [13 Sep 2022]
@@ -32,15 +32,15 @@ Version 3.1.0 [29 Jun 2015]
 
 Version 3.0.1 [06 Mar 2015]
 ---------------------------
-- Move version::current from header to object file.
+- Move `version::current` from header to object file.
 
 
 Version 3.0.0 [26 Feb 2015]
 ---------------------------
 - Start using Semantic Versioning http://semver.org/.
 - Use t2t_docsys http://github.com/ufal/t2t_docsys as documentation system.
-- Renamed the utf{8,16}::{string,buffer}_decoder_helper helper classes to
-  utf{8,16}::{string,buffer}_decoder.
+- Renamed the `utf{8,16}::{string,buffer}_decoder_helper` helper classes to
+  `utf{8,16}::{string,buffer}_decoder`.
 - Add version structure.
 - Fix compilation on Visual C++ 2013.
 
