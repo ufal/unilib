@@ -8,7 +8,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 VERSION=15.1.0
-UCD=UnicodeData CompositionExclusions NormalizationTest
+UCD=UnicodeData CompositionExclusions NormalizationTest SpecialCasing
 all: $(UCD:=.txt)
 
 $(UCD:=.txt):
