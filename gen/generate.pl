@@ -13,11 +13,10 @@ use warnings;
 use strict;
 use open qw{:std :utf8};
 
-@ARGV >= 4 && !(@ARGV % 2) or die "Usage: $0 UniLib_version Unicode_version UnicodeData.xz CompositionExclusions.xz [input_file output_file]*\n";
+@ARGV >= 3 && (@ARGV % 2) or die "Usage: $0 UniLib_version Unicode_version Unicode_datadir [input_file output_file]*\n";
 my $UniLibVersion = shift @ARGV;
 my $UnicodeVersion = shift @ARGV;
-my $UnicodeData = shift @ARGV;
-my $CompositionExclusion = shift @ARGV;
+my $UnicodeDataDir = shift @ARGV;
 
 $UniLibVersion =~ /^(\d+)\.(\d+)\.(\d+)(?:-(.+))?$/ or die "Cannot parse UNILIB version $UniLibVersion";
 my %versions = (
@@ -41,7 +40,7 @@ my %combining_mark = (name=>'COMBINING_MARK', data=>[(0) x $N]);
 my %stripped = (name=>'STRIPPED', data=>[(0) x $N], rawdata=>[0], rawmap=>{});
 my @data = (\%cat, \%othercase, \%ccc, \%composition, \%decomposition, \%combining_mark, \%stripped);
 
-open (my $f, "<", $UnicodeData) or die "Cannot open '$UnicodeData': $!";
+open (my $f, "<", "$UnicodeDataDir/UnicodeData.txt") or die "Cannot open '$UnicodeDataDir/UnicodeData.txt': $!";
 while (<$f>) {
   chomp;
   my @parts = split /;/, $_, -1;
@@ -87,7 +86,7 @@ close $f;
 
 # Load CompositionExclusions and fill composition data
 my %excluded = ();
-open ($f, "<", $CompositionExclusion) or die "Cannot open '$CompositionExclusion': $!";
+open ($f, "<", "$UnicodeDataDir/CompositionExclusions.txt") or die "Cannot open '$UnicodeDataDir/CompositionExclusions.txt': $!";
 while (<$f>) {
   chomp;
   s/\s*(#.*)?$//;

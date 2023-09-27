@@ -7,13 +7,9 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-all: $(foreach data,UnicodeData CompositionExclusions NormalizationTest,$(data)-15.1.0.txt)
+VERSION=15.1.0
+UCD=UnicodeData CompositionExclusions NormalizationTest
+all: $(UCD:=.txt)
 
-UnicodeData-%.txt:
-	curl http://www.unicode.org/Public/$*/ucd/UnicodeData.txt >$@
-
-CompositionExclusions-%.txt:
-	curl http://www.unicode.org/Public/$*/ucd/CompositionExclusions.txt >$@
-
-NormalizationTest-%.txt:
-	curl http://www.unicode.org/Public/$*/ucd/NormalizationTest.txt >$@
+$(UCD:=.txt):
+	curl http://www.unicode.org/Public/$(VERSION)/ucd/$@ >$@
