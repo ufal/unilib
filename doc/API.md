@@ -119,7 +119,10 @@ class version {
   unsigned patch;
   std::string prerelease;
 
+  // Returns the version as a single string.
+  inline std::string to_string();
+
   // Returns the current version.
-  static version current();
+  static inline version current();
 };
 ```
