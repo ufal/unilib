@@ -1,10 +1,10 @@
-all: $(foreach data,UnicodeData CompositionExclusions NormalizationTest,$(data)-15.0.0.txt.xz)
+all: $(foreach data,UnicodeData CompositionExclusions NormalizationTest,$(data)-15.1.0.txt)
 
-UnicodeData-%.txt.xz:
-	curl http://www.unicode.org/Public/$*/ucd/UnicodeData.txt | xz -c9v >$@
+UnicodeData-%.txt:
+	curl http://www.unicode.org/Public/$*/ucd/UnicodeData.txt >$@
 
-CompositionExclusions-%.txt.xz:
-	curl http://www.unicode.org/Public/$*/ucd/CompositionExclusions.txt | xz -c9v >$@
+CompositionExclusions-%.txt:
+	curl http://www.unicode.org/Public/$*/ucd/CompositionExclusions.txt >$@
 
-NormalizationTest-%.txt.xz:
-	curl http://www.unicode.org/Public/$*/ucd/NormalizationTest.txt | xz -c9v >$@
+NormalizationTest-%.txt:
+	curl http://www.unicode.org/Public/$*/ucd/NormalizationTest.txt >$@

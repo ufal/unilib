@@ -41,7 +41,7 @@ my %combining_mark = (name=>'COMBINING_MARK', data=>[(0) x $N]);
 my %stripped = (name=>'STRIPPED', data=>[(0) x $N], rawdata=>[0], rawmap=>{});
 my @data = (\%cat, \%othercase, \%ccc, \%composition, \%decomposition, \%combining_mark, \%stripped);
 
-open (my $f, "-|", "xzcat $UnicodeData") or die "Cannot open 'xzcat $UnicodeData': $!";
+open (my $f, "<", $UnicodeData) or die "Cannot open '$UnicodeData': $!";
 while (<$f>) {
   chomp;
   my @parts = split /;/, $_, -1;
@@ -87,7 +87,7 @@ close $f;
 
 # Load CompositionExclusions and fill composition data
 my %excluded = ();
-open ($f, "-|", "xzcat $CompositionExclusion") or die "Cannot open 'xzcat $CompositionExclusion': $!";
+open ($f, "<", $CompositionExclusion) or die "Cannot open '$CompositionExclusion': $!";
 while (<$f>) {
   chomp;
   s/\s*(#.*)?$//;

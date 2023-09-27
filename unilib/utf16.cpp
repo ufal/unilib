@@ -8,7 +8,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 // UniLib version: 3.3.2-dev
-// Unicode version: 15.0.0
+// Unicode version: 15.1.0
 
 #include "utf16.h"
 

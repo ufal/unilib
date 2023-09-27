@@ -1,5 +1,6 @@
 Version 3.3.2-dev
 -----------------
+- Update Unicode data to 15.1.0.
 
 
 Version 3.3.1 [12 Sep 2023]
