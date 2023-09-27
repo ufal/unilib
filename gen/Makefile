@@ -1,3 +1,12 @@
+# This file is part of UniLib <http://github.com/ufal/unilib/>.
+#
+# Copyright 2014-2023 Institute of Formal and Applied Linguistics, Faculty
+# of Mathematics and Physics, Charles University in Prague, Czech Republic.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 TARGETS=Makefile.include unicode.cpp unicode.h uninorms.cpp uninorms.h unistrip.cpp unistrip.h utf8.cpp utf8.h utf16.cpp utf16.h version.cpp version.h
 UNILIB=3.3.2-dev
 UNICODE=15.1.0

@@ -14,10 +14,10 @@ If currently offers:
 
 It is tested on the following compilers and platforms:
 - Linux using gcc and clang
-- Windows using Visual C++ 2019
+- Windows using Visual C++ 2019 and newer
 - macOS using clang
 
-Copyright 2022 Institute of Formal and Applied Linguistics, Faculty of
-Mathematics and Physics, Charles University in Prague, Czech Republic.
+Copyright 2014-2023 Institute of Formal and Applied Linguistics, Faculty
+of Mathematics and Physics, Charles University in Prague, Czech Republic.
 
 UniLib repository http://github.com/ufal/unilib is hosted on GitHub.

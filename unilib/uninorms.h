@@ -1,7 +1,7 @@
 // This file is part of UniLib <http://github.com/ufal/unilib/>.
 //
-// Copyright 2014 Institute of Formal and Applied Linguistics, Faculty of
-// Mathematics and Physics, Charles University in Prague, Czech Republic.
+// Copyright 2014-2023 Institute of Formal and Applied Linguistics, Faculty
+// of Mathematics and Physics, Charles University in Prague, Czech Republic.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,11 +18,22 @@
 namespace ufal {
 namespace unilib {
 
+// The `uninorms` class performs normalization to [Unicode Normalization
+// Forms](http://unicode.org/reports/tr15/). All normalization forms are
+// supported and the normalization is performed in-place on a `u32string`
+// representing a string of Unicode code points.
 class uninorms {
  public:
+  // Convert given string to [Normalization Form C](http://unicode.org/reports/tr15/#Norm_Forms).
   static void nfc(std::u32string& str);
+
+  // Convert given string to [Normalization Form D](http://unicode.org/reports/tr15/#Norm_Forms).
   static void nfd(std::u32string& str);
+
+  // Convert given string to [Normalization Form KC](http://unicode.org/reports/tr15/#Norm_Forms).
   static void nfkc(std::u32string& str);
+
+  // Convert given string to [Normalization Form KD](http://unicode.org/reports/tr15/#Norm_Forms).
   static void nfkd(std::u32string& str);
 
  private:

@@ -1,7 +1,7 @@
 // This file is part of UniLib <http://github.com/ufal/unilib/>.
 //
-// Copyright 2014 Institute of Formal and Applied Linguistics, Faculty of
-// Mathematics and Physics, Charles University in Prague, Czech Republic.
+// Copyright 2014-2023 Institute of Formal and Applied Linguistics, Faculty
+// of Mathematics and Physics, Charles University in Prague, Czech Republic.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -17,9 +17,29 @@
 namespace ufal {
 namespace unilib {
 
+// The `unistrip` class performs combining marks stripping. The same
+// functionality can be achieved by combining `unicode` and `uninorms`
+// classes, but `unistrip` class performs the task much faster and
+// needs less embedded data.
 class unistrip {
  public:
+  // Returns `true` if the category of the given Unicode code point is `M`
+  // (i.e., nonspacing mark `Mn` or spacing mark `Mc` or enclosing `Me`).
   static inline bool is_combining_mark(char32_t chr);
+
+  // Returns Unicode code point which has all combining marks removed. If the
+  // given code point is a combining mark itself, or there are no combining
+  // marks presents, `strip_combining_marks` returns the original code point.
+  //
+  // This method is equivalent to the following process:
+  // - If the given code point is outside the valid Unicode range, return it.
+  // - If the given code points has general category `M`, return it.
+  // - Othervise, convert it to NFD.
+  // - If there are no code points with general category `M`, return
+  //   the original code point.
+  // - Otherwise, remove all code points with general cagetory `M`.
+  // - Convert the result to NFC.
+  // - Return the resulting code point.
   static inline char32_t strip_combining_marks(char32_t chr);
 
  private:

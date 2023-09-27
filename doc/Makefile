@@ -1,26 +1,14 @@
-include t2t_docsys/Makefile.include
+# This file is part of UniLib <http://github.com/ufal/unilib/>.
+#
+# Copyright 2014-2023 Institute of Formal and Applied Linguistics, Faculty
+# of Mathematics and Physics, Charles University in Prague, Czech Republic.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-.PHONY: all doc install
-all: doc
-doc: manual.txt manual.html readme.txt readme_md.md
-install: doc
-	cp manual.txt ../MANUAL
-	cp manual.html ../MANUAL.html
-	cp readme.txt ../README
-	cp readme_md.md ../README.md
+.PHONY: all
+all: API.md
 
-%.html: %.t2t $(wildcard *.t2t)
-	$(call t2t_docsys_html,$@,$<,manual)
-
-%.txt: %.t2t $(wildcard *.t2t)
-	$(call t2t_docsys_txt,$@,$<,manual)
-
-%.md: %.t2t $(wildcard *.t2t)
-	$(call t2t_docsys_md,$@,$<,manual)
-
-%.pdf: %.t2t $(wildcard *.t2t)
-	$(call t2t_docsys_pdf,$@,$<,manual)
-
-.PHONY: clean
-clean:
-	@rm -f $(T2T_DOCSYS_OUTPUT_WILDCARDS)
+API.md: API.py $(wildcard ../unilib/*.h)
+	python3 $< $@

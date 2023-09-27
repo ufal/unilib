@@ -1,7 +1,7 @@
 // This file is part of UniLib <http://github.com/ufal/unilib/>.
 //
-// Copyright 2014 Institute of Formal and Applied Linguistics, Faculty of
-// Mathematics and Physics, Charles University in Prague, Czech Republic.
+// Copyright 2014-2023 Institute of Formal and Applied Linguistics, Faculty
+// of Mathematics and Physics, Charles University in Prague, Czech Republic.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -19,6 +19,10 @@
 namespace ufal {
 namespace unilib {
 
+// The `unicode` class contains basic information from
+// [Unicode Character Database](http://www.unicode.org/reports/tr44/), notably
+// - general categories
+// - simple and full uppercase/lowercase/titlecase mappings
 class unicode {
   enum : uint8_t {
     _Lu = 1, _Ll = 2, _Lt = 3, _Lm = 4, _Lo = 5,
@@ -31,6 +35,15 @@ class unicode {
   };
 
  public:
+  // The `category_t` type represents general category from
+  // [Unicode Character Database](http://www.unicode.org/reports/tr44/).
+  // Its values are:
+  // - abbreviated property value aliases for general categories,
+  // - abbreviated aliases for groupings of related general categories.
+  //
+  // Note that the `category_t` is a bitmask indicating general categories,
+  // which makes it easy to define arbitrary subsets of general categories
+  // similarly to how groupings of general categories are defined.
   typedef uint32_t category_t;
   enum : category_t {
     Lu = 1 << _Lu, Ll = 1 << _Ll, Lt = 1 << _Lt, Lut = Lu | Lt, LC = Lu | Ll | Lt,
@@ -44,8 +57,15 @@ class unicode {
     Cc = 1 << _Cc, Cf = 1 << _Cf, Cs = 1 << _Cs, Co = 1 << _Co, Cn = 1 << _Cn, C = Cc | Cf | Cs | Co | Cn
   };
 
+  // Returns general category of the given Unicode code point as a value of
+  // `category_t` enumeration. The `Cn` category is returned for code points
+  // outside of valid range.
   static inline category_t category(char32_t chr);
 
+  // Returns the simple lowercase/uppercase/titlecase mapping of the given code
+  // point from [Unicode Character Database](http://www.unicode.org/reports/tr44/).
+  // If no such mapping is defined or the given code point is outside of valid
+  // range, the original code point is returned.
   static inline char32_t lowercase(char32_t chr);
   static inline char32_t uppercase(char32_t chr);
   static inline char32_t titlecase(char32_t chr);
