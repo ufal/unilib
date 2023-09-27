@@ -72,7 +72,5 @@ void utf8::encode(const std::u32string& str, std::string& encoded) {
     append(encoded, chr);
 }
 
-const char utf8::REPLACEMENT_CHAR;
-
 } // namespace unilib
 } // namespace ufal

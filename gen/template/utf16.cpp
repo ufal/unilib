@@ -54,7 +54,5 @@ void utf16::encode(const std::u32string& str, std::u16string& encoded) {
     append(encoded, chr);
 }
 
-const char16_t utf16::REPLACEMENT_CHAR;
-
 } // namespace unilib
 } // namespace ufal

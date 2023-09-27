@@ -15,8 +15,6 @@
 namespace ufal {
 namespace unilib {
 
-const char32_t unistrip::CHARS;
-
 const uint8_t unistrip::combining_mark_index[unistrip::CHARS >> 8] = $COMBINING_MARK_INDICES;
 
 const uint8_t unistrip::combining_mark_block[][32] = $COMBINING_MARK_BLOCKS;

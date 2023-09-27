@@ -163,18 +163,6 @@ void uninorms::decompose(std::u32string& str, bool kompatibility) {
 }
 
 // Data fields
-const char32_t uninorms::CHARS;
-
-const char32_t uninorms::Hangul::SBase;
-const char32_t uninorms::Hangul::LBase;
-const char32_t uninorms::Hangul::VBase;
-const char32_t uninorms::Hangul::TBase;
-const char32_t uninorms::Hangul::LCount;
-const char32_t uninorms::Hangul::VCount;
-const char32_t uninorms::Hangul::TCount;
-const char32_t uninorms::Hangul::NCount;
-const char32_t uninorms::Hangul::SCount;
-
 const uint8_t uninorms::ccc_index[uninorms::CHARS >> 8] = $CCC_INDICES;
 const uint8_t uninorms::ccc_block[][256] = $CCC_BLOCKS;
 

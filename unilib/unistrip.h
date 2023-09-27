@@ -43,7 +43,7 @@ class unistrip {
   static inline char32_t strip_combining_marks(char32_t chr);
 
  private:
-  static const char32_t CHARS = 0x110000;
+  inline static const char32_t CHARS = 0x110000;
 
   static const uint8_t combining_mark_index[CHARS >> 8];
   static const uint8_t combining_mark_block[][32];

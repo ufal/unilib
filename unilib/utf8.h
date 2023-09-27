@@ -71,7 +71,7 @@ class utf8 {
   template<class F> static void map(F f, const std::string& str, std::string& result);
 
  private:
-  static const char REPLACEMENT_CHAR = '?';
+  inline static const char REPLACEMENT_CHAR = '?';
 };
 
 bool utf8::valid(const std::string& str) {

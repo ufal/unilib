@@ -71,7 +71,7 @@ class utf16 {
   template<class F> static void map(F f, const std::u16string& str, std::u16string& result);
 
  private:
-  static const char16_t REPLACEMENT_CHAR = '?';
+  inline static const char16_t REPLACEMENT_CHAR = '?';
 };
 
 bool utf16::valid(const std::u16string& str) {

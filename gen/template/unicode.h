@@ -71,8 +71,8 @@ class unicode {
   static inline char32_t titlecase(char32_t chr);
 
  private:
-  static const char32_t CHARS = 0x110000;
-  static const int32_t DEFAULT_CAT = Cn;
+  inline static const char32_t CHARS = 0x110000;
+  inline static const int32_t DEFAULT_CAT = Cn;
 
   static const uint8_t category_index[CHARS >> 8];
   static const uint8_t category_block[][256];
