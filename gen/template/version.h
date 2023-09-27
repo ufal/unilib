@@ -26,9 +26,25 @@ class version {
   unsigned patch;
   std::string prerelease;
 
+  // Returns the version as a single string.
+  inline std::string to_string();
+
   // Returns the current version.
-  static version current();
+  static inline version current();
 };
+
+//
+// Definitions
+//
+
+std::string version::to_string() {
+  return std::to_string(major) + "." + std::to_string(minor) + "." + std::to_string(patch) +
+      (!prerelease.empty() ? "-" + prerelease : "");
+}
+
+version version::current() {
+  return {$UNILIB_MAJOR_VERSION, $UNILIB_MINOR_VERSION, $UNILIB_PATCH_VERSION, $UNILIB_PRERELEASE_VERSION};
+}
 
 } // namespace unilib
 } // namespace ufal

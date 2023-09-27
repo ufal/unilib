@@ -10,4 +10,4 @@
 UNILIB_VERSION := $UNILIB_VERSION
 UNILIB_UNICODE_VERSION := $UNICODE_VERSION
 
-UNILIB_OBJECTS := unicode uninorms unistrip utf8 utf16 version
+UNILIB_OBJECTS := unicode uninorms unistrip utf8 utf16
