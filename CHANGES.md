@@ -1,5 +1,6 @@
-Version 3.3.2-dev
+Version 4.0.0-dev
 -----------------
+- Increase the minimum requirements to C++ 17, bump major version to 4.
 - Replace the system generating the API documentation.
 - Update Unicode data to 15.1.0.
 

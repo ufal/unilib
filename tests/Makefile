@@ -10,6 +10,7 @@
 include Makefile.builtem
 include ../unilib/Makefile.include
 
+CPP_STANDARD = c++17
 TESTS = $(foreach test,compile conversion normalization strip ucd,test_$(test))
 
 .PHONY: all compile test

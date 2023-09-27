@@ -1,7 +1,7 @@
-# UniLib: C++11 Embeddable Unicode Library
+# UniLib: C++17 Embeddable Unicode Library
 [![Tests](https://github.com/ufal/unilib/actions/workflows/tests.yml/badge.svg)](https://github.com/ufal/unilib/actions/workflows/tests.yml)
 
-UniLib is an embeddable C++11 Unicode library under
+UniLib is an embeddable C++17 Unicode library under
 [MPL 2.0 license](http://www.mozilla.org/MPL/2.0/).
 It is versioned using [Semantic Versioning](http://semver.org/).
 
