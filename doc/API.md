@@ -1,6 +1,6 @@
 # UniLib 3.3.2-dev
 
-The UniLib library is contained in `ufal::unilib` namespace.
+The UniLib library is contained in the `unilib` namespace.
 It consists of several independent files, each containing a class with
 the same name. All methods are thread-safe, unless stated otherwise.
 

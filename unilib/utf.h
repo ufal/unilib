@@ -16,7 +16,6 @@
 #include <string>
 #include <string_view>
 
-namespace ufal {
 namespace unilib {
 
 // The `utf` class converts among UTF-8, UTF-16, and UTF-32 encodings.
@@ -434,4 +433,3 @@ void utf::encode(std::u32string_view str, std::u16string& encoded) {
 }
 
 } // namespace unilib
-} // namespace ufal

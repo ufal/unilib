@@ -12,7 +12,6 @@
 
 #include "unistrip.h"
 
-namespace ufal {
 namespace unilib {
 
 const uint8_t unistrip::combining_mark_index[unistrip::CHARS >> 8] = {
@@ -135,4 +134,3 @@ const char32_t unistrip::stripped_data[] = {
 };
 
 } // namespace unilib
-} // namespace ufal

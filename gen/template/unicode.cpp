@@ -12,7 +12,6 @@
 
 #include "unicode.h"
 
-namespace ufal {
 namespace unilib {
 
 std::u32string unicode::lowercase_full(char32_t chr) {
@@ -45,4 +44,3 @@ const uint8_t unicode::othercase_index[unicode::CHARS >> 8] = $OTHERCASE_INDICES
 const char32_t unicode::othercase_block[][256] = $OTHERCASE_BLOCKS;
 
 } // namespace unilib
-} // namespace ufal

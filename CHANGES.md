@@ -1,6 +1,7 @@
 Version 4.0.0-dev
 -----------------
 - Increase the minimum requirements to C++ 17 [incompatible change].
+- Change the namespace from `ufal::unilib` to `unilib` [incompatible change].
 - Start using `std::string_view` in the API [incompatible change].
 - Merge `utf8` and `utf16` classes to just `utf` [incompatible change].
 - Add also full casing mappings (where the casing of a single codepoint

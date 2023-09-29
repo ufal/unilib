@@ -12,7 +12,6 @@
 
 #include "uninorms.h"
 
-namespace ufal {
 namespace unilib {
 
 void uninorms::nfc(std::u32string& str) {
@@ -175,4 +174,3 @@ const uint16_t uninorms::decomposition_block[][257] = $DECOMPOSITION_BLOCKS;
 const char32_t uninorms::decomposition_data[] = $DECOMPOSITION_DATA;
 
 } // namespace unilib
-} // namespace ufal

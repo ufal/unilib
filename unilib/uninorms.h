@@ -15,7 +15,6 @@
 #include <cstdint>
 #include <string>
 
-namespace ufal {
 namespace unilib {
 
 // The `uninorms` class performs normalization to [Unicode Normalization
@@ -61,4 +60,3 @@ class uninorms {
 };
 
 } // namespace unilib
-} // namespace ufal

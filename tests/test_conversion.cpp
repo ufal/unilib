@@ -14,7 +14,7 @@
 #include "unicode.h"
 #include "utf.h"
 
-using namespace ufal::unilib;
+using namespace unilib;
 
 int main(void) {
   // UTF conversions

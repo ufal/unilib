@@ -14,7 +14,6 @@
 
 #include <string>
 
-namespace ufal {
 namespace unilib {
 
 // The `version` class represents the UniLib version according to
@@ -47,4 +46,3 @@ version version::current() {
 }
 
 } // namespace unilib
-} // namespace ufal

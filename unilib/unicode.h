@@ -15,7 +15,6 @@
 #include <cstdint>
 #include <string>
 
-namespace ufal {
 namespace unilib {
 
 // The `unicode` class contains basic information from
@@ -124,4 +123,3 @@ char32_t unicode::titlecase(char32_t chr) {
 }
 
 } // namespace unilib
-} // namespace ufal

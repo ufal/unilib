@@ -10,7 +10,7 @@
 #include "test.h"
 
 #include "uninorms.h"
-using namespace ufal::unilib;
+using namespace unilib;
 
 int main(void) {
   // Unicode normalization

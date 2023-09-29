@@ -10,7 +10,7 @@
 #include "test.h"
 
 #include "unicode.h"
-using namespace ufal::unilib;
+using namespace unilib;
 
 int main(void) {
   vector full_casing_methods = {unicode::lowercase_full, unicode::titlecase_full, unicode::uppercase_full};

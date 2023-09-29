@@ -12,6 +12,6 @@
 #include "version.h"
 
 int main(void) {
-  std::cout << ufal::unilib::version::current().to_string() << std::endl;
+  std::cout << unilib::version::current().to_string() << std::endl;
   return 0;
 }

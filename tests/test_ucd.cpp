@@ -12,7 +12,7 @@
 #include "test.h"
 
 #include "unicode.h"
-using namespace ufal::unilib;
+using namespace unilib;
 
 unordered_map<string, unicode::category_t> categories = {
   {"Lu", unicode::Lu}, {"Ll", unicode::Ll}, {"Lt", unicode::Lt}, {"Lm", unicode::Lm}, {"Lo", unicode::Lo},

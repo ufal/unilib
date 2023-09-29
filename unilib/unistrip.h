@@ -14,7 +14,6 @@
 
 #include <cstdint>
 
-namespace ufal {
 namespace unilib {
 
 // The `unistrip` class performs combining marks stripping. The same
@@ -64,4 +63,3 @@ char32_t unistrip::strip_combining_marks(char32_t chr) {
 }
 
 } // namespace unilib
-} // namespace ufal

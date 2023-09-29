@@ -15,7 +15,7 @@
 #include "uninorms.h"
 #include "unistrip.h"
 
-using namespace ufal::unilib;
+using namespace unilib;
 
 int main(void) {
   // Combining mark tests
