@@ -1,4 +1,4 @@
-# UniLib 3.3.2-dev
+# UniLib 4.0.0
 
 The UniLib library is contained in the `unilib` namespace.
 It consists of several independent files, each containing a class with
