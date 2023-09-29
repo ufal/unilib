@@ -208,6 +208,27 @@ foreach my $data_ref (\%composition, \%decomposition, \%stripped) {
   $data_ref->{rawdata} = split_long($data_ref->{rawdata});
 }
 
+# Generate code for performing full casing mappings.
+my %full_casings = ();
+open ($f, "<", "$UnicodeDataDir/SpecialCasing.txt") or die "Cannot open '$UnicodeDataDir/SpecialCasing.txt': $!";
+while (<$f>) {
+  chomp;
+  s/\s*(#.*)?$//;
+  next unless length;
+  my @parts = split /\s*;\s*/, $_;
+  @parts > 4 and $parts[4] and next;
+  my @casing = ("LOWER", "TITLE", "UPPER");
+  for (my $i = 0; $i < @casing; $i++) {
+    if ($parts[$i + 1] ne $parts[0] and $parts[$i + 1] =~ /\s/) {
+      $full_casings{$casing[$i]}->{"U'\\u$parts[0]'"} = 'U"' . join("", map {"\\u$_"} split(/\s+/, $parts[$i + 1])) . '"';
+    }
+  }
+}
+close $f;
+foreach my $casing (keys %full_casings) {
+  $full_casings{$casing} = join("\n    ", map {"case $_: return $full_casings{$casing}->{$_};"} sort(keys %{$full_casings{$casing}}));
+}
+
 # Replace templates in given files.
 while (@ARGV) {
   my $input_file = shift @ARGV;
@@ -225,6 +246,9 @@ while (@ARGV) {
     }
     foreach my $data_ref (\%composition, \%decomposition, \%stripped) {
       s/\$$data_ref->{name}_DATA/$data_ref->{rawdata}/eg;
+    }
+    foreach my $casing (keys %full_casings) {
+      s/\$${casing}CASES_FULL/$full_casings{$casing}/eg;
     }
     print $output $_;
   }

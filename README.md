@@ -8,7 +8,7 @@ It is versioned using [Semantic Versioning](http://semver.org/).
 If currently offers:
 - utf-8 and utf-16 encodings
 - Unicode General Category info
-- simple lowercasing, titlecasing and uppercasing
+- simple and full lower/title/uppercasing
 - Unicode normalization forms
 - efficient stripping of combining marks
 

@@ -2,6 +2,8 @@ Version 4.0.0-dev
 -----------------
 - Increase the minimum requirements to C++ 17 [incompatible change].
 - Start using `std::string_view` in the API [incompatible change].
+- Add also full casing mappings (where the casing of a single codepoint
+  is longer than 1 codepoint).
 - Replace the system generating the API documentation.
 - Update Unicode data to 15.1.0.
 

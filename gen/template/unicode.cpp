@@ -15,6 +15,27 @@
 namespace ufal {
 namespace unilib {
 
+std::u32string unicode::lowercase_full(char32_t chr) {
+  switch (chr) {
+    $LOWERCASES_FULL
+  }
+  return std::u32string(1, unicode::lowercase(chr));
+}
+
+std::u32string unicode::uppercase_full(char32_t chr) {
+  switch (chr) {
+    $UPPERCASES_FULL
+  }
+  return std::u32string(1, unicode::uppercase(chr));
+}
+
+std::u32string unicode::titlecase_full(char32_t chr) {
+  switch (chr) {
+    $TITLECASES_FULL
+  }
+  return std::u32string(1, unicode::titlecase(chr));
+}
+
 const uint8_t unicode::category_index[unicode::CHARS >> 8] = $CATEGORY_INDICES;
 
 const uint8_t unicode::category_block[][256] = $CATEGORY_BLOCKS;

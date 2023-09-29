@@ -1,6 +1,7 @@
 .build/
 test_compile
 test_conversion
+test_full_casing
 test_normalization
 test_strip
 test_ucd

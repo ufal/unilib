@@ -70,6 +70,13 @@ class unicode {
   static inline char32_t uppercase(char32_t chr);
   static inline char32_t titlecase(char32_t chr);
 
+  // Returns the full lowercase/uppercase/titlecase mapping of the given code
+  // point from [Unicode Character Database](http://www.unicode.org/reports/tr44/).
+  // If no full mapping is defined, return the corresponding simple mapping.
+  static std::u32string lowercase_full(char32_t chr);
+  static std::u32string uppercase_full(char32_t chr);
+  static std::u32string titlecase_full(char32_t chr);
+
  private:
   inline static const char32_t CHARS = 0x110000;
   inline static const int32_t DEFAULT_CAT = Cn;
