@@ -24,7 +24,7 @@ run_test_conversion: $(call exe,test_conversion)
 run_test_full_casing: $(call exe,test_full_casing)
 	$(call platform_name,./$<) <../gen/data/SpecialCasing.txt
 run_test_normalization: $(call exe,test_normalization)
-	python3 test_normalization_input.py ../gen/data/NormalizationTest.txt | $(call platform_name,./$<)
+	$(call platform_name,./$<) <../gen/data/NormalizationTest.txt
 run_test_strip: $(call exe,test_strip)
 	$(call platform_name,./$<)
 run_test_ucd: $(call exe,test_ucd)

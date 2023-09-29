@@ -27,9 +27,12 @@ int main(void) {
   vector<u32string> forms(5);
   vector<bool> tested_chars(0x110000);
   while (getline(cin, line)) {
+    if (line.empty() || line.compare(0, 1, "#") == 0 || line.compare(0, 1, "@") == 0) continue;
+
     split(line, ';', words);
-    if (words.size() != forms.size()) return cerr << "Cannot parse NormalizationTest line " << line << endl, 1;
-    for (unsigned i = 0; i < words.size(); i++) {
+    if (words.size() < forms.size()) return cerr << "Cannot parse NormalizationTest line " << line << endl, 1;
+
+    for (unsigned i = 0; i < forms.size(); i++) {
       split(words[i], ' ', characters);
       forms[i].clear();
       for (auto&& character : characters)
