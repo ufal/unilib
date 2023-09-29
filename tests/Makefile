@@ -26,7 +26,7 @@ run_test_normalization: $(call exe,test_normalization)
 run_test_strip: $(call exe,test_strip)
 	$(call platform_name,./$<)
 run_test_ucd: $(call exe,test_ucd)
-	python3 test_ucd_input.py ../gen/data/UnicodeData.txt | $(call platform_name,./$<)
+	$(call platform_name,./$<) <../gen/data/UnicodeData.txt
 
 C_FLAGS += $(call include_dir,../unilib)
 $(call exe,test_compile): $(call obj,$(addprefix ../unilib/,$(UNILIB_OBJECTS)))
