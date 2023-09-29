@@ -12,25 +12,22 @@
 #include "test.h"
 
 #include "unicode.h"
-#include "utf8.h"
-#include "utf16.h"
+#include "utf.h"
 
 using namespace ufal::unilib;
 
 int main(void) {
   // UTF conversions
-  auto u8_to_u32 = [](string str){ u32string res; utf8::decode(str, res); return res; };
-  auto u16_to_u32 = [](u16string str){ u32string res; utf16::decode(str, res); return res; };
-  auto u32_to_u16 = [](u32string str){ u16string res; utf16::encode(str, res); return res; };
-  auto u32_to_u8 = [](u32string str){ string res; utf8::encode(str, res); return res; };
+  auto u8_to_u32 = [](string str){ u32string res; utf::decode(str, res); return res; };
+  auto u16_to_u32 = [](u16string str){ u32string res; utf::decode(str, res); return res; };
+  auto u32_to_u16 = [](u32string str){ u16string res; utf::encode(str, res); return res; };
+  auto u32_to_u8 = [](u32string str){ string res; utf::encode(str, res); return res; };
 
   // Iterators
-  auto u8_str_iter = [](string str) { decltype(str) res; for (auto&& chr : utf8::decoder(str)) utf8::append(res, chr); return res; };
-  auto u8_cstr_iter = [](string str) { decltype(str) res; for (auto&& chr : utf8::decoder(str.c_str())) utf8::append(res, chr); return res; };
-  auto u8_buffer_iter = [](string str) { decltype(str) res; for (auto&& chr : utf8::decoder(str.c_str(), str.size())) utf8::append(res, chr); return res; };
-  auto u16_str_iter = [](u16string str) { decltype(str) res; for (auto&& chr : utf16::decoder(str)) utf16::append(res, chr); return res; };
-  auto u16_cstr_iter = [](u16string str) { decltype(str) res; for (auto&& chr : utf16::decoder(str.c_str())) utf16::append(res, chr); return res; };
-  auto u16_buffer_iter = [](u16string str) { decltype(str) res; for (auto&& chr : utf16::decoder(str.c_str(), str.size())) utf16::append(res, chr); return res; };
+  auto u8_str_iter = [](string str) { decltype(str) res; for (auto&& chr : utf::decoder(str)) utf::append(res, chr); return res; };
+  auto u8_cstr_iter = [](string str) { decltype(str) res; for (auto&& chr : utf::decoder(str.c_str())) utf::append(res, chr); return res; };
+  auto u16_str_iter = [](u16string str) { decltype(str) res; for (auto&& chr : utf::decoder(str)) utf::append(res, chr); return res; };
+  auto u16_cstr_iter = [](u16string str) { decltype(str) res; for (auto&& chr : utf::decoder(str.c_str())) utf::append(res, chr); return res; };
 
   string line;
   vector<string> numbers;
@@ -62,7 +59,6 @@ int main(void) {
   test([=](u32string str) { return u8_to_u32(u32_to_u8(str)); }, u32, u32);
   test([=](u32string str) { return u8_to_u32(u8_str_iter(u32_to_u8(str))); }, u32, u32);
   test([=](u32string str) { return u8_to_u32(u8_cstr_iter(u32_to_u8(str))); }, u32, u32);
-  test([=](u32string str) { return u8_to_u32(u8_buffer_iter(u32_to_u8(str))); }, u32, u32);
 
   test(u32_to_u16, u32, u16);
   test(u16_to_u32, u16, u32);
@@ -70,7 +66,6 @@ int main(void) {
   test([=](u32string str) { return u16_to_u32(u32_to_u16(str)); }, u32, u32);
   test([=](u32string str) { return u16_to_u32(u16_str_iter(u32_to_u16(str))); }, u32, u32);
   test([=](u32string str) { return u16_to_u32(u16_cstr_iter(u32_to_u16(str))); }, u32, u32);
-  test([=](u32string str) { return u16_to_u32(u16_buffer_iter(u32_to_u16(str))); }, u32, u32);
 
   return test_summary();
 }

@@ -10,4 +10,4 @@
 UNILIB_VERSION := 3.3.2-dev
 UNILIB_UNICODE_VERSION := 15.1.0
 
-UNILIB_OBJECTS := unicode uninorms unistrip utf8 utf16
+UNILIB_OBJECTS := unicode uninorms unistrip

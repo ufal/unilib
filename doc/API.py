@@ -38,11 +38,11 @@ for class_name in [line.removeprefix("## Class `").removesuffix("`")
         source = class_file.read()
 
     # Keep only the class itself
-    source = re.sub(fr"^.*\n\n(?=(?:(?:[^\n]|\n[^\n])*\n)?class {class_name})", "", source, flags=re.S)
+    source = re.sub(fr"^.*?\n\n(?=(?:(?:[^\n]|\n[^\n])*\n)?class {class_name})", "", source, flags=re.S)
     source = re.sub(r"(?<=\n};)\n.*$", "", source, flags=re.S)
 
     # Drop the private parts
-    source = re.sub(fr"(?:(?<=class {class_name} {{)\n|\n\s*private:\n)(?:(?!public).)*(?=\n\s*public:|\n}})", "", source, flags=re.S)
+    source = re.sub(fr"(?:(?<=class {class_name} {{)\n|\n*\s(\s*)private:\n)(?:(?!public:|\n\1}}).)*(?=\n\s*public:|\n\1}})", "", source, flags=re.S)
 
     # Special rules for the unicode class
     source = re.sub(r" = 1 << _[A-Z][a-z]", "", source)

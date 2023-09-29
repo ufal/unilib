@@ -114,6 +114,88 @@ class unistrip {
 };
 ```
 
+## Class `utf`
+
+```cpp
+// The `utf` class converts among UTF-8, UTF-16, and UTF-32 encodings.
+// - UTF-8 represents code units as `char` and strings as
+//   `const char*`, `std::string`, and `std::string_view`;
+// - UTF-16 represents code units as `char16_t` and strings as
+//   `const char16_t*`, `std::u16string`, and `std::u16string_view`;
+// - UTF-32 represents code units as `char32_t` and strings as
+//   `const char32_t*`, `std::u32string`, and `std::u32string_view`.
+// The C-style "pointer-to-first-character" strings are ended by a `\0` code point;
+// the STL strings behave as buffers of a given length and can contain the `\0`.
+class utf {
+ public:
+  // Validity
+  inline static bool valid(const char* str);
+  inline static bool valid(std::string_view str);
+
+  inline static bool valid(const char16_t* str);
+  inline static bool valid(std::u16string_view str);
+
+  inline static bool valid(const char32_t* str);
+  inline static bool valid(std::u32string_view str);
+
+  // First code point decoding
+  inline static char32_t first(const char* str);
+  inline static char32_t first(std::string_view str);
+
+  inline static char32_t first(const char16_t* str);
+  inline static char32_t first(std::u16string_view str);
+
+  // Decoding and moving past a first code point
+  inline static char32_t decode(const char*& str);
+  inline static char32_t decode(std::string_view& str);
+
+  inline static char32_t decode(const char16_t*& str);
+  inline static char32_t decode(std::u16string_view& str);
+
+  // Decoding of a whole string
+  inline static void decode(const char* str, std::u32string& decoded);
+  inline static void decode(std::string_view str, std::u32string& decoded);
+
+  inline static void decode(const char16_t* str, std::u32string& decoded);
+  inline static void decode(std::u16string_view str, std::u32string& decoded);
+
+  // Iterator decoding
+  template<class Char>
+  class string_decoder {
+   public:
+    class iterator;
+    inline iterator begin();
+    inline iterator end();
+  };
+  inline static string_decoder<char> decoder(const char* str);
+  inline static string_decoder<char16_t> decoder(const char16_t* str);
+
+  template<class Char>
+  class buffer_decoder {
+   public:
+    class iterator;
+    inline iterator begin();
+    inline iterator end();
+  };
+  inline static buffer_decoder<char> decoder(std::string_view str);
+  inline static buffer_decoder<char16_t> decoder(std::u16string_view str);
+
+  // Appending a single code point
+  inline static void append(char*& str, char32_t chr);
+  inline static void append(std::string& str, char32_t chr);
+
+  inline static void append(char16_t*& str, char32_t chr);
+  inline static void append(std::u16string& str, char32_t chr);
+
+  // Encoding a whole string
+  static void encode(const char32_t* str, std::string& encoded);
+  static void encode(std::u32string_view str, std::string& encoded);
+
+  static void encode(const char32_t* str, std::u16string& encoded);
+  static void encode(std::u32string_view str, std::u16string& encoded);
+};
+```
+
 ## Class `version`
 
 ```cpp

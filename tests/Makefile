@@ -32,7 +32,7 @@ run_test_ucd: $(call exe,test_ucd)
 
 C_FLAGS += $(call include_dir,../unilib)
 $(call exe,test_compile): $(call obj,$(addprefix ../unilib/,$(UNILIB_OBJECTS)))
-$(call exe,test_conversion): $(call obj,$(addprefix ../unilib/,unicode utf8 utf16))
+$(call exe,test_conversion): $(call obj,$(addprefix ../unilib/,unicode))
 $(call exe,test_full_casing): $(call obj,$(addprefix ../unilib/,unicode))
 $(call exe,test_normalization): $(call obj,$(addprefix ../unilib/,uninorms))
 $(call exe,test_strip): $(call obj,$(addprefix ../unilib/,unicode uninorms unistrip))
