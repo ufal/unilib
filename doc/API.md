@@ -123,6 +123,6 @@ class version {
   inline std::string to_string();
 
   // Returns the current version.
-  static inline version current();
+  inline static version current();
 };
 ```
