@@ -2,7 +2,7 @@ Version 4.0.1-dev
 -----------------
 
 
-Version 4.0.0 [[29 Sep 2023]
+Version 4.0.0 [29 Sep 2023]
 ----------------------------
 - Increase the minimum requirements to C++ 17 [incompatible change].
 - Change the namespace from `ufal::unilib` to `unilib` [incompatible change].
