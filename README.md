@@ -17,7 +17,7 @@ It is tested on the following compilers and platforms:
 - Windows using Visual C++ 2019 and newer
 - macOS using clang
 
-Copyright 2014-2023 Institute of Formal and Applied Linguistics, Faculty
+Copyright 2014-2024 Institute of Formal and Applied Linguistics, Faculty
 of Mathematics and Physics, Charles University in Prague, Czech Republic.
 
 UniLib repository http://github.com/ufal/unilib is hosted on GitHub.
