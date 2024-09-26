@@ -7,7 +7,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
-// UniLib version: 4.0.1-dev
+// UniLib version: 4.1.0
 // Unicode version: 16.0.0
 
 #include "uninorms.h"
