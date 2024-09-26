@@ -33,9 +33,9 @@ jobs:
             platform: win-vs-32
           - os: windows-2022
             platform: win-vs-64
-          - os: macos-11
+          - os: macos-13
             platform: macos-clang-64
-          - os: macos-11
+          - os: macos-14
             platform: macos-clang-arm64
 
     steps:
@@ -62,4 +62,3 @@ jobs:
 
       - name: Run tests
         run: make PLATFORM=${{ matrix.platform }} -k -C tests test
-        if: matrix.platform != 'macos-clang-arm64'
