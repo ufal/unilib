@@ -1,5 +1,6 @@
 Version 4.1.1-dev
 -----------------
+- Silence new Clang warning by not using comma operator in returns.
 
 
 Version 4.1.0 [27 Sep 2024]

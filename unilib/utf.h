@@ -200,9 +200,11 @@ char32_t utf::first(std::u16string_view str) {
 
 // Decoding and moving past a first code point, UTF-8
 char32_t utf::decode(const char*& str) {
-  if (((unsigned char)*str) < 0x80) return (unsigned char)*str++;
-  else if (((unsigned char)*str) < 0xC0) return ++str, REPLACEMENT_CHAR;
-  else if (((unsigned char)*str) < 0xE0) {
+  if (((unsigned char)*str) < 0x80) {
+    return (unsigned char)*str++;
+  } else if (((unsigned char)*str) < 0xC0) {
+    ++str; return REPLACEMENT_CHAR;
+  } else if (((unsigned char)*str) < 0xE0) {
     char32_t res = (((unsigned char)*str++) & 0x1F) << 6;
     if (((unsigned char)*str) < 0x80 || ((unsigned char)*str) >= 0xC0) return REPLACEMENT_CHAR;
     return res + (((unsigned char)*str++) & 0x3F);
@@ -220,24 +222,28 @@ char32_t utf::decode(const char*& str) {
     res += (((unsigned char)*str++) & 0x3F) << 6;
     if (((unsigned char)*str) < 0x80 || ((unsigned char)*str) >= 0xC0) return REPLACEMENT_CHAR;
     return res + (((unsigned char)*str++) & 0x3F);
-  } else return ++str, REPLACEMENT_CHAR;
+  } else {
+    ++str; return REPLACEMENT_CHAR;
+  }
 }
 
 char32_t utf::decode(std::string_view& str) {
   if (str.empty()) return 0;
   char32_t res;
-  if (((unsigned char)str.front()) < 0x80) return res = (unsigned char)str.front(), str.remove_prefix(1), res;
-  else if (((unsigned char)str.front()) < 0xC0) return str.remove_prefix(1), REPLACEMENT_CHAR;
-  else if (((unsigned char)str.front()) < 0xE0) {
+  if (((unsigned char)str.front()) < 0x80) {
+    res = (unsigned char)str.front(); str.remove_prefix(1); return res;
+  } else if (((unsigned char)str.front()) < 0xC0) {
+    str.remove_prefix(1); return REPLACEMENT_CHAR;
+  } else if (((unsigned char)str.front()) < 0xE0) {
     res = (((unsigned char)str.front()) & 0x1F) << 6; str.remove_prefix(1);
     if (str.empty() || ((unsigned char)str.front()) < 0x80 || ((unsigned char)str.front()) >= 0xC0) return REPLACEMENT_CHAR;
-    return res += ((unsigned char)str.front()) & 0x3F, str.remove_prefix(1), res;
+    res += ((unsigned char)str.front()) & 0x3F; str.remove_prefix(1); return res;
   } else if (((unsigned char)str.front()) < 0xF0) {
     res = (((unsigned char)str.front()) & 0x0F) << 12; str.remove_prefix(1);
     if (str.empty() || ((unsigned char)str.front()) < 0x80 || ((unsigned char)str.front()) >= 0xC0) return REPLACEMENT_CHAR;
     res += (((unsigned char)str.front()) & 0x3F) << 6; str.remove_prefix(1);
     if (str.empty() || ((unsigned char)str.front()) < 0x80 || ((unsigned char)str.front()) >= 0xC0) return REPLACEMENT_CHAR;
-    return res += ((unsigned char)str.front()) & 0x3F, str.remove_prefix(1), res;
+    res += ((unsigned char)str.front()) & 0x3F; str.remove_prefix(1); return res;
   } else if (((unsigned char)str.front()) < 0xF8) {
     char32_t res = (((unsigned char)str.front()) & 0x07) << 18; str.remove_prefix(1);
     if (str.empty() || ((unsigned char)str.front()) < 0x80 || ((unsigned char)str.front()) >= 0xC0) return REPLACEMENT_CHAR;
@@ -245,14 +251,16 @@ char32_t utf::decode(std::string_view& str) {
     if (str.empty() || ((unsigned char)str.front()) < 0x80 || ((unsigned char)str.front()) >= 0xC0) return REPLACEMENT_CHAR;
     res += (((unsigned char)str.front()) & 0x3F) << 6; str.remove_prefix(1);
     if (str.empty() || ((unsigned char)str.front()) < 0x80 || ((unsigned char)str.front()) >= 0xC0) return REPLACEMENT_CHAR;
-    return res += ((unsigned char)str.front()) & 0x3F, str.remove_prefix(1), res;
-  } else return str.remove_prefix(1), REPLACEMENT_CHAR;
+    res += ((unsigned char)str.front()) & 0x3F; str.remove_prefix(1); return res;
+  } else {
+      str.remove_prefix(1); return REPLACEMENT_CHAR;
+  }
 }
 
 // Decoding and moving past a first code point, UTF-16
 char32_t utf::decode(const char16_t*& str) {
   if (*str < 0xD800 || *str >= 0xE000) return *str++;
-  if (*str >= 0xDC00) return ++str, REPLACEMENT_CHAR;
+  if (*str >= 0xDC00) {++str; return REPLACEMENT_CHAR;}
   char32_t res = 0x10000 + ((*str++ - 0xD800) << 10);
   if (*str < 0xDC00 || *str >= 0xE000) return REPLACEMENT_CHAR;
   return res + (*str++ - 0xDC00);
@@ -261,11 +269,12 @@ char32_t utf::decode(const char16_t*& str) {
 char32_t utf::decode(std::u16string_view& str) {
   if (str.empty()) return 0;
   char32_t res;
-  if (str.front() < 0xD800 || str.front() >= 0xE000) return res = str.front(), str.remove_prefix(1), res;
-  if (str.front() >= 0xDC00) return str.remove_prefix(1), REPLACEMENT_CHAR;
+  if (str.front() < 0xD800 || str.front() >= 0xE000) {res = str.front(); str.remove_prefix(1); return res;}
+  if (str.front() >= 0xDC00) {str.remove_prefix(1); return REPLACEMENT_CHAR;}
   res = 0x10000 + ((str.front() - 0xD800) << 10); str.remove_prefix(1);
   if (str.empty() || str.front() < 0xDC00 || str.front() >= 0xE000) return REPLACEMENT_CHAR;
-  return res += str.front() - 0xDC00, str.remove_prefix(1), res;
+  res += str.front() - 0xDC00; str.remove_prefix(1);
+  return res;
 }
 
 // Decoding of a whole string
