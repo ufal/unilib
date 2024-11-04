@@ -1,3 +1,7 @@
+Version 4.1.2-dev
+-----------------
+
+
 Version 4.1.1 [4 Nov 2024]
 --------------------------
 - Silence new Clang warning by not using comma operator in returns.
