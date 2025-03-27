@@ -1,4 +1,4 @@
-# UniLib 4.1.2-dev
+# UniLib 4.1.2
 
 The UniLib library is contained in the `unilib` namespace.
 It consists of several independent files, each containing a class with
@@ -188,11 +188,11 @@ class utf {
   inline static void append(std::u16string& str, char32_t chr);
 
   // Encoding a whole string
-  static void encode(const char32_t* str, std::string& encoded);
-  static void encode(std::u32string_view str, std::string& encoded);
+  inline static void encode(const char32_t* str, std::string& encoded);
+  inline static void encode(std::u32string_view str, std::string& encoded);
 
-  static void encode(const char32_t* str, std::u16string& encoded);
-  static void encode(std::u32string_view str, std::u16string& encoded);
+  inline static void encode(const char32_t* str, std::u16string& encoded);
+  inline static void encode(std::u32string_view str, std::u16string& encoded);
 };
 ```
 

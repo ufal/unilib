@@ -1,5 +1,5 @@
-Version 4.1.2-dev
------------------
+Version 4.1.2 [27 Mar 2025]
+---------------------------
 - Add forgotten `inline` specifier in the `utf::encode` methods.
 
 
