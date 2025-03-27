@@ -13,3 +13,4 @@ UNICODE=16.0.0
 
 all: generate.pl Makefile $(wildcard data/*.txt) $(TARGETS:%=template/%)
 	./generate.pl $(UNILIB) $(UNICODE) data $(foreach t,$(TARGETS),template/$(t) ../unilib/$(t))
+	make -C ../doc
