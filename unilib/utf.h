@@ -97,11 +97,11 @@ class utf {
   inline static void append(std::u16string& str, char32_t chr);
 
   // Encoding a whole string
-  static void encode(const char32_t* str, std::string& encoded);
-  static void encode(std::u32string_view str, std::string& encoded);
+  inline static void encode(const char32_t* str, std::string& encoded);
+  inline static void encode(std::u32string_view str, std::string& encoded);
 
-  static void encode(const char32_t* str, std::u16string& encoded);
-  static void encode(std::u32string_view str, std::u16string& encoded);
+  inline static void encode(const char32_t* str, std::u16string& encoded);
+  inline static void encode(std::u32string_view str, std::u16string& encoded);
 
  private:
   // The REPLACEMENT_CHAR used to represent invalid code points.
