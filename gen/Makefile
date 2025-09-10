@@ -9,7 +9,7 @@
 
 TARGETS=Makefile.include unicode.cpp unicode.h uninorms.cpp uninorms.h unistrip.cpp unistrip.h utf.h version.h
 UNILIB=4.1.3-dev
-UNICODE=16.0.0
+UNICODE=17.0.0
 
 all: generate.pl Makefile $(wildcard data/*.txt) $(TARGETS:%=template/%)
 	./generate.pl $(UNILIB) $(UNICODE) data $(foreach t,$(TARGETS),template/$(t) ../unilib/$(t))
