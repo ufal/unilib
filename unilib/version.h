@@ -7,7 +7,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
-// UniLib version: 4.1.3-dev
+// UniLib version: 4.2.0
 // Unicode version: 17.0.0
 
 #pragma once
@@ -42,7 +42,7 @@ std::string version::to_string() {
 }
 
 version version::current() {
-  return {4, 1, 3, "dev"};
+  return {4, 2, 0, ""};
 }
 
 } // namespace unilib

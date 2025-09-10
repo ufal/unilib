@@ -1,5 +1,5 @@
-Version 4.1.3-dev
------------------
+Version 4.2.0 [10 Sep 2025]
+---------------------------
 - Update Unicode data to 17.0.0.
 
 
