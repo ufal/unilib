@@ -25,13 +25,13 @@ jobs:
             platform: linux-clang CXX=clang++-14
           - os: ubuntu-22.04
             platform: linux-clang CXX=clang++-15
-          - os: windows-2019
+          - os: windows-2022
             platform: win-vs-32
-          - os: windows-2019
+          - os: windows-2022
             platform: win-vs-64
-          - os: windows-2022
+          - os: windows-2025
             platform: win-vs-32
-          - os: windows-2022
+          - os: windows-2025
             platform: win-vs-64
           - os: macos-13
             platform: macos-clang-64
@@ -50,10 +50,6 @@ jobs:
       - if: startsWith(matrix.os, 'windows')
         name: Windows - Install make
         run: choco install --no-progress -y make
-
-      - if: matrix.container == 'quay.io/pypa/manylinux2014_x86_64'
-        name: Manylinux2014 container - Set default python3
-        run: ln -s $(which python3.10) /usr/bin/python3
 
       - name: Compile tests
         run: make PLATFORM=${{ matrix.platform }} -k -C tests compile
