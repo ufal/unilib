@@ -8,7 +8,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 TARGETS=Makefile.include unicode.cpp unicode.h uninorms.cpp uninorms.h unistrip.cpp unistrip.h utf.h version.h
-UNILIB=4.2.0
+UNILIB=4.2.1-dev
 UNICODE=17.0.0
 
 all: generate.pl Makefile $(wildcard data/*.txt) $(TARGETS:%=template/%)
