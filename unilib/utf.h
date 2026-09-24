@@ -405,13 +405,13 @@ void utf::append(std::string& str, char32_t chr) {
 
 // Appending a single code point, UTF-16
 void utf::append(char16_t*& str, char32_t chr) {
-  if (chr <= 0xFFFF) *str++ = chr;
+  if (chr <= 0xFFFF) *str++ = char16_t(chr);
   else if (chr <= 0x10FFFF) { *str++ = 0xD800 + ((chr - 0x10000) >> 10); *str++ = 0xDC00 + ((chr - 0x10000) & 0x3FF); }
   else *str++ = REPLACEMENT_CHAR;
 }
 
 void utf::append(std::u16string& str, char32_t chr) {
-  if (chr <= 0xFFFF) str += chr;
+  if (chr <= 0xFFFF) str += char16_t(chr);
   else if (chr <= 0x10FFFF) { str += 0xD800 + ((chr - 0x10000) >> 10); str += 0xDC00 + ((chr - 0x10000) & 0x3FF); }
   else str += REPLACEMENT_CHAR;
 }
