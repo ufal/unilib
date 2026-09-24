@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <iostream>
 #include <string>
 #include <tuple>
@@ -26,7 +27,7 @@ void test_dump(T data) {
 
 template <>
 void test_dump(char32_t data) {
-  cerr << hex << data << oct;
+  cerr << hex << uint32_t(data) << oct;
 }
 
 template <class T>
