@@ -7,7 +7,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-BUILTEM_VERSION := 2.2.5
+BUILTEM_VERSION := 2.3.1
 
 ############
 # PLATFORM #
@@ -38,13 +38,25 @@ ifneq ($(filter linux-gcc linux-clang,$(PLATFORM)),)
   PLATFORM_ARCH:=$(shell uname -m)
   ifneq ($(filter x86_64,$(PLATFORM_ARCH)),)
     override PLATFORM:=$(PLATFORM)-64
+  else ifneq ($(filter aarch64,$(PLATFORM_ARCH)),)
+    override PLATFORM:=$(PLATFORM)-aarch64
   else ifneq ($(filter i386 i686,$(PLATFORM_ARCH)),)
     override PLATFORM:=$(PLATFORM)-32
   else
     $(error Architecture $(PLATFORM_ARCH) is currently not supported on platform $(PLATFORM))
   endif
 else ifneq ($(filter win-vs win-gcc,$(PLATFORM)),)
-  ifneq ($(filter AMD64,$(PROCESSOR_ARCHITECTURE))$(filter AMD64,$(PROCESSOR_ARCHITEW6432)),)
+  ifeq ($(PLATFORM)-$(strip $(VSCMD_ARG_TGT_ARCH)),win-vs-x64)
+    override PLATFORM:=win-vs-64
+  else ifeq ($(PLATFORM)-$(strip $(VSCMD_ARG_TGT_ARCH)),win-vs-arm64)
+    override PLATFORM:=win-vs-arm64
+  else ifeq ($(PLATFORM)-$(strip $(VSCMD_ARG_TGT_ARCH)),win-vs-x86)
+    override PLATFORM:=win-vs-32
+  else ifneq ($(and $(filter win-vs,$(PLATFORM)),$(strip $(VSCMD_ARG_TGT_ARCH))),)
+    $(error Architecture $(VSCMD_ARG_TGT_ARCH) is currently not supported on platform $(PLATFORM))
+  else ifneq ($(filter ARM64,$(PROCESSOR_ARCHITECTURE) $(PROCESSOR_ARCHITEW6432)),)
+    override PLATFORM:=$(PLATFORM)-arm64
+  else ifneq ($(filter AMD64,$(PROCESSOR_ARCHITECTURE) $(PROCESSOR_ARCHITEW6432)),)
     override PLATFORM:=$(PLATFORM)-64
   else ifeq ($(filter x86,$(PROCESSOR_ARCHITECTURE))$(PROCESSOR_ARCHITEW6432),x86)
     override PLATFORM:=$(PLATFORM)-32
@@ -53,19 +65,19 @@ else ifneq ($(filter win-vs win-gcc,$(PLATFORM)),)
   endif
 else ifneq ($(filter macos-clang,$(PLATFORM)),)
   PLATFORM_ARCH:=$(shell uname -m)
-  ifneq ($(filter x86_64,$(PLATFORM_ARCH)),)
-    override PLATFORM:=$(PLATFORM)-64
-  else ifneq ($(filter arm64,$(PLATFORM_ARCH)),)
+  ifneq ($(filter arm64,$(PLATFORM_ARCH)),)
     override PLATFORM:=$(PLATFORM)-arm64
+  else ifneq ($(filter x86_64,$(PLATFORM_ARCH)),)
+    override PLATFORM:=$(PLATFORM)-64
   else
     $(error Architecture $(PLATFORM_ARCH) is currently not supported on platform $(PLATFORM))
   endif
 endif
 
 # fail for unknown platforms
-PLATFORMS = linux-gcc-64 linux-gcc-32 linux-clang-64 linux-clang-32
-PLATFORMS += win-vs-64 win-vs-32 win-gcc-64 win-gcc-32
-PLATFORMS += macos-clang-64 macos-clang-arm64
+PLATFORMS = linux-gcc-64 linux-gcc-aarch64 linux-gcc-32 linux-clang-64 linux-clang-aarch64 linux-clang-32
+PLATFORMS += win-vs-64 win-vs-arm64 win-vs-32 win-gcc-64 win-gcc-arm64 win-gcc-32
+PLATFORMS += macos-clang-arm64 macos-clang-64
 ifeq ($(filter $(PLATFORMS),$(PLATFORM)),)
   $(error Unsupported platform $(PLATFORM), only $(PLATFORMS) are supported)
 endif
@@ -78,7 +90,7 @@ ifndef CPP_STANDARD
 endif
 
 # fail for unknown standards
-ifeq ($(filter c++11 c++14 c++17 c++20 c++23,$(CPP_STANDARD)),)
+ifeq ($(filter c++11 c++14 c++17 c++20,$(CPP_STANDARD)),)
   $(error Unsupported C++ standard $(CPP_STANDARD), only [c++11], c++14, c++17, c++20 are supported)
 endif
 
@@ -139,7 +151,7 @@ ifeq ($(firstword $(sort $(MAKE_VERSION) 4.0)),4.0)
   echo = $(if $(2),$(file $(1),$(2)),$(if $(filter sh,$(PLATFORM_SHELL)),$(1),type nul$(subst /,\,$(1))))
 endif
 
-# Report PLATFORM, PLATFORM_SHELL, MODE and BITNESS if requested
+# Report MODE, CPP_STANDARD, PLATFORM, and PLATFORM_SHELL if requested
 ifdef VERBOSE
   $(info Build $(MODE) with $(CPP_STANDARD) on platform $(PLATFORM) with shell $(PLATFORM_SHELL))
 endif
@@ -151,6 +163,15 @@ endif
 # the minimal Windows version defaulting to Windows 10
 ifndef WINNT_VERSION
   WINNT_VERSION=0x0A00
+endif
+
+# the macOS target version is set from CPP_STANDARD and PLATFORM when unset
+ifndef MACOS_TARGET_VERSION
+  ifneq ($(filter macos-%-64,$(PLATFORM)),)
+    MACOS_TARGET_VERSION:=$(if $(filter c++11 c++14,$(CPP_STANDARD)),10.9,$(if $(filter c++17,$(CPP_STANDARD)),10.15,14))
+  else ifneq ($(filter macos-%-arm64,$(PLATFORM)),)
+    MACOS_TARGET_VERSION:=$(if $(filter c++11 c++14 c++17,$(CPP_STANDARD)),11,14)
+  endif
 endif
 
 # executable and library namings
@@ -225,7 +246,7 @@ else ifneq ($(filter win-vs-%,$(PLATFORM)),)
     CXX = cl
   endif
   C_FLAGS += /nologo$(if $(filter c++11,$(CPP_STANDARD)),, /std:$(CPP_STANDARD)) /W2 /D WIN32 /D UNICODE /D _UNICODE /D _WIN32_WINNT=$(WINNT_VERSION) /EHsc /utf-8
-  LD_FLAGS += /MANIFEST:EMBED /MACHINE:$(if $(filter %-64,$(PLATFORM)),X64,X86)
+  LD_FLAGS += /MANIFEST:EMBED /MACHINE:$(if $(filter %-64,$(PLATFORM)),X64,$(if $(filter %-arm64,$(PLATFORM)),ARM64,X86))
 
   ifeq ($(MODE),normal)
     C_FLAGS += /O2 /MT
@@ -247,9 +268,9 @@ else ifneq ($(filter macos-clang-%,$(PLATFORM)),)
   DYN_LD_FLAGS += -dynamiclib
 
   ifneq ($(filter %-64,$(PLATFORM)),)
-    C_FLAGS += -target x86_64-apple-macos$(if $(filter c++11 c++14,$(CPP_STANDARD)),10.9,$(if $(filter c++17,$(CPP_STANDARD)),10.15,14))
+    C_FLAGS += -target x86_64-apple-macos$(MACOS_TARGET_VERSION)
   else ifneq ($(filter %-arm64,$(PLATFORM)),)
-    C_FLAGS += -target arm64-apple-macos$(if $(filter c++11 c++14 c++17,$(CPP_STANDARD)),11,14)
+    C_FLAGS += -target arm64-apple-macos$(MACOS_TARGET_VERSION)
   endif
 
   ifeq ($(MODE),normal)
@@ -337,7 +358,7 @@ ifneq ($(findstring -gcc-,$(PLATFORM)),)
 endif
 
 ifneq ($(filter win-vs-%,$(PLATFORM)),)
-  win_subsystem = /SUBSYSTEM:$(1),6 /ENTRY:$(if $(2),$(2),main)CRTStartup
+  win_subsystem = /SUBSYSTEM:$(1) /ENTRY:$(if $(2),$(2),main)CRTStartup
 else ifneq ($(filter win-gcc-%,$(PLATFORM)),)
   win_subsystem = -Wl,--subsystem=$(1) $(if $(filter wmain,$(2)),-municode,)
 endif
@@ -362,7 +383,7 @@ ifneq ($(filter win-vs-%,$(PLATFORM)),)
 COMPILE_DEPS += .build/cl_deps.exe
 .build/cl_deps.exe: .build/cl_deps.cpp
 	@$(info Compiling cl_deps.exe)
-	@$(CXX) /Fe$@ /Fo$@.obj /nologo /W2 /O1 /D WIN32 /D UNICODE /D _UNICODE /D _WIN32_WINNT=$(WINNT_VERSION) /EHsc /utf-8 /MT $< /link /MANIFEST:EMBED /SUBSYSTEM:console,6
+	@$(CXX) /Fe$@ /Fo$@.obj /nologo /W2 /O1 /D WIN32 /D UNICODE /D _UNICODE /D _WIN32_WINNT=$(WINNT_VERSION) /EHsc /utf-8 /MT $< /link /MANIFEST:EMBED /SUBSYSTEM:console
 .build/cl_deps.cpp: | .build
 	@$(info Generating cl_deps.cpp)
 	@$(call echo,>$@,#include <ctype.h>)

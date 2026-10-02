@@ -13,19 +13,40 @@ jobs:
         include:
           - os: ubuntu-24.04
             platform: linux-gcc CXX=g++-12
-          - os: ubuntu-24.04
+          - os: ubuntu-26.04
             platform: linux-gcc CXX=g++-13
-          - os: ubuntu-24.04
+          - os: ubuntu-26.04
             platform: linux-gcc CXX=g++-14
+          - os: ubuntu-26.04
+            platform: linux-gcc CXX=g++-15
           - os: ubuntu-24.04
             platform: linux-clang CXX=clang++-16
           - os: ubuntu-24.04
             platform: linux-clang CXX=clang++-17
           - os: ubuntu-24.04
             platform: linux-clang CXX=clang++-18
-          - os: ubuntu-24.04
+          - os: ubuntu-26.04
+            platform: linux-clang CXX=clang++-20
+          - os: ubuntu-26.04
+            platform: linux-clang CXX=clang++-21
+          - os: ubuntu-26.04
+            platform: linux-clang CXX=clang++-22
+          - os: ubuntu-26.04
             platform: linux-gcc
             container: quay.io/pypa/manylinux_2_28_x86_64
+
+          - os: ubuntu-24.04-arm
+            platform: linux-gcc
+          - os: ubuntu-24.04-arm
+            platform: linux-clang
+          - os: ubuntu-26.04-arm
+            platform: linux-gcc
+          - os: ubuntu-26.04-arm
+            platform: linux-clang
+          - os: ubuntu-26.04-arm
+            platform: linux-gcc
+            container: quay.io/pypa/manylinux_2_28_aarch64
+
           - os: windows-2022
             platform: win-vs-32
           - os: windows-2022
@@ -34,9 +55,20 @@ jobs:
             platform: win-vs-32
           - os: windows-2025
             platform: win-vs-64
+          - os: windows-2025-vs2026
+            platform: win-vs-64
+          - os: windows-11-arm
+            platform: win-vs-arm64
+          - os: windows-11-vs2026-arm
+            platform: win-vs-arm64
+
           - os: macos-15
             platform: macos-clang-arm64
           - os: macos-15-intel
+            platform: macos-clang-64
+          - os: macos-26
+            platform: macos-clang-arm64
+          - os: macos-26-intel
             platform: macos-clang-64
 
     steps:
@@ -46,7 +78,7 @@ jobs:
         name: Windows - Set up MSVC
         uses: TheMrMilchmann/setup-msvc-dev@v4
         with:
-          arch: ${{ endswith(matrix.platform, '-32') && 'x86' || 'x64' }}
+          arch: ${{ endswith(matrix.platform, '-64') && 'x64' || endswith(matrix.platform, '-arm64') && 'arm64' || 'x86' }}
 
       - if: startsWith(matrix.os, 'windows')
         name: Windows - Install make

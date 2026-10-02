@@ -4,6 +4,8 @@ Version 4.2.1-dev
 - When appending a `char32_t` to UTF-16, replace the codepoints
   of the surrogate characters with `REPLACEMENT_CHAR`.
 - Update Unicode data to 18.0.0.
+- Add support for `aarch64` on Linux.
+- Add support for `arm64` on Windows.
 
 
 Version 4.2.0 [10 Sep 2025]
