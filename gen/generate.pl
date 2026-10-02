@@ -209,6 +209,11 @@ foreach my $data_ref (\%composition, \%decomposition, \%stripped) {
 }
 
 # Generate code for performing full casing mappings.
+sub format_char {
+  my ($code) = @_;
+  sprintf(length($code) <= 4 ? "\\u%04s" : "\\U%08s", $code);
+}
+
 my %full_casings = ();
 open ($f, "<", "$UnicodeDataDir/SpecialCasing.txt") or die "Cannot open '$UnicodeDataDir/SpecialCasing.txt': $!";
 while (<$f>) {
@@ -220,7 +225,7 @@ while (<$f>) {
   my @casing = ("LOWER", "TITLE", "UPPER");
   for (my $i = 0; $i < @casing; $i++) {
     if ($parts[$i + 1] ne $parts[0] and $parts[$i + 1] =~ /\s/) {
-      $full_casings{$casing[$i]}->{"U'\\u$parts[0]'"} = 'U"' . join("", map {"\\u$_"} split(/\s+/, $parts[$i + 1])) . '"';
+      $full_casings{$casing[$i]}->{"U'" . format_char($parts[0]) . "'"} = 'U"' . join("", map {format_char($_)} split(/\s+/, $parts[$i + 1])) . '"';
     }
   }
 }
