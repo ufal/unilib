@@ -1,5 +1,5 @@
-Version 4.2.1-dev
------------------
+Version 4.3.0 [02 Oct 2026]
+---------------------------
 - Avoid false-positive warning on clang-21.
 - When appending a `char32_t` to UTF-16, replace the codepoints
   of the surrogate characters with `REPLACEMENT_CHAR`.
