@@ -8,7 +8,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 // UniLib version: 4.2.1-dev
-// Unicode version: 17.0.0
+// Unicode version: 18.0.0
 
 #pragma once
 
