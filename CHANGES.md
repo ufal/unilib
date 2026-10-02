@@ -1,3 +1,7 @@
+Version 4.3.1-dev
+-----------------
+
+
 Version 4.3.0 [02 Oct 2026]
 ---------------------------
 - Avoid false-positive warning on clang-21.
