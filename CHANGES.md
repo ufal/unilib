@@ -1,3 +1,7 @@
+Version 4.4.1-dev
+-----------------
+
+
 Version 4.4.0 [03 Oct 2026]
 ---------------------------
 - Add `utf::decoded` and `utf::encoded` returning the new string,
