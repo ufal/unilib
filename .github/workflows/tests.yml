@@ -55,11 +55,7 @@ jobs:
             platform: win-vs-32
           - os: windows-2025
             platform: win-vs-64
-          - os: windows-2025-vs2026
-            platform: win-vs-64
           - os: windows-11-arm
-            platform: win-vs-arm64
-          - os: windows-11-vs2026-arm
             platform: win-vs-arm64
 
           - os: macos-15
