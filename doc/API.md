@@ -159,6 +159,13 @@ class utf {
   inline static void decode(const char16_t* str, std::u32string& decoded);
   inline static void decode(std::u16string_view str, std::u32string& decoded);
 
+  // Decoding of a whole string, returning the decoded string
+  inline static std::u32string decoded(const char* str);
+  inline static std::u32string decoded(std::string_view str);
+
+  inline static std::u32string decoded(const char16_t* str);
+  inline static std::u32string decoded(std::u16string_view str);
+
   // Iterator decoding
   template<class Char>
   class string_decoder {
@@ -193,6 +200,13 @@ class utf {
 
   inline static void encode(const char32_t* str, std::u16string& encoded);
   inline static void encode(std::u32string_view str, std::u16string& encoded);
+
+  // Encoding a whole string, returning the encoded string;
+  // the `String` must be either `std::string` (the default) or `std::u16string`
+  template<class String = std::string>
+  inline static String encoded(const char32_t* str);
+  template<class String = std::string>
+  inline static String encoded(std::u32string_view str);
 };
 ```
 

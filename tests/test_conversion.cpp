@@ -23,6 +23,16 @@ int main(void) {
   auto u32_to_u16 = [](u32string str){ u16string res; utf::encode(str, res); return res; };
   auto u32_to_u8 = [](u32string str){ string res; utf::encode(str, res); return res; };
 
+  // UTF conversions returning the result
+  auto u8_str_decoded = [](string str){ return utf::decoded(str); };
+  auto u8_cstr_decoded = [](string str){ return utf::decoded(str.c_str()); };
+  auto u16_str_decoded = [](u16string str){ return utf::decoded(str); };
+  auto u16_cstr_decoded = [](u16string str){ return utf::decoded(str.c_str()); };
+  auto u32_str_encoded_u8 = [](u32string str){ return utf::encoded(str); };
+  auto u32_cstr_encoded_u8 = [](u32string str){ return utf::encoded(str.c_str()); };
+  auto u32_str_encoded_u16 = [](u32string str){ return utf::encoded<u16string>(str); };
+  auto u32_cstr_encoded_u16 = [](u32string str){ return utf::encoded<u16string>(str.c_str()); };
+
   // Iterators
   auto u8_str_iter = [](string str) { decltype(str) res; for (auto&& chr : utf::decoder(str)) utf::append(res, chr); return res; };
   auto u8_cstr_iter = [](string str) { decltype(str) res; for (auto&& chr : utf::decoder(str.c_str())) utf::append(res, chr); return res; };
@@ -53,19 +63,30 @@ int main(void) {
   for (const auto& number : numbers)
     u8.push_back(char(stoi(number)));
 
-  test(u32_to_u8, u32, u8);
-  test(u8_to_u32, u8, u32);
-  test([=](string str) { return u32_to_u8(u8_to_u32(str)); }, u8, u8);
-  test([=](u32string str) { return u8_to_u32(u32_to_u8(str)); }, u32, u32);
-  test([=](u32string str) { return u8_to_u32(u8_str_iter(u32_to_u8(str))); }, u32, u32);
-  test([=](u32string str) { return u8_to_u32(u8_cstr_iter(u32_to_u8(str))); }, u32, u32);
-
   test(u32_to_u16, u32, u16);
   test(u16_to_u32, u16, u32);
   test([=](u16string str) { return u32_to_u16(u16_to_u32(str)); }, u16, u16);
   test([=](u32string str) { return u16_to_u32(u32_to_u16(str)); }, u32, u32);
   test([=](u32string str) { return u16_to_u32(u16_str_iter(u32_to_u16(str))); }, u32, u32);
   test([=](u32string str) { return u16_to_u32(u16_cstr_iter(u32_to_u16(str))); }, u32, u32);
+
+  test(u8_str_decoded, u8, u32);
+  test(u8_cstr_decoded, u8, u32);
+  test(u16_str_decoded, u16, u32);
+  test(u16_cstr_decoded, u16, u32);
+  test(u32_str_encoded_u8, u32, u8);
+  test(u32_cstr_encoded_u8, u32, u8);
+  test(u32_str_encoded_u16, u32, u16);
+  test(u32_cstr_encoded_u16, u32, u16);
+  test([=](string str) { return u32_str_encoded_u8(u8_str_decoded(str)); }, u8, u8);
+  test([=](u16string str) { return u32_str_encoded_u16(u16_str_decoded(str)); }, u16, u16);
+
+  test(u32_to_u8, u32, u8);
+  test(u8_to_u32, u8, u32);
+  test([=](string str) { return u32_to_u8(u8_to_u32(str)); }, u8, u8);
+  test([=](u32string str) { return u8_to_u32(u32_to_u8(str)); }, u32, u32);
+  test([=](u32string str) { return u8_to_u32(u8_str_iter(u32_to_u8(str))); }, u32, u32);
+  test([=](u32string str) { return u8_to_u32(u8_cstr_iter(u32_to_u8(str))); }, u32, u32);
 
   return test_summary();
 }

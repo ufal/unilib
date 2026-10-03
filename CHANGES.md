@@ -1,5 +1,8 @@
 Version 4.3.1-dev
 -----------------
+- Add `utf::decoded` and `utf::encoded` returning the new string,
+  instead of modifying an existing one. Reusing `decode` name is
+  impossible, so we take inspiration from `sort`/`sorted` in Python.
 
 
 Version 4.3.0 [02 Oct 2026]

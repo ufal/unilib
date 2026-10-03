@@ -60,6 +60,13 @@ class utf {
   inline static void decode(const char16_t* str, std::u32string& decoded);
   inline static void decode(std::u16string_view str, std::u32string& decoded);
 
+  // Decoding of a whole string, returning the decoded string
+  inline static std::u32string decoded(const char* str);
+  inline static std::u32string decoded(std::string_view str);
+
+  inline static std::u32string decoded(const char16_t* str);
+  inline static std::u32string decoded(std::u16string_view str);
+
   // Iterator decoding
   template<class Char>
   class string_decoder {
@@ -102,6 +109,13 @@ class utf {
 
   inline static void encode(const char32_t* str, std::u16string& encoded);
   inline static void encode(std::u32string_view str, std::u16string& encoded);
+
+  // Encoding a whole string, returning the encoded string;
+  // the `String` must be either `std::string` (the default) or `std::u16string`
+  template<class String = std::string>
+  inline static String encoded(const char32_t* str);
+  template<class String = std::string>
+  inline static String encoded(std::u32string_view str);
 
  private:
   // The REPLACEMENT_CHAR used to represent invalid code points.
@@ -302,6 +316,31 @@ void utf::decode(std::u16string_view str, std::u32string& decoded) {
     decoded.push_back(decode(str));
 }
 
+// Decoding of a whole string, returning the decoded string
+std::u32string utf::decoded(const char* str) {
+  std::u32string decoded;
+  decode(str, decoded);
+  return decoded;
+}
+
+std::u32string utf::decoded(std::string_view str) {
+  std::u32string decoded;
+  decode(str, decoded);
+  return decoded;
+}
+
+std::u32string utf::decoded(const char16_t* str) {
+  std::u32string decoded;
+  decode(str, decoded);
+  return decoded;
+}
+
+std::u32string utf::decoded(std::u16string_view str) {
+  std::u32string decoded;
+  decode(str, decoded);
+  return decoded;
+}
+
 // Iterator decoding, C-string
 template<class Char>
 class utf::string_decoder<Char>::iterator {
@@ -441,6 +480,21 @@ void utf::encode(std::u32string_view str, std::u16string& encoded) {
   encoded.clear();
   for (; !str.empty(); str.remove_prefix(1))
     append(encoded, str.front());
+}
+
+// Encoding a whole string, returning the encoded string
+template<class String>
+String utf::encoded(const char32_t* str) {
+  String encoded;
+  encode(str, encoded);
+  return encoded;
+}
+
+template<class String>
+String utf::encoded(std::u32string_view str) {
+  String encoded;
+  encode(str, encoded);
+  return encoded;
 }
 
 } // namespace unilib
